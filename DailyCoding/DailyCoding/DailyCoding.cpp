@@ -22,6 +22,7 @@ T random(T Min, T Max)
 //
 int FirstReverse();					//https://coderbyte.com/language/First%20Reverse
 int FirstFactorial();				//https://coderbyte.com/language/First%20Factorial
+int LongestWord();					//https://coderbyte.com/language/Longest%20Word
 
 int main()
 {
@@ -29,6 +30,7 @@ int main()
 	{
 		"Day#1\tFirst Reverse",
 		"Day#2\tFirst Factorial",
+		"Day#3\tLongest word in sentence",
 		"EXIT"
 	};
 	int input = 0;
@@ -37,8 +39,9 @@ int main()
 		input = simplemenu(challenges);
 		switch (input)
 		{
-		case 0: input = FirstReverse(); break;
-		case 1: input = FirstFactorial(); break;
+		case 0: FirstReverse(); break;
+		case 1: FirstFactorial(); break;
+		case 2: LongestWord(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges))-1);
@@ -80,5 +83,32 @@ int FirstFactorial()
 	//date of creation: 04.09.2017
 	//Created by: Marcin Nowak
 };
+
+int LongestWord() 
+{
+	/*
+	Input:"fun&!! time"
+	Output:"time"
+	*/
+	std::string sen{};//="fun&!! time";
+	std::cout << "Input sentence to check: ";
+	std::getline(std::cin, sen);
+	std::string temp{}, longest{};
+	for (int i = 0; i < sen.length(); i++)
+	{
+		temp.clear();
+		while (sen.at(i)!=' ' && isalnum(sen.at(i)))
+		{
+			temp.push_back(sen.at(i));
+			i++;
+			if (i >= sen.length()) break;
+		};
+		if (temp.length() > longest.length()) longest = temp;
+	};
+	std::cout << "Longest word in sentence '" << sen << "' is: " << longest << "\n";
+	_getch();
+	return 0;
+}
+
 
 //TODO: Continue practicing and developping programming skills
