@@ -23,6 +23,7 @@ T random(T Min, T Max)
 int FirstReverse();					//https://coderbyte.com/language/First%20Reverse
 int FirstFactorial();				//https://coderbyte.com/language/First%20Factorial
 int LongestWord();					//https://coderbyte.com/language/Longest%20Word
+int LetterChanges();				//https://coderbyte.com/language/Letter%20Changes
 
 int main()
 {
@@ -31,26 +32,26 @@ int main()
 		"Day#1\tFirst Reverse",
 		"Day#2\tFirst Factorial",
 		"Day#3\tLongest word in sentence",
-		"EXIT"
+		"Day#4\tLetter changes"
 	};
 	int input = 0;
 	do
 	{
-		input = simplemenu(challenges);
+		input = simplemenu(challenges, "Pick challange solution");
 		switch (input)
 		{
 		case 0: FirstReverse(); break;
 		case 1: FirstFactorial(); break;
 		case 2: LongestWord(); break;
+		case 3: LetterChanges(); break;
 		default:break;
 		};
-	} while (input != (sizeof(challenges) / sizeof(*challenges))-1);
+	} while (input != (sizeof(challenges) / sizeof(*challenges)));
 	std::cout << "\n\a\tFarewell!\n"
 		<< "Press any key to exit...";
 	_getch();
 	return 0;
 	//date of creation: 03.09.2017
-	//Created by: Marcin Nowak
 };
 
 int FirstReverse()
@@ -64,7 +65,6 @@ int FirstReverse()
 	return 0;
 
 	//date of creation: 03.09.2017
-	//Created by: Marcin Nowak
 };
 
 int FirstFactorial(int num)
@@ -81,7 +81,6 @@ int FirstFactorial()
 	_getch();
 	return 0;
 	//date of creation: 04.09.2017
-	//Created by: Marcin Nowak
 };
 
 int LongestWord() 
@@ -108,7 +107,35 @@ int LongestWord()
 	std::cout << "Longest word in sentence '" << sen << "' is: " << longest << "\n";
 	_getch();
 	return 0;
+	//date of creation: 05.09.2017
 }
 
+bool isvovel(char character)
+{
+	const char vovels[]{ 'a', 'e', 'i', 'o', 'u' };
+	for (int i = 0; i < (sizeof(vovels)/sizeof(*vovels)); i++)
+	{
+		if (character == vovels[i]) return true;
+	};
+	return false;
+};
+int LetterChanges()
+{
+	std::string input; // = "fun times!";
+	std::cout << "Input phrase:";
+	getline(std::cin, input);
+	for (int i = 0; i < input.length(); i++)
+	{
+		if (isalpha(input.at(i)))
+		{
+			input.at(i) += 1;
+			if (isvovel(input.at(i)) && islower(input.at(i))) input.at(i)=toupper(input.at(i));
+		};
+	};
+	std::cout << input;
+	_getch();
+	return 0;
+}
 
 //TODO: Continue practicing and developping programming skills
+//Created by: Marcin Nowak
