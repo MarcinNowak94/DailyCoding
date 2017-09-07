@@ -7,6 +7,8 @@
 #include "simplemenu.h"
 #include <string>
 
+const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra, nisl id laoreet porta, sapien risus luctus nibh, et dapibus velit nisi ac tortor.";
+
 //helper functions
 template<class T>
 T random(T Min, T Max)
@@ -18,12 +20,23 @@ T random(T Min, T Max)
 	//date of creation: 03.09.2017
 	//Created by: Marcin Nowak
 };
+bool isvovel(const char & character)
+{
+	const char vovels[]{ 'a', 'e', 'i', 'o', 'u' };
+	for (int i = 0; i < (sizeof(vovels) / sizeof(*vovels)); i++)
+	{
+		if (character == vovels[i]) return true;
+	};
+	return false;
+	//date of creation: 06.09.2017
+};
 
-//
 int FirstReverse();					//https://coderbyte.com/language/First%20Reverse
 int FirstFactorial();				//https://coderbyte.com/language/First%20Factorial
 int LongestWord();					//https://coderbyte.com/language/Longest%20Word
 int LetterChanges();				//https://coderbyte.com/language/Letter%20Changes
+int SimpleAdding();					//https://coderbyte.com/language/Simple%20Adding
+int LetterCapitalize();				//https://coderbyte.com/language/Letter%20Capitalize
 
 int main()
 {
@@ -32,7 +45,9 @@ int main()
 		"Day#1\tFirst Reverse",
 		"Day#2\tFirst Factorial",
 		"Day#3\tLongest word in sentence",
-		"Day#4\tLetter changes"
+		"Day#4\tLetter changes",
+		"Day#5\tSimple adding",
+		"Day#5\tLetter captitalize"
 	};
 	int input = 0;
 	do
@@ -44,6 +59,8 @@ int main()
 		case 1: FirstFactorial(); break;
 		case 2: LongestWord(); break;
 		case 3: LetterChanges(); break;
+		case 4: SimpleAdding(); break;
+		case 5: LetterCapitalize(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));
@@ -85,10 +102,6 @@ int FirstFactorial()
 
 int LongestWord() 
 {
-	/*
-	Input:"fun&!! time"
-	Output:"time"
-	*/
 	std::string sen{};//="fun&!! time";
 	std::cout << "Input sentence to check: ";
 	std::getline(std::cin, sen);
@@ -110,15 +123,6 @@ int LongestWord()
 	//date of creation: 05.09.2017
 }
 
-bool isvovel(char character)
-{
-	const char vovels[]{ 'a', 'e', 'i', 'o', 'u' };
-	for (int i = 0; i < (sizeof(vovels)/sizeof(*vovels)); i++)
-	{
-		if (character == vovels[i]) return true;
-	};
-	return false;
-};
 int LetterChanges()
 {
 	std::string input; // = "fun times!";
@@ -135,6 +139,38 @@ int LetterChanges()
 	std::cout << input;
 	_getch();
 	return 0;
+	//date of creation: 06.09.2017
+}
+
+int SimpleAdding()
+{
+	std::cout << "Input real number:";
+	unsigned int input, sum=0;
+	std::cin >> input;
+	for (int i = input; i > 0; i--)
+	{
+		sum += i;
+	};
+	std::cout << "Sum = " << sum;
+	_getch();
+	return 0;
+	//date of creation: 07.09.2017
+};
+
+int LetterCapitalize() 
+{
+	std::string str{};	// = loremipsum;
+	std::cout << "Input text: ";
+	getline(std::cin, str);
+	for (int i = 0; i<str.length(); i++)
+	{
+		if (isalpha(str.at(i))) str.at(i) = toupper(str.at(i));
+		while (' '!=str.at(i) && i<(str.length()-1))	i++;
+	};
+	std::cout << "Output text:\n" << str;
+	_getch();
+	return 0;
+	//date of creation: 07.09.2017
 }
 
 //TODO: Continue practicing and developping programming skills
