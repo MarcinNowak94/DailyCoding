@@ -10,8 +10,8 @@
 const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra, nisl id laoreet porta, sapien risus luctus nibh, et dapibus velit nisi ac tortor.";
 
 //helper functions
-template<class T>
-T random(T Min, T Max)
+template<class T=int>
+T random(T Min=1, T Max=100)
 {
 	std::random_device rd;	//random number
 	std::mt19937 Random(rd()); //using random number as seed for generator
@@ -38,6 +38,7 @@ int LetterChanges();				//https://coderbyte.com/language/Letter%20Changes
 int SimpleAdding();					//https://coderbyte.com/language/Simple%20Adding
 int LetterCapitalize();				//https://coderbyte.com/language/Letter%20Capitalize
 int SimpleSymbols();				//https://coderbyte.com/language/Simple%20Symbols
+int CheckNums();					//https://coderbyte.com/language/Check%20Nums
 
 int main()
 {
@@ -49,7 +50,8 @@ int main()
 		"Day#4\tLetter changes",
 		"Day#5\tSimple adding",
 		"Day#5\tLetter captitalize",
-		"Day#6\tSimpleSymbols"
+		"Day#6\tSimpleSymbols",
+		"Day#7\tChecknums",
 	};
 	int input = 0;
 	do
@@ -64,6 +66,7 @@ int main()
 		case 4: SimpleAdding(); break;
 		case 5: LetterCapitalize(); break;
 		case 6: SimpleSymbols(); break;
+		case 7: CheckNums(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));
@@ -197,6 +200,23 @@ int SimpleSymbols()
 	_getch();
 	return 0;
 	//date of creation: 08.09.2017
+};
+
+int chknms(int & num1, int & num2)
+{
+	if (num1 > num2) return false;
+	if (num1 == num2) return -1;
+	return true;
+
+};
+int CheckNums()
+{
+	int number1 = random();
+	int number2 = random();
+	std::cout << "Number1="<<number1 <<", Number2=" << number2 <<". Is Number1<Number2 ? " << chknms(number1, number2);
+	_getch();
+	return 0;
+	//date of creation: 09.09.2017
 };
 
 //TODO: Continue practicing and developping programming skills
