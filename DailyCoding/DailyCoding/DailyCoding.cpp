@@ -37,6 +37,7 @@ int LongestWord();					//https://coderbyte.com/language/Longest%20Word
 int LetterChanges();				//https://coderbyte.com/language/Letter%20Changes
 int SimpleAdding();					//https://coderbyte.com/language/Simple%20Adding
 int LetterCapitalize();				//https://coderbyte.com/language/Letter%20Capitalize
+int SimpleSymbols();				//https://coderbyte.com/language/Simple%20Symbols
 
 int main()
 {
@@ -47,7 +48,8 @@ int main()
 		"Day#3\tLongest word in sentence",
 		"Day#4\tLetter changes",
 		"Day#5\tSimple adding",
-		"Day#5\tLetter captitalize"
+		"Day#5\tLetter captitalize",
+		"Day#6\tSimpleSymbols"
 	};
 	int input = 0;
 	do
@@ -61,6 +63,7 @@ int main()
 		case 3: LetterChanges(); break;
 		case 4: SimpleAdding(); break;
 		case 5: LetterCapitalize(); break;
+		case 6: SimpleSymbols(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));
@@ -172,6 +175,29 @@ int LetterCapitalize()
 	return 0;
 	//date of creation: 07.09.2017
 }
+
+int SimpleSymbols()
+{
+	std::cout << "\nInput string, letters must be padded with + sign:";
+	std::string str{};				//= "f++d+";//= "+d+=3=+s+";
+	getline(std::cin, str);
+	std::cout << "\nString correct?: ";
+	bool state = false;
+	for (int i = 0; i < str.length(); i++)
+	{
+		if (isalpha(str.at(i)))
+		{
+			if (0 == i) break;
+			if ('+' == str.at(i - 1) && '+' == str.at(i + 1)) { state = true; }
+			else { state = false; break;};
+		};
+	};
+	if (true == state) { str = "true";} else str = "false";
+	std::cout << str;
+	_getch();
+	return 0;
+	//date of creation: 08.09.2017
+};
 
 //TODO: Continue practicing and developping programming skills
 //Created by: Marcin Nowak

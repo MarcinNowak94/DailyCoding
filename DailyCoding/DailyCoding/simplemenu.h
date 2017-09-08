@@ -79,14 +79,25 @@ int simplemenudisplay(std::vector<bool> menu, const T menuoptions[], T2 amountof
 			menu[cursorposition - 1] = menu[cursorposition];
 			menu[cursorposition] = 0;
 			cursorposition -= 1;
-		}; }; break;
+		}
+				 else
+				 {
+					 menu[cursorposition] = 0;
+					 menu[amountofoptions] = 1;
+					 cursorposition = amountofoptions;
+				 }; }; break;
 		case 80: {if (cursorposition != amountofoptions)			//down arrow
 		{
 			menu[cursorposition + 1] = menu[cursorposition];
 			menu[cursorposition] = 0;
 			cursorposition += 1;
-
-		}; }; break;
+		}
+				 else
+				 {
+					 menu[cursorposition] = 0;
+					 menu[0] = 1;
+					 cursorposition = 0;
+				 }; }; break;
 		case '\r':									//enter
 		{
 			return cursorposition;
@@ -106,6 +117,7 @@ int simplemenudisplay(std::vector<bool> menu, const T menuoptions[], T2 amountof
 template<class T>
 int simplemenu(T & optionstodisplay)
 {
+	//TODO: calculate amount of options
 	std::vector<bool> menu(1);	//temporary vector remembering position of cursor
 	menu.at(0) = 1;					//initializing cursor position at 1st element
 	for (auto i = 0; i <= (sizeof(optionstodisplay) / sizeof(*optionstodisplay)); i++, menu.push_back(0));		//extra element for "back\exit"
@@ -117,6 +129,7 @@ int simplemenu(T & optionstodisplay)
 template<class T, class T2>
 int simplemenu(T & optionstodisplay, T2 & header)
 {
+	//TODO: calculate amount of options
 	std::vector<bool> menu(1);	//temporary vector remembering position of cursor
 	menu.at(0) = 1;					//initializing cursor position at 1st element
 	for (auto i = 0; i < (sizeof(optionstodisplay) / sizeof(*optionstodisplay)); i++)
