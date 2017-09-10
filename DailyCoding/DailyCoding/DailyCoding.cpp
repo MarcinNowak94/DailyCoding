@@ -39,6 +39,7 @@ int SimpleAdding();					//https://coderbyte.com/language/Simple%20Adding
 int LetterCapitalize();				//https://coderbyte.com/language/Letter%20Capitalize
 int SimpleSymbols();				//https://coderbyte.com/language/Simple%20Symbols
 int CheckNums();					//https://coderbyte.com/language/Check%20Nums
+int TimeConvert();					//https://coderbyte.com/language/Time%20Convert
 
 int main()
 {
@@ -52,6 +53,7 @@ int main()
 		"Day#5\tLetter captitalize",
 		"Day#6\tSimpleSymbols",
 		"Day#7\tChecknums",
+		"Day#8\tTime convert",
 	};
 	int input = 0;
 	do
@@ -67,6 +69,7 @@ int main()
 		case 5: LetterCapitalize(); break;
 		case 6: SimpleSymbols(); break;
 		case 7: CheckNums(); break;
+		case 8: TimeConvert(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));
@@ -217,6 +220,18 @@ int CheckNums()
 	_getch();
 	return 0;
 	//date of creation: 09.09.2017
+};
+
+int TimeConvert()
+{
+	int num = random(1, 3600);
+	int hrs = 0;
+	std::cout << num << "=";
+	while (num >= 60) { num -= 60; hrs++; };
+	std::cout << hrs << ":" << num;
+	_getch();
+	return 0;
+	//date of creation: 10.09.2017
 };
 
 //TODO: Continue practicing and developping programming skills
