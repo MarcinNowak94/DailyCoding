@@ -1,12 +1,15 @@
 // Sources:
 // https://coderbyte.com/challenges
 // https://www.reddit.com/r/dailyprogrammer/
-//
+// https://play.google.com/store/apps/details?id=com.alansa.ideabag
+// https://play.google.com/store/apps/details?id=com.alansa.ideabag2
+
 
 #include "stdafx.h"
 #include "simplemenu.h"
 #include <string>
 #include "coderbyte.h"
+#include "idea_bag.h"
 
 const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra, nisl id laoreet porta, sapien risus luctus nibh, et dapibus velit nisi ac tortor.";
 
@@ -23,7 +26,8 @@ int main()
 		"Day#6\tSimple Symbols",
 		"Day#7\tChecknums",
 		"Day#8\tTime convert",
-		"Day#9\tAlphabet soup"
+		"Day#9\tAlphabet soup",
+		"Day#11\tDistance between two cities"
 	};
 	int input = 0;
 	do
@@ -41,6 +45,7 @@ int main()
 		case 7: CheckNums(); break;
 		case 8: TimeConvert(); break;
 		case 9: AlphabetSoup(); break;
+		case 10: Distance_between_two_cities(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));

@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Coderbyte.h" />
     <ClInclude Include="Helper_functions.h" />
+    <ClInclude Include="idea_bag.h" />
     <ClInclude Include="simplemenu.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="Coderbyte.cpp" />
     <ClCompile Include="DailyCoding.cpp" />
     <ClCompile Include="Helper_functions.cpp" />
+    <ClCompile Include="idea_bag.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
