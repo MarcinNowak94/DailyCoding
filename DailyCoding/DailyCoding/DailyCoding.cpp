@@ -28,7 +28,8 @@ int main()
 		"Day#8\tTime convert",
 		"Day#9\tAlphabet soup",
 		"Day#11\tDistance between two cities",
-		"Day#12\tHappy numbers"
+		"Day#12\tHappy numbers",
+		"Day#13\tCoin flipper"
 	};
 	int input = 0;
 	do
@@ -48,6 +49,7 @@ int main()
 		case 9: AlphabetSoup(); break;
 		case 10: Distance_between_two_cities(); break;
 		case 11: Happy_Numbers(); break;
+		case 12: Coin_Flipper(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));

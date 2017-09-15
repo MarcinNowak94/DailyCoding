@@ -14,3 +14,9 @@ int Happy_Numbers();
 
 #endif // !HAPPY_NUMBERS_H
 
+#ifndef COIN_FLIPPER_H
+#define COIN_FLIPPER_H
+
+int Coin_Flipper();
+
+#endif // !COIN_FLIPPER_H

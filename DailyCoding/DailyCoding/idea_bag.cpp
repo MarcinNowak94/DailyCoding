@@ -40,3 +40,21 @@ int Happy_Numbers()
 	return 0;
 	//date of creation: 14.09.2017
 };
+
+int Coin_Flipper()
+{
+	unsigned int amount_of_flips = random();
+	std::cout << "\nStatistics for flipping coin " << amount_of_flips << " time/s :\n";
+	unsigned int heads, tails;
+	heads = tails = 0;
+	for (unsigned int  i = 1; i <= amount_of_flips; i++)
+	{
+		if (0 == random(0, 1)) { heads++; std::cout << "Head\t"; }
+		else { tails++; std::cout << "Tail\t"; };
+		if (i % 10 == 0) std::cout << "\n";
+	};
+	std::cout << "\nHeads: " << heads << "(" << (heads*100)/amount_of_flips << "%), Tails: " << tails << "(" << (tails*100)/amount_of_flips << "%).";
+	_getch();
+	return 0;
+	//date of creation: 15.09.2017
+};
