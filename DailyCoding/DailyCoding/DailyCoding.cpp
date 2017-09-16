@@ -29,7 +29,8 @@ int main()
 		"Day#9\tAlphabet soup",
 		"Day#11\tDistance between two cities",
 		"Day#12\tHappy numbers",
-		"Day#13\tCoin flipper"
+		"Day#13\tCoin flipper",
+		"Day#14\tFibonacci sequence",
 	};
 	int input = 0;
 	do
@@ -50,6 +51,7 @@ int main()
 		case 10: Distance_between_two_cities(); break;
 		case 11: Happy_Numbers(); break;
 		case 12: Coin_Flipper(); break;
+		case 13: Fibonacci(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));

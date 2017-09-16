@@ -58,3 +58,16 @@ int Coin_Flipper()
 	return 0;
 	//date of creation: 15.09.2017
 };
+
+int Fibonacci()
+{
+	int number = random();
+	std::cout << "Fibonacci sequence to " << number << ":\n";
+	for (size_t i = 1; i <= number; i++, i+=i)
+	{
+		std::cout << ' ' << i;
+	};
+	_getch();
+	return 0;
+	//date of creation: 16.09.2017
+};

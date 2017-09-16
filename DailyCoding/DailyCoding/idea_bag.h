@@ -20,3 +20,10 @@ int Happy_Numbers();
 int Coin_Flipper();
 
 #endif // !COIN_FLIPPER_H
+
+#ifndef FIBONACCI_H
+#define FIBONACCI_H
+
+int Fibonacci();
+
+#endif // !FIBONACCI_H
