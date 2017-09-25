@@ -10,6 +10,7 @@
 #include <string>
 #include "coderbyte.h"
 #include "idea_bag.h"
+#include "dailyprogrammer.h"
 
 const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra, nisl id laoreet porta, sapien risus luctus nibh, et dapibus velit nisi ac tortor.";
 
@@ -31,6 +32,7 @@ int main()
 		"Day#12\tHappy numbers",
 		"Day#13\tCoin flipper",
 		"Day#14\tFibonacci sequence",
+		"Day#16\tTalking clock",
 	};
 	int input = 0;
 	do
@@ -52,6 +54,7 @@ int main()
 		case 11: Happy_Numbers(); break;
 		case 12: Coin_Flipper(); break;
 		case 13: Fibonacci(); break;
+		case 14: Talking_Clock(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));

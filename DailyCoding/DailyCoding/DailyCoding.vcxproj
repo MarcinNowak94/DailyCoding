@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coderbyte.h" />
+    <ClInclude Include="dailyprogrammer.h" />
     <ClInclude Include="Helper_functions.h" />
     <ClInclude Include="idea_bag.h" />
     <ClInclude Include="simplemenu.h" />
@@ -156,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="Coderbyte.cpp" />
     <ClCompile Include="DailyCoding.cpp" />
+    <ClCompile Include="Dailyprogrammer.cpp" />
     <ClCompile Include="Helper_functions.cpp" />
     <ClCompile Include="idea_bag.cpp" />
     <ClCompile Include="stdafx.cpp">
