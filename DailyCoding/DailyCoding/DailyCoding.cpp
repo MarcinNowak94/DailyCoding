@@ -33,6 +33,7 @@ int main()
 		"Day#13\tCoin flipper",
 		"Day#14\tFibonacci sequence",
 		"Day#16\tTalking clock",
+		"Day#17\tPacket Assembler",
 	};
 	int input = 0;
 	do
@@ -55,6 +56,7 @@ int main()
 		case 12: Coin_Flipper(); break;
 		case 13: Fibonacci(); break;
 		case 14: Talking_Clock(); break;
+		case 15: Packet_Assembler(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));
