@@ -75,21 +75,19 @@ int Talking_Clock()
 	//date of creation: 26.09.2017
 };
 
+static struct packet
+{
+	int message_ID;			//which message this packet is a part of
+	int packet_ID;			//the index of this packet in the message (zero-indexed)
+	int num_of_packets;		//total number of packets in the message
+	std::string message{};	//part of message
+};
+static std::vector<packet> message;
+//static std::vector<std::vector<packet>> messages(0, std::vector<packet>(0));
 int Assembler(std::string incoming_packet)
 {
-	struct packet
-	{
-		int message_ID;			//which message this packet is a part of
-		int packet_ID;			//the index of this packet in the message (zero-indexed)
-		int num_of_packets;		//total number of packets in the message
-		std::string message{};	//part of message
-	};
-	std::cout << "\nRecieved: " << incoming_packet << '\n';
-	/*for (size_t i = 0; i < 17; i++)
-	{
-		std::cout << incoming_packet[i] << "[" << i << "]";
-	};*/
-	std::vector<packet> message();
+	
+	std::cout << "\nRecieved: " << incoming_packet;	
 	packet incoming;
 	int elementpos = 0;
 	incoming.message_ID = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find_first_of(' ')));
@@ -101,14 +99,48 @@ int Assembler(std::string incoming_packet)
 	incoming.num_of_packets = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find(' ', elementpos)));
 
 	if (elementpos != incoming_packet.length()) elementpos = incoming_packet.find_first_not_of(' ', incoming_packet.find(' ', elementpos));					//next non-blank character
-	incoming.message = incoming_packet.substr(elementpos, incoming_packet.length());
-	std::cout << "\nPacket test:"
+	if (elementpos == -1) {incoming.message = ' ';} else incoming.message = incoming_packet.substr(elementpos, incoming_packet.length());
+	/*std::cout << "\nPacket test:"
 		<< "\nMessage ID:\t" << incoming.message_ID
 		<< "\nPacket ID:\t" << incoming.packet_ID
 		<< "\nnum of p:\t" << incoming.num_of_packets
-		<< "\nmessage:\t" << incoming.message;
+		<< "\nmessage:\t" << incoming.message;*/	
+	if (message.size()>=1)
+	{
+		for (size_t i = 0; i < message.size(); i++)
+		{
+			if (incoming.message_ID < message.at(i).message_ID) { message.insert(message.begin() + i, incoming); break; }
+			else if (incoming.packet_ID < message.at(i).packet_ID) { message.insert(message.begin() + i, incoming); break; };
+		};
+	}
+	else message.push_back(incoming);
+	//message.push_back(incoming);
+	/*
+	std::cout << "\nsaving to vector\n";
+	for (size_t i = 0; i < messages.size(); i++)
+	{
+		if (messages[i][0].message_ID == incoming.message_ID) messages[i].emplace_back(incoming);
+		if (i == messages.size() - 1) { std::vector<packet> (); messages[i].emplace_back(incoming); };
+	};
+	std::cout << "\nDisplaying amount of packs in message\n";
+	if (incoming.num_of_packets==messages[0].size() && incoming.message_ID==messages[0][0].message_ID)
+	{
+		std::cout << "\nnum of packs: " << incoming.num_of_packets << ", vec size: " << messages[0].size() << "\n\a";
+	}
+	//std::cout << "\nmessage vector: [" << messages.size() << "][" << messages[0].size()<<"]"<<'\n';
+	*/
 	return 0;
 };
+void Display()
+{
+	std::cout << "\nPacket messages: \n";
+	//extern std::vector<struct packet>message;
+	for (size_t i = 0; i < message.size(); i++)
+	{
+		std::cout << message[i].message_ID << " " << message[i].packet_ID << " " << message[i].message << "\n";
+	};
+};
+
 int Packet_Assembler()
 {
 	//https://www.reddit.com/r/dailyprogrammer/comments/72ivih/20170926_challenge_333_easy_packet_assembler/
@@ -193,10 +225,10 @@ int Packet_Assembler()
 	};
 	for (size_t i = 0; i < sizeof(messages)/sizeof(messages[0])-1; i++)
 	{
-		std::cout << "\nPacket sent to assembler:\n"
-			<< messages[i];
+		//std::cout << "\nPacket sent to assembler: " << messages[i];
 		Assembler(messages[i]);
 	};
+	Display();
 	_getch();
 	return 0;
 	//date of creation: 26.09.2017
