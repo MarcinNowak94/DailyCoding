@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "dailyprogrammer.h"
 #include "Helper_functions.h"
 
@@ -83,52 +83,40 @@ static struct packet
 	std::string message{};	//part of message
 };
 static std::vector<packet> message;
-//static std::vector<std::vector<packet>> messages(0, std::vector<packet>(0));
 int Assembler(std::string incoming_packet)
 {
 	
-	std::cout << "\nRecieved: " << incoming_packet;	
+	//std::cout << "\nRecieved: " << incoming_packet;	
 	packet incoming;
 	int elementpos = 0;
-	incoming.message_ID = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find_first_of(' ')));
-
+	//get message_ID
+	incoming.message_ID = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find_first_of(' ')));		
 	if(elementpos!=incoming_packet.length()) elementpos = incoming_packet.find_first_not_of(' ', incoming_packet.find_first_of(' '));					//next non-blank character
-	incoming.packet_ID = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find(' ', elementpos)));
-
+	//get packet_ID
+	incoming.packet_ID = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find(' ', elementpos)));		
 	if (elementpos != incoming_packet.length()) elementpos = incoming_packet.find_first_not_of(' ', incoming_packet.find(' ', elementpos));					//next non-blank character
-	incoming.num_of_packets = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find(' ', elementpos)));
+	//get num_of_packets
+	incoming.num_of_packets = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find(' ', elementpos)));	
+	//turn rest of string into message
+	if (elementpos != incoming_packet.length()) if ((elementpos = incoming_packet.find_first_not_of(' ', incoming_packet.find(' ', elementpos))) != -1)		//next non-blank character
+	{incoming.message = incoming_packet.substr(elementpos, incoming_packet.length());}
+	else incoming.message = ' ';
 
-	if (elementpos != incoming_packet.length()) elementpos = incoming_packet.find_first_not_of(' ', incoming_packet.find(' ', elementpos));					//next non-blank character
-	if (elementpos == -1) {incoming.message = ' ';} else incoming.message = incoming_packet.substr(elementpos, incoming_packet.length());
-	/*std::cout << "\nPacket test:"
-		<< "\nMessage ID:\t" << incoming.message_ID
-		<< "\nPacket ID:\t" << incoming.packet_ID
-		<< "\nnum of p:\t" << incoming.num_of_packets
-		<< "\nmessage:\t" << incoming.message;*/	
+	//storing and sorting
 	if (message.size()>=1)
 	{
 		for (size_t i = 0; i < message.size(); i++)
 		{
-			if (incoming.message_ID < message.at(i).message_ID) { message.insert(message.begin() + i, incoming); break; }
-			else if (incoming.packet_ID < message.at(i).packet_ID) { message.insert(message.begin() + i, incoming); break; };
+			if (incoming.message_ID == message.at(i).message_ID) 
+			{
+				if (incoming.packet_ID < message.at(i).packet_ID) { message.insert(message.begin() + i, incoming); break;}
+				else if (i == message.size() - 1) { message.insert(message.begin() + i + 1, incoming); break; };
+				//else { message.insert(message.begin() + i++, incoming); break; };
+			}
+			else if(incoming.message_ID<message.at(i).message_ID) { message.insert(message.begin()+i--,incoming); break;};
 		};
 	}
 	else message.push_back(incoming);
-	//message.push_back(incoming);
-	/*
-	std::cout << "\nsaving to vector\n";
-	for (size_t i = 0; i < messages.size(); i++)
-	{
-		if (messages[i][0].message_ID == incoming.message_ID) messages[i].emplace_back(incoming);
-		if (i == messages.size() - 1) { std::vector<packet> (); messages[i].emplace_back(incoming); };
-	};
-	std::cout << "\nDisplaying amount of packs in message\n";
-	if (incoming.num_of_packets==messages[0].size() && incoming.message_ID==messages[0][0].message_ID)
-	{
-		std::cout << "\nnum of packs: " << incoming.num_of_packets << ", vec size: " << messages[0].size() << "\n\a";
-	}
-	//std::cout << "\nmessage vector: [" << messages.size() << "][" << messages[0].size()<<"]"<<'\n';
-	*/
 	return 0;
 };
 void Display()
@@ -137,10 +125,9 @@ void Display()
 	//extern std::vector<struct packet>message;
 	for (size_t i = 0; i < message.size(); i++)
 	{
-		std::cout << message[i].message_ID << " " << message[i].packet_ID << " " << message[i].message << "\n";
+		std::cout << message[i].message_ID << '\t' << message[i].packet_ID << '\t' << message[i].message << "\n";
 	};
 };
-
 int Packet_Assembler()
 {
 	//https://www.reddit.com/r/dailyprogrammer/comments/72ivih/20170926_challenge_333_easy_packet_assembler/
@@ -175,7 +162,7 @@ int Packet_Assembler()
 		5181    2   7   shoulder of Orion.I watched C - beams
 		5181    4   7   Gate.All those moments will be lost
 		6220    6   10  He's a silent guardian. 
-		5181    3   7   glitter in the dark near the Tannh�user
+		5181    3   7   glitter in the dark near the Tannhäuser
 		6220    7   10  A watchful protector.
 		5181    1   7   believe.Attack ships on fire off the
 		6220    0   10  We have to chase him.
@@ -188,7 +175,7 @@ int Packet_Assembler()
 		5181    0   7   I've seen things you people wouldn't
 		5181    1   7   believe.Attack ships on fire off the
 		5181    2   7   shoulder of Orion.I watched C - beams
-		5181    3   7   glitter in the dark near the Tannh�user
+		5181    3   7   glitter in the dark near the Tannhäuser
 		5181    4   7   Gate.All those moments will be lost
 		5181    5   7   in time, like tears in rain.Time to die.
 		5181    6   7
@@ -214,7 +201,7 @@ int Packet_Assembler()
 		"5181    2   7   shoulder of Orion.I watched C - beams",
 		"5181    4   7   Gate.All those moments will be lost",
 		"6220    6   10  He's a silent guardian. ",
-		"5181    3   7   glitter in the dark near the Tannh�user",
+		"5181    3   7   glitter in the dark near the Tannhäuser",
 		"6220    7   10  A watchful protector.",
 		"5181    1   7   believe.Attack ships on fire off the",
 		"6220    0   10  We have to chase him.",
@@ -223,13 +210,81 @@ int Packet_Assembler()
 		"6220    2   10  but not the one it needs right now.",
 		"6220    8   10  A Dark Knight.",
 	};
-	for (size_t i = 0; i < sizeof(messages)/sizeof(messages[0])-1; i++)
+	std::string challenge_input[] =
+	{
+		"7469    1   7   believe.Attack ships on fire off the",
+		"9949    6   10  He's a silent guardian." ,
+		"2997    9   19  Force is a pathway to many abilities some",
+		"6450    2   11  is a vestige of the vox populi, now vacant, vanished.However, this valorous",
+		"6450    10  11 ",
+		"6450    8   11  veers most verbose, so let me simply add that it's my very good honour to meet ",
+		"6450    5   11 and voracious violation of volition!The only verdict is vengeance; a vendetta",
+		"9949    1   10  Because he's the hero Gotham deserves, ",
+		"6450    1   11 and villain by the vicissitudes of fate.This visage, no mere veneer of vanity,",
+		"2997    13  19  he did.Unfortunately, he taught his",
+		"9949    8   10  A Dark Knight.",
+		"1938    4   17  by the iniquities of the selfish and the",
+		"1938    0   17  You read the Bible, Brett ? Well there's ",
+		"2997    0   19  Did you ever hear the tragedy of Darth",
+		"2997    1   19  Plagueis the Wise ? I thought not.It's not a",
+		"1938    8   17  of darkness, for he is truly is brother's ",
+		"2997    14  19  apprentice everything he knew, then his",
+		"6450    3   11  visitation of a bygone vexation stands vivified, and has vowed to vanquish these",
+		"1938    12  17  who attempt to poison and destroy my",
+		"6450    9   11  you and you may call me V.",
+		"7469    2   7   shoulder of Orion.I watched C - beams",
+		"2997    10  19  consider to be unnatural.He became so",
+		"1938    1   17  this passage I got memorized, sorta fits",
+		"2997    5   19  Force to influence the midichlorians to",
+		"1938    6   17  in the name of charity and good will,",
+		"7469    0   7   I've seen things you people wouldn't",
+		"9949    4   10  Because he can take it.",
+		"6450    7   11  vindicate the vigilant and the virtuous.Verily, this vichyssoise of verbiage",
+		"9949    0   10  We have to chase him.",
+		"9949    7   10  A watchful protector.",
+		"2997    3   19  legend.Darth Plagueis was a Dark Lord of the",
+		"6450    6   11  held as a votive, not in vain, for the value and veracity of such shall one day",
+		"2997    8   19  cared about from dying.The dark side of the",
+		"1938    10  17  And I will strike down upon thee with",
+		"1938    11  17  great vengeance and furious anger those",
+		"1938    7   17  shepherds the weak through the valley",
+		"1938    2   17  this occasion.Ezekiel 25:17 ? \"The path" ,
+		"2997    18  19",
+		"9949    9   10",
+		"1938    14  17  the Lord when I lay my vengeance upon",
+		"1938    15  17  thee." ,
+		"1938    9   17  keeper and the finder of lost children.",
+		"1938    13  17  brothers.And you will know my name is",
+		"9949    2   10  but not the one it needs right now.",
+		"2997    16  19  he could have others from death, but not",
+		"2997    7   19  dark side that he could even keep the once he",
+		"1938    5   17  tyranny of evil men.Blessed is he who,",
+		"2997    17  19  himself.",
+		"2997    6   19  create life...He had such a knowledge of the",
+		"2997    12  19  losing his power.Which eventually, of course,",
+		"7469    4   7   Gate.All those moments will be lost",
+		"2997    2   19  story the Jedi would tell you.It's a Sith",
+		"1938    16  17",
+		"2997    4   19  Sith so powerful and so wise, he could use the",
+		"1938    3   17  of the righteous man is beset on all sides",
+		"2997    11  19  powerful...The only thing he was afraid of was",
+		"7469    6   7 ",
+		"2997    15  19  apprentice killed him in his sleep.Ironic,",
+		"7469    5   7   in time, like tears in rain.Time to die.",
+		"9949    3   10  So we'll hunt him. ",
+		"7469    3   7   glitter in the dark near the Tannhäuser",
+		"6450    4   11  venal and virulent vermin vanguarding vice and vouchsafing the violently vicious",
+		"6450    0   11  Voilà!In view, a humble vaudevillian veteran, cast vicariously as both victim",
+		"9949    5   10  Because he's not a hero. "
+	};
+	for (size_t i = 0; i < sizeof(challenge_input)/sizeof(challenge_input[0]); i++)
 	{
 		//std::cout << "\nPacket sent to assembler: " << messages[i];
-		Assembler(messages[i]);
+		Assembler(challenge_input[i]);
 	};
 	Display();
+	message.clear();
 	_getch();
 	return 0;
-	//date of creation: 26.09.2017
+	//date of creation: 26-28.09.2017
 }
