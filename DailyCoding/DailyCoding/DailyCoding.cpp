@@ -23,17 +23,18 @@ int main()
 		"Day#3\tLongest word in sentence",
 		"Day#4\tLetter changes",
 		"Day#5\tSimple adding",
-		"Day#5\tLetter captitalize",
-		"Day#6\tSimple Symbols",
-		"Day#7\tChecknums",
-		"Day#8\tTime convert",
-		"Day#9\tAlphabet soup",
+		"Day#6\tLetter captitalize",
+		"Day#7\tSimple Symbols",
+		"Day#8\tChecknums",
+		"Day#9\tTime convert",
+		"Day#10\tAlphabet soup",
 		"Day#11\tDistance between two cities",
 		"Day#12\tHappy numbers",
 		"Day#13\tCoin flipper",
 		"Day#14\tFibonacci sequence",
-		"Day#16\tTalking clock",
-		"Day#17\tPacket Assembler",
+		"Day#15\tTalking clock",
+		"Day#16\tPacket Assembler",
+		"Day#17\tSequences",
 	};
 	int input = 0;
 	do
@@ -57,6 +58,7 @@ int main()
 		case 13: Fibonacci(); break;
 		case 14: Talking_Clock(); break;
 		case 15: Packet_Assembler(); break;
+		case 16: Consecutive_Distance_Rating(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));

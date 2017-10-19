@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "dailyprogrammer.h"
 #include "Helper_functions.h"
+#include <sstream> //stream manipulation
 
 void clock(std::string time)
 {
@@ -288,3 +289,72 @@ int Packet_Assembler()
 	return 0;
 	//date of creation: 26-28.09.2017
 }
+
+bool fill(std::istream & input, int & amount, int & length, std::vector<std::vector<int>> & tab)
+{
+	input >> amount;
+	input >> length;
+	int temp = 0;
+	for (int seq = 0; seq<amount; seq++)
+	{
+		std::cout << "\n ";
+		std::vector<int> row;
+		tab.push_back(row);
+		for (int num = 0; num<length; num++)
+		{
+			input >> temp;
+			tab[seq].push_back(temp); std::cout << tab[seq][num] << "\t";
+		};
+	};
+	return true;
+};
+void sequences(std::istream & input, int difference=1)
+{
+	int numofseq;
+	int seqlen;
+	std::vector<std::vector<int>> seqtab;
+	int seqtotal = 0;
+	int everyseq = 0;
+	//parsing input
+	fill(input, numofseq, seqlen, seqtab);
+	std::cout << "\nSearching for sequences of " << difference << ":";
+	for (int seq = 0; seq<numofseq; seq++)
+	{
+		for (int num = 0; num<seqlen; num++)
+		{
+			for (int n = num; n<seqtab[seq].size(); n++)
+			{
+				if (seqtab[seq][num] + difference == seqtab[seq][n] || seqtab[seq][num]-difference== seqtab[seq][n])
+				{ seqtotal += (n - num); /*std::cout << "\nseq " << seqtab[seq][num] << "-" << seqtab[seq][n] << "= " << n-num; */};
+			};
+		};
+		std::cout << "\nsequence " << seq  << ": " << seqtotal;
+		everyseq += seqtotal;
+		seqtotal = 0;
+	};
+	std::cout << "\nTotal length of sequences: " << everyseq;
+	return;
+};
+int Consecutive_Distance_Rating()
+{
+	//https://www.reddit.com/r/dailyprogrammer/comments/759fha/20171009_challenge_335_easy_consecutive_distance/
+	/* "6 11
+		31 63 53 56 96 62 73 25 54 55 64
+		77 39 35 38 41 42 76 73 40 31 10
+		30 63 57 87 37 31 58 83 34 76 38
+		18 62 55 92 88 57 90 10 11 96 12
+		26 8 7 25 52 17 45 64 11 35 12
+		89 57 21 55 56 81 54 100 22 62 50"*/
+	//initializing stream as test input specification
+	std::istringstream str("6 11 31 63 53 56 96 62 73 25 54 55 64 77 39 35 38 41 42 76 73 40 31 10 30 63 57 87 37 31 58 83 34 76 38 18 62 55 92 88 57 90 10 11 96 12 26 8 7 25 52 17 45 64 11 35 12 89 57 21 55 56 81 54 100 22 62 50");
+	std::cin.rdbuf(str.rdbuf());
+	std::cout << "\nDefault version: ";
+	sequences(std::cin);
+	std::cout << "\n\nBonus version: ";
+	std::istringstream str2("6 11 31 63 53 56 96 62 73 25 54 55 64 77 39 35 38 41 42 76 73 40 31 10 30 63 57 87 37 31 58 83 34 76 38 18 62 55 92 88 57 90 10 11 96 12 26 8 7 25 52 17 45 64 11 35 12 89 57 21 55 56 81 54 100 22 62 50");
+	std::cin.rdbuf(str2.rdbuf());
+	sequences(std::cin, 2);
+	_getch();
+	return 0;
+	//date of creation: 19.10.2017
+};
