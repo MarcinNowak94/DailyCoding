@@ -35,6 +35,7 @@ int main()
 		"Day#15\tTalking clock",
 		"Day#16\tPacket Assembler",
 		"Day#17\tSequences",
+		"Day#18\tAdding Calculator"
 	};
 	int input = 0;
 	do
@@ -59,6 +60,7 @@ int main()
 		case 14: Talking_Clock(); break;
 		case 15: Packet_Assembler(); break;
 		case 16: Consecutive_Distance_Rating(); break;
+		case 17: Adding_Calculator(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));

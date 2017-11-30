@@ -20,3 +20,10 @@ int Packet_Assembler();
 int Consecutive_Distance_Rating();
 
 #endif // !CONSECUTIVE_DISTANCE_RATING_H
+
+#ifndef ADDING_CALCULATOR_H
+#define ADDING_CALCULATOR_H
+
+int Adding_Calculator();
+
+#endif // !ADDING_CALCULATOR_H

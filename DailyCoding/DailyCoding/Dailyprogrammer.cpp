@@ -358,3 +358,59 @@ int Consecutive_Distance_Rating()
 	return 0;
 	//date of creation: 19.10.2017
 };
+
+int calc(std::istream & procedure)
+{
+	int a = 0, b = 0, result = 0;
+	char operation;
+	procedure >> a; procedure >> operation; procedure >> b;
+	//if(a<<0 && b<<0) return 0;
+	switch (operation)
+	{
+	case '+': return(a + b); break;
+	case '-': return(a +(-b)); break;
+	case '*': 
+	{
+		if (0 == b) return 0;
+		if (0 > b) { for (int amount = 0; amount < -b; amount++, result += a); return -result; }
+		for (int amount = 0; amount < b; amount++, result += a);
+		return result;
+	}; break;
+	case '/': 
+	{
+		if ((a + (-b)) < 0) return 0;
+		do
+		{
+			a += (-b);
+			result++;
+			if (a < b) { std::cout << "Non integral answer\n"; break; };
+		} while (a < 0);
+		return result;
+		//TODO: Revisit
+	}; break;
+	case '^': 
+	{
+		for (int amount = 0; amount < b; amount++)
+		{
+			for (int amount2 = 0; amount2 < a; amount2++, result+=a);
+		};
+		return result;
+	}; break;
+	default: std::cout <<"\n\aUnknown Operator '" << operation << "'!";
+	};
+	return result;
+}
+int Adding_Calculator()
+{
+	//https://www.reddit.com/r/dailyprogrammer/comments/6ze9z0/20170911_challenge_331_easy_the_adding_calculator/
+	std::istringstream str("12 + 25 -30 + 100 100 - 30 100 - -30 -25 - 29 -41 - -10 9 * 3 9 * -4 -4 * 8 -12 * -9 100 / 2 75 / -3 -75 / 3 7 / 3 0 / 0 5 ^ 3 -5 ^ 3 -8 ^ 3 -1 ^ 1 1 ^ 1 0 ^ 5 5 ^ 0 10 ^ -3");
+	std::cin.rdbuf(str.rdbuf());
+	while (std::cin)
+	{
+		std::cout << '\n' << calc(std::cin);
+	};
+
+	_getch();
+	return 0;
+	//date of creation: 30.11.2017
+};
