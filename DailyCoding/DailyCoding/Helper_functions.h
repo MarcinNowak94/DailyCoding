@@ -24,3 +24,10 @@ T random(T Min = 1, T Max = 100)
 
 #endif // !RANDOM_H
 
+#ifndef ABSOULTE_H
+#define ABSOLUTE_h
+
+template<class T=int>
+inline T Absolute(T number) { return number > 0 ? number : -number; };
+
+#endif

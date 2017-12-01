@@ -12,7 +12,6 @@ void clock(std::string time)
 	std::string final = "It's ";
 	int hours = std::stoi(time.substr(0, 2));
 	int minutes = std::stoi(time.substr(3, 4));
-	//std::cout << final << digits[hours % 12] << ' ' << decimal[minutes / 10] << ' ' << digits[minutes % 10] << ' ' << suffix[hours / 12] << '\n';
 	if (0 == hours) { final.append(digits[12]); } else final.append(digits[hours % 12]);
 	final.append(" ");
 	if (0 == minutes) { final.append("\b"); }
@@ -85,9 +84,7 @@ static struct packet
 };
 static std::vector<packet> message;
 int Assembler(std::string incoming_packet)
-{
-	
-	//std::cout << "\nRecieved: " << incoming_packet;	
+{	
 	packet incoming;
 	int elementpos = 0;
 	//get message_ID
@@ -112,7 +109,6 @@ int Assembler(std::string incoming_packet)
 			{
 				if (incoming.packet_ID < message.at(i).packet_ID) { message.insert(message.begin() + i, incoming); break;}
 				else if (i == message.size() - 1) { message.insert(message.begin() + i + 1, incoming); break; };
-				//else { message.insert(message.begin() + i++, incoming); break; };
 			}
 			else if(incoming.message_ID<message.at(i).message_ID) { message.insert(message.begin()+i--,incoming); break;};
 		};
@@ -123,7 +119,6 @@ int Assembler(std::string incoming_packet)
 void Display()
 {
 	std::cout << "\nPacket messages: \n";
-	//extern std::vector<struct packet>message;
 	for (size_t i = 0; i < message.size(); i++)
 	{
 		std::cout << message[i].message_ID << '\t' << message[i].packet_ID << '\t' << message[i].message << "\n";
@@ -280,7 +275,6 @@ int Packet_Assembler()
 	};
 	for (size_t i = 0; i < sizeof(challenge_input)/sizeof(challenge_input[0]); i++)
 	{
-		//std::cout << "\nPacket sent to assembler: " << messages[i];
 		Assembler(challenge_input[i]);
 	};
 	Display();
@@ -325,7 +319,7 @@ void sequences(std::istream & input, int difference=1)
 			for (int n = num; n<seqtab[seq].size(); n++)
 			{
 				if (seqtab[seq][num] + difference == seqtab[seq][n] || seqtab[seq][num]-difference== seqtab[seq][n])
-				{ seqtotal += (n - num); /*std::cout << "\nseq " << seqtab[seq][num] << "-" << seqtab[seq][n] << "= " << n-num; */};
+				{ seqtotal += (n - num);};
 			};
 		};
 		std::cout << "\nsequence " << seq  << ": " << seqtotal;
@@ -364,7 +358,7 @@ int calc(std::istream & procedure)
 	int a = 0, b = 0, result = 0;
 	char operation;
 	procedure >> a; procedure >> operation; procedure >> b;
-	//if(a<<0 && b<<0) return 0;
+	std::cout << "\n" << a << " " << operation << " " << b << " =";
 	switch (operation)
 	{
 	case '+': return(a + b); break;
@@ -378,23 +372,37 @@ int calc(std::istream & procedure)
 	}; break;
 	case '/': 
 	{
-		if ((a + (-b)) < 0) return 0;
+
+		if ((Absolute(a) + -Absolute(b)) < 0) return 0;
+		if (Absolute(a) < Absolute(b)) { std::cout << "Non integral answer\n"; break; };
+		if (a < 0)
+		{
+			a = -a;
+			do
+			{
+				a += -Absolute(b);
+				result++;
+			} while (a > 0);
+			return -result;
+		};
 		do
 		{
-			a += (-b);
+			a += -Absolute(b);
 			result++;
-			if (a < b) { std::cout << "Non integral answer\n"; break; };
-		} while (a < 0);
-		return result;
+			if (a < Absolute(b)) { std::cout << "Non integral answer\n"; break; };
+		} while (a > 0);
+		return b<0?-result:result;
 		//TODO: Revisit
 	}; break;
 	case '^': 
 	{
-		for (int amount = 0; amount < b; amount++)
+		bool isnegative = false;
+		if (a < 0) { a = -a; isnegative = true; };
+		for (int amount = 0; amount <= b; amount++)
 		{
-			for (int amount2 = 0; amount2 < a; amount2++, result+=a);
+			for (int amount2 = 0; amount2 <= a; amount2++, result+=a);
 		};
-		return result;
+		return isnegative=true?-result:result;
 	}; break;
 	default: std::cout <<"\n\aUnknown Operator '" << operation << "'!";
 	};
@@ -407,7 +415,7 @@ int Adding_Calculator()
 	std::cin.rdbuf(str.rdbuf());
 	while (std::cin)
 	{
-		std::cout << '\n' << calc(std::cin);
+		std::cout << calc(std::cin);
 	};
 
 	_getch();
