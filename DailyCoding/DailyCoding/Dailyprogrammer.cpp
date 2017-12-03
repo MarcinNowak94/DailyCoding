@@ -353,7 +353,7 @@ int Consecutive_Distance_Rating()
 	//date of creation: 19.10.2017
 };
 
-int calc(std::istream & procedure)
+void calc(std::istream & procedure)
 {
 	int a = 0, b = 0, result = 0;
 	char operation;
@@ -361,20 +361,21 @@ int calc(std::istream & procedure)
 	std::cout << "\n" << a << " " << operation << " " << b << " =";
 	switch (operation)
 	{
-	case '+': return(a + b); break;
-	case '-': return(a +(-b)); break;
+	case '+': {std::cout << (a + b); return; }; break;
+	case '-': {std::cout << (a + (-b)); return; }; break;
 	case '*': 
 	{
-		if (0 == b) return 0;
-		if (0 > b) { for (int amount = 0; amount < -b; amount++, result += a); return -result; }
+		if (0 == b) {std::cout << 0; return; };
+		if (0 > b) { for (int amount = 0; amount < -b; amount++, result += a); std::cout << -result; return; };
 		for (int amount = 0; amount < b; amount++, result += a);
-		return result;
+		std::cout << result;
+		return;
 	}; break;
 	case '/': 
 	{
-
-		if ((Absolute(a) + -Absolute(b)) < 0) return 0;
-		if (Absolute(a) < Absolute(b)) { std::cout << "Non integral answer\n"; break; };
+		if (b == 0) { std::cout << "Not-defined\n"; return; };
+		if ((Absolute(a) + -Absolute(b)) < 0) { std::cout << 0; return; };
+		if (Absolute(a) < Absolute(b)) { std::cout << "Non-integral answer\n"; return; };
 		if (a < 0)
 		{
 			a = -a;
@@ -383,30 +384,37 @@ int calc(std::istream & procedure)
 				a += -Absolute(b);
 				result++;
 			} while (a > 0);
-			return -result;
+			std::cout << -result;
+			return;
 		};
 		do
 		{
+			if (a < Absolute(b)) { std::cout << "Non-integral answer\n"; break; }; //need to figure out a way to not return value while breaking 
 			a += -Absolute(b);
 			result++;
-			if (a < Absolute(b)) { std::cout << "Non integral answer\n"; break; };
 		} while (a > 0);
-		return b<0?-result:result;
-		//TODO: Revisit
+		std::cout << (b < 0 ? -result : result);
+		return;
+		//TODO: Revisit 
 	}; break;
 	case '^': 
 	{
+		if (b < 0) { std::cout << "Non-integral answer\n"; return; };
+		if (b == 0) { std::cout << 1; return; };
 		bool isnegative = false;
 		if (a < 0) { a = -a; isnegative = true; };
-		for (int amount = 0; amount <= b; amount++)
+		int number = a;
+		for (int amount = 0; amount < Absolute(b)-1; amount++)
 		{
-			for (int amount2 = 0; amount2 <= a; amount2++, result+=a);
+			for (int amount2 = 0; amount2 < number; amount2++, result+=a);
+			a = result;
+			result = 0;
 		};
-		return isnegative=true?-result:result;
+		std::cout << (isnegative == true ? -a : a);
+		return;
 	}; break;
 	default: std::cout <<"\n\aUnknown Operator '" << operation << "'!";
-	};
-	return result;
+	}; return;
 }
 int Adding_Calculator()
 {
@@ -415,9 +423,8 @@ int Adding_Calculator()
 	std::cin.rdbuf(str.rdbuf());
 	while (std::cin)
 	{
-		std::cout << calc(std::cin);
+		calc(std::cin);
 	};
-
 	_getch();
 	return 0;
 	//date of creation: 30.11.2017
