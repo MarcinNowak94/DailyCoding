@@ -27,3 +27,10 @@ int Consecutive_Distance_Rating();
 int Adding_Calculator();
 
 #endif // !ADDING_CALCULATOR_H
+
+#ifndef REPEATING_NUMBERS_H
+#define REPEATING_NUMBERS_H
+
+int Repeating_Numbers();
+
+#endif // !REPEATING_NUMBERS_H

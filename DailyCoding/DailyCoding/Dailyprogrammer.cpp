@@ -429,3 +429,18 @@ int Adding_Calculator()
 	return 0;
 	//date of creation: 30.11.2017
 };
+
+int Repeating_Numbers()
+{
+	//https://www.reddit.com/r/dailyprogrammer/comments/7eh6k8/20171121_challenge_341_easy_repeating_numbers/
+	long long input[] =
+	{
+		82156821568221,
+		11111011110111011,
+		98778912332145,
+		124489903108444899
+	};
+	_getch();
+	return 0;
+	//date of creation: 04.12.2017
+};
