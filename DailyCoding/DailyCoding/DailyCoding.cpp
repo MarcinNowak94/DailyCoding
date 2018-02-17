@@ -11,6 +11,7 @@
 #include "coderbyte.h"
 #include "idea_bag.h"
 #include "dailyprogrammer.h"
+#include "other.h"
 
 const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra, nisl id laoreet porta, sapien risus luctus nibh, et dapibus velit nisi ac tortor.";
 
@@ -36,7 +37,8 @@ int main()
 		"Day#16\tPacket Assembler",
 		"Day#17\tSequences",
 		"Day#18\tAdding Calculator",
-		"Day#19\tRepeating Numbers"
+		"Day#19\tRepeating Numbers (////TODO)",
+		"Day#20\tFizzBuzz"
 	};
 	int input = 0;
 	do
@@ -63,6 +65,7 @@ int main()
 		case 16: Consecutive_Distance_Rating(); break;
 		case 17: Adding_Calculator(); break;
 		case 18: Repeating_Numbers(); break;
+		case 19: FizzBuzz(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));
