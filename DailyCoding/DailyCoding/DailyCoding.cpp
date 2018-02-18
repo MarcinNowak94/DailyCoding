@@ -38,7 +38,8 @@ int main()
 		"Day#17\tSequences",
 		"Day#18\tAdding Calculator",
 		"Day#19\tRepeating Numbers (////TODO)",
-		"Day#20\tFizzBuzz"
+		"Day#20\tFizzBuzz",
+		"Day#21\tDateChecker",
 	};
 	int input = 0;
 	do
@@ -66,6 +67,7 @@ int main()
 		case 17: Adding_Calculator(); break;
 		case 18: Repeating_Numbers(); break;
 		case 19: FizzBuzz(); break;
+		case 20: Date_Checker(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));
