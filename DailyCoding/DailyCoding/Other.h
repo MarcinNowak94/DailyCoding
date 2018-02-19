@@ -13,3 +13,10 @@ int FizzBuzz();
 int Date_Checker();
 
 #endif // !DATE_CHECKER_H
+
+#ifndef DICEGAME_H
+#define DICEGAME_H
+
+int DiceGame();
+
+#endif // !DICEGAME_H

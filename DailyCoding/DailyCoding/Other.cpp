@@ -53,3 +53,65 @@ int Date_Checker()
 	} while (exit =='y' && exit =='Y');
 	return EXIT_SUCCESS;
 };
+
+int DiceGame()
+{
+	double first=0, second=0;
+	int gamelength = 5, roundlength = 10, diceroll = 0, dice1 = 0, dice2 = 1;
+
+	for (int i = 1; i < gamelength+1; i++)
+	{
+		//first players round
+		for (int j = 1; j < roundlength+1; j++)
+		{
+			dice1 = random(1, 6);
+			dice2 = random(1, 6);
+			if (j==1 && (dice1 + dice2 == 7 || dice1 + dice2 == 11)) break;
+			if (j==1 && (dice1 + dice2 == 2 || dice1 + dice2 == 12)) 
+			{
+				for (int k = 1; k < roundlength+1; k++)	{first += (12 / k+1);};
+				break;
+			};
+			if (dice1 + dice2 == 5) break;
+			first += (dice1 + dice2 / j);
+		};
+		//second players round
+		for (int j = 1; j < roundlength+1; j++)
+		{
+			dice1 = random(1, 6);
+			dice2 = random(1, 6);
+			if (j == 1 && (dice1 + dice2 == 7 || dice1 + dice2 == 11)) break;
+			if (j == 1 && (dice1 + dice2 == 2 || dice1 + dice2 == 12))
+			{
+				for (int k = 1; k < roundlength+1; k++)	{second += (12 / k);};
+				break;
+			};
+			if (dice1 + dice2 == 5) break;
+			second += (dice1 + dice2 / j);
+		};
+	};
+	std::cout << "\n\aEnd of match.\nFinal results:\t First: " << first << ".\tSecond: " << second << ".\nWinner: ";
+	if (first < second) { std::cout << "First.\n"; }
+	else { std::cout << "Second.\n"; };
+
+	/*Specified rules:
+	-2 players: first & second
+	-5 rounds, order of players: first-second-first etc.
+	-player first always begins the game
+	-each round player gathers penalty points as specified below
+	-players begin with 0 points, player with last amount of points wins
+
+	-each turn player rolls two six faced dice simultaneously max 10 times
+
+	Rulebook:
+	-if in first roll player rolls either 7 or 11 he wins the round
+	-if in first roll player rolls either 2 or 12 he loses the round and recieves max penalty
+	-if players rolls 5(sum of faces) he wins the round
+	-if player rolls sum of faces other than specified he gets equal to rolled amount/roll number in this round
+
+	result: display amount of points each player recieved and winner.
+	*/
+	std::cout << "\aPress any key to continue...";
+	_getch();
+	return EXIT_SUCCESS;
+}

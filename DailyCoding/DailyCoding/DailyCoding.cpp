@@ -40,6 +40,7 @@ int main()
 		"Day#19\tRepeating Numbers (////TODO)",
 		"Day#20\tFizzBuzz",
 		"Day#21\tDateChecker",
+		"Day#22\tDicegame"
 	};
 	int input = 0;
 	do
@@ -68,6 +69,7 @@ int main()
 		case 18: Repeating_Numbers(); break;
 		case 19: FizzBuzz(); break;
 		case 20: Date_Checker(); break;
+		case 21: DiceGame(); break;
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));
