@@ -20,3 +20,10 @@ int Date_Checker();
 int DiceGame();
 
 #endif // !DICEGAME_H
+
+#ifndef BARCODECHECKER_H
+#define BARCODECHECKER_H
+
+int BarcodeChecker();
+
+#endif // !BARCODECHECKER_H

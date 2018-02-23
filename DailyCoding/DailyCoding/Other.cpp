@@ -115,3 +115,82 @@ int DiceGame()
 	_getch();
 	return EXIT_SUCCESS;
 }
+
+enum codetype {EAN_8=1, EAN_13=2};
+int CheckEAN(std::string barcode, int type)
+{
+	
+	std::cout << barcode << " length: " << barcode.length() << ", ean-8? " << (type == EAN_8) << ", EAN-13? " << (type == EAN_13) << ".\n";
+	if (type==EAN_8)
+	{
+		int checksum = std::stoi(barcode.substr(8,1));
+		int possiblechecksum = std::stoi(barcode.substr(7,1));
+		std::cout << "checksum= " << checksum << ", possibly=" << possiblechecksum << "\n";
+		int sum = 0;
+		for (int i = 7; i > 0; i--)
+		{
+			std::cout << "number " << barcode.substr(i, 1);
+			if (i % 2 == 0) { sum += std::stoi(barcode.substr(i, 1)) * 3; std::cout << "sum=" << sum << "\n"; continue; }
+			else { sum += std::stoi(barcode.substr(i, 1)); std::cout << "sum=" << sum << "\n"; continue; };
+		};
+		if ((checksum + (sum % 10)) % 10 == 10) { return std::stoi(barcode.substr(0, 8)); } else 				//if EAN-8 code is not right check one position earlier (possibly omitted 0)
+		{
+			int sum = 0;
+			for (int i = 6; i > 0; i--)
+			{
+				std::cout << "number " << barcode.substr(i, 1);
+				if (i % 2 != 0) { sum += std::stoi(barcode.substr(i, 1)) * 3; std::cout << "sum=" << sum << "\n"; continue; }
+				else { sum += std::stoi(barcode.substr(i, 1)); std::cout << "sum=" << sum << "\n"; continue; };
+			};
+		};
+		if ((possiblechecksum + (sum % 10)) % 10 != 10) { std::cout << "Barcode " << barcode << " is not valid EAN-8\a"; return EXIT_FAILURE; }
+		else { return std::stoi('0'+barcode.substr(0, 7)); };		//returning valid EAN-8 with omitted 0
+	};
+	if (type == EAN_13)
+	{
+		int checksum = std::stoi(barcode.substr(13, 1));
+		int possiblechecksum = std::stoi(barcode.substr(12, 1));
+		std::cout << "checksum= " << checksum << ", possibly=" << possiblechecksum << "\n";
+		int sum = 0;
+		for (int i = 12; i > 0; i--)
+		{
+			std::cout << "number " << barcode.substr(i, 1);
+			if (i % 2 == 0) { sum += std::stoi(barcode.substr(i, 1)) * 3; std::cout << "sum=" << sum << "\n"; continue; }
+			else { sum += std::stoi(barcode.substr(i, 1)); std::cout << "sum=" << sum << "\n"; continue; };
+		};
+		if ((checksum + (sum % 10)) % 10 == 10) { return std::stoi(barcode.substr(0, 13)); }
+		else 				//if EAN-13 code is not right check one position earlier (possibly omitted 0)
+		{
+			int sum = 0;
+			for (int i = 11; i > 0; i--)
+			{
+				std::cout << "number " << barcode.substr(i, 1);
+				if (i % 2 != 0) { sum += std::stoi(barcode.substr(i, 1)) * 3; std::cout << "sum=" << sum << "\n"; continue; }
+				else { sum += std::stoi(barcode.substr(i, 1)); std::cout << "sum=" << sum << "\n"; continue; };
+			};
+		};
+		if ((possiblechecksum + (sum % 10)) % 10 != 10) { std::cout << "Barcode " << barcode << " is not valid EAN-13\a"; return EXIT_FAILURE; }
+		else { return std::stoi('0' + barcode.substr(0, 11)); };		//returning valid EAN-8 with omitted 0
+	}
+	std::cout << "Undefined!\a\n";
+	return EXIT_FAILURE;
+	//all eventual errors in input should be signaled with exceptions
+}
+int BarcodeChecker()
+{
+	
+	std::string barcode1 = "69207020772112";	//code 692070207721 with addon 12
+	std::string barcode2 = "075678164125";		//scanner can sometimes ommit predecating 0, real barcode: 0075678164125
+	std::cout << "\nBarcode1 (" << barcode1 << ") EAN-8 code is " << CheckEAN(barcode1, 1) << ".\n";
+	_getch();
+	std::cout << "\nBarcode1 (" << barcode1 << ") EAN-13 code is " << CheckEAN(barcode1, 2) << ".\n";
+	_getch();
+	std::cout << "\nBarcode2 (" << barcode2 << ") EAN-8 code is " << CheckEAN(barcode1, 1) << ".\n";
+	_getch();
+	std::cout << "\nBarcode2 (" << barcode2 << ") EAN-13 code is " << CheckEAN(barcode1, 2) << ".\n";
+	std::cout << "Press any key to continue...\a";
+	_getch();
+	return EXIT_SUCCESS;
+	//https://pl.wikipedia.org/wiki/EAN
+	//http://barcode-coder.com/en/ean-13-specification-102.html
+}
