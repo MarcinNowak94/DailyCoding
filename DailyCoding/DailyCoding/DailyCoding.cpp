@@ -37,7 +37,7 @@ int main()
 		"Day#16\tPacket Assembler",
 		"Day#17\tSequences",
 		"Day#18\tAdding Calculator",
-		"Day#19\tRepeating Numbers (////TODO)",
+		"Day#19\tRepeating Numbers",
 		"Day#20\tFizzBuzz",
 		"Day#21\tDateChecker",
 		"Day#22\tDicegame",

@@ -430,16 +430,53 @@ int Adding_Calculator()
 	//date of creation: 30.11.2017
 };
 
+void checkRepetitions(std::string input[], int amountofinputs)
+{
+	int sequence = 0;
+	do
+	{
+		int startpos = 0;
+		std::vector<std::string> answers(1);
+		answers.at(0) = '\0';
+		std::cout << "Sequence #" << sequence << '\t' << input[sequence] << ":\n";
+		do
+		{
+			int offset = 2;
+			do
+			{
+				int timespresent = 1;
+				std::string number = input[sequence].substr(startpos, offset);
+				for (int i = startpos+1; i < input[sequence].length(); i++)
+				{
+					if (number == input[sequence].substr(i, offset)) timespresent++;
+				};
+				if (timespresent != 1) 
+				{
+					bool isalreadyfound = 0;
+					for (int i = 0; i < answers.size(); i++) if (number == answers.at(i)) isalreadyfound=1;
+					if (!isalreadyfound) { std::cout << number << ':' << timespresent << '\n'; answers.push_back(number);};
+				}	//output according to specification
+				offset++;
+			} while (offset<=input[sequence].length()-1);
+			startpos++;
+		} while (startpos!=input[sequence].length()-3);
+		sequence++;
+		//std::cout << "Amount of repeating numbers: " << answers.size()-1 << '\n';
+	} while (sequence<=amountofinputs);
+	return;
+};
 int Repeating_Numbers()
 {
 	//https://www.reddit.com/r/dailyprogrammer/comments/7eh6k8/20171121_challenge_341_easy_repeating_numbers/
-	long long input[] =
+	std::string input[] =
 	{
-		82156821568221,
-		11111011110111011,
-		98778912332145,
-		124489903108444899
+		"82156821568221",
+		"11111011110111011",
+		"98778912332145",
+		"124489903108444899"
 	};
+	checkRepetitions(input, (sizeof(input) / sizeof(input[0]))-1);
+	std::cout << "Press any key to continue...";
 	_getch();
 	return 0;
 	//date of creation: 04.12.2017

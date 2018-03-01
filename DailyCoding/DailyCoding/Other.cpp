@@ -124,6 +124,7 @@ std::string CheckEAN(std::string barcode, int type)
 	odd = even = sum = checksum = possiblechecksum = 0;
 	if (type==EAN_8)
 	{
+		if (barcode.length() < 6) return "too short for EAN-8";
 		checksum = barcode.at(7)-'0';
 		possiblechecksum = barcode.at(6) - '0';		//checksum if 0 is omitted
 		for (int i = 7; i >=0 ; i--)
@@ -150,7 +151,7 @@ std::string CheckEAN(std::string barcode, int type)
 		return("is not valid EAN-13\a");
 	};
 	return( "Not defined!\a");
-}
+};
 int BarcodeChecker()
 {
 	
@@ -165,8 +166,4 @@ int BarcodeChecker()
 	return EXIT_SUCCESS;
 	//https://pl.wikipedia.org/wiki/EAN
 	//http://barcode-coder.com/en/ean-13-specification-102.html
-	/*
-	Workflow:
-	-
-	*/
-}
+};
