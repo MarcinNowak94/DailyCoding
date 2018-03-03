@@ -143,6 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="mozart-dice-starting.txt" />
+    <Text Include="output.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

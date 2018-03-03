@@ -34,3 +34,10 @@ int Adding_Calculator();
 int Repeating_Numbers();
 
 #endif // !REPEATING_NUMBERS_H
+
+#ifndef MOZARTSMUSICALDICE_H
+#define MOZARTSMUSICALDICE_H
+
+int MozartsMusicalDice();
+
+#endif // !MOZARTSMUSICALDICE_H
