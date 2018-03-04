@@ -482,7 +482,6 @@ int Repeating_Numbers()
 	//date of creation: 04.12.2017
 };
 
-
 int MozartsMusicalDice()
 {
 	//https://www.reddit.com/r/dailyprogrammer/comments/7i1ib1/20171206_challenge_343_intermediate_mozarts/
@@ -496,43 +495,35 @@ int MozartsMusicalDice()
 		float beat = NULL;
 		float duration = NULL;
 	};
-	std::string tempname = {};
-	float tempbeat = NULL;
-	float tempduration = NULL;
-	note temp;
-	std::vector<note> notes;
-	do
-	{
-		file >> tempname;
-		file >> tempbeat;
-		file >> tempduration;
-		temp = { tempname, tempbeat, tempduration };
-		notes.emplace_back(temp);
-	} while (!file.eof());
-	file.close();
-	//-----------------------------------------------------construct measures
-	const int measurelength = 3;
 	std::vector<std::vector<note>> measure;
-	for (int i = 0; i < notes.size(); i++)
 	{
+		std::string tempname = {};
+		float tempbeat = NULL;
+		float tempduration = NULL;
+		note temp = { tempname, tempbeat, tempduration };
+		const int measurelength = 3;
 
-		int measurestart = i;
-		float measurestartbeat = notes.at(i).beat;
-		std::vector<note> tempmeasure;
+		float measurestartbeat = 0;	//initializing measurestart before reading
 		do
 		{
-			//std::cout << i << ".\t" << notes.at(i).name << "\tstart time " << notes.at(i).beat << "\tduration " << notes.at(i).duration << "\tend:" << (notes.at(i).beat + notes.at(i).duration) << '\n';
-			notes.at(i).beat -= measurestartbeat;	//normalizing beat timing
-			//std::cout << i << ".\t" << notes.at(i).name << "\tstart time " << notes.at(i).beat << "\tduration " << notes.at(i).duration << "\tend:" << (notes.at(i).beat +notes.at(i).duration) << '\n';
-			tempmeasure.emplace_back(notes.at(i));
-			i++;
-			if (notes.size() == i) break;
-		} while (((notes.at(i - 1).beat + notes.at(i - 1).duration)) <= measurelength);
-		i--;
-		measure.emplace_back(tempmeasure);
-		//std::cout << "\t\tMeasure: " << measure.size() <<'\n';
-	};	
-	std::cout << "There are " << notes.size() << " notes organized into " << measure.size() << "measures.\n";
+			std::vector<note> tempmeasure;
+			measurestartbeat = tempbeat;
+			do
+			{
+				file >> tempname;
+				file >> tempbeat;
+				file >> tempduration;
+				temp = { tempname, tempbeat, tempduration };
+				temp.beat -= measurestartbeat;	//normalizing beat timing
+				//std::cout << '\t' << temp.name << '\t' << temp.beat << '\t' << temp.duration << '\n';
+				tempmeasure.emplace_back(temp);
+				if (file.eof()) break;
+			} while (temp.beat + temp.duration <= measurelength);
+			measure.emplace_back(tempmeasure);
+			//std::cout << "Measure " << measure.size() << ": " << measure.back().size() << " notes\n";
+		} while (!file.eof());
+	};	//scoped all temporary variables
+	file.close();
 	//-----------------------------------------------------pick 16 measures according to scheme
 	int scheme[16][11] =
 	{
@@ -560,12 +551,17 @@ int MozartsMusicalDice()
 	float beat = 0;
 	for (int i = 0, diceresult=2; i < 16; i++)
 	{
-		diceresult = random(1, 6)+random(1, 6);
-		std::cout <<"\t"<< i << " measure " << scheme[i][diceresult] << '\n';
-		for (int j = 0; j < measure.at(scheme[i][diceresult]).size(); j++)		//breaks on result[15][11]
+		diceresult = (random(1, 6)+random(1, 6))-1;	//ommitting impossible '1' roll 
+		std::cout <<"\t"<< i+1 << " measure " << scheme[i][diceresult] << '\n' << '\a';
+		for (int j = 0; j < measure.at(scheme[i][diceresult]).size(); j++)
+		{
+			std::cout << measure.at(scheme[i][diceresult]).at(j).name << ' '
+				<< beat + measure.at(scheme[i][diceresult]).at(j).beat << ' ' << measure.at(scheme[i][diceresult]).at(j).duration << '\n';
+		};
+		for (int j = 0; j < measure.at(scheme[i][diceresult]).size(); j++)
 		{
 			//save to file or send directly to http://ufx.space/stuff/mozart-dice/ 
-			outputfile<< measure.at(scheme[i][diceresult]).at(j).name << ' '
+			outputfile << measure.at(scheme[i][diceresult]).at(j).name << ' '
 				<< beat+measure.at(scheme[i][diceresult]).at(j).beat << ' ' << measure.at(scheme[i][diceresult]).at(j).duration << '\n';
 		};
 		beat += 3;
