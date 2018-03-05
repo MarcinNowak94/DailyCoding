@@ -41,3 +41,10 @@ int Repeating_Numbers();
 int MozartsMusicalDice();
 
 #endif // !MOZARTSMUSICALDICE_H
+
+#ifndef LIGHTROOM_H
+#define LIGHTROOM_H
+
+int LightRoom();
+
+#endif // !LIGHTROOM_H

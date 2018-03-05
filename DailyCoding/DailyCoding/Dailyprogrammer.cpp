@@ -573,3 +573,77 @@ int MozartsMusicalDice()
 	return EXIT_SUCCESS;
 	//date of creation: 01.03.2017
 };
+
+
+int LightRoom()
+{
+	struct occupancy
+	{
+		int enter = NULL;
+		int leave = NULL;
+	};
+	occupancy exampleinput[] ={ {1, 3}, {2,3},{4,5} };								//Output: 3
+	occupancy testinput1[] = { {2,4}, {3, 6}, {1, 3}, {6,8} };						//Output: 7
+	occupancy testinput2[] = { {6,8}, {5,8}, {8,9}, {5,7}, {4,7} };					//Output: 5
+	occupancy* example[] = { exampleinput, testinput1, testinput2 };
+
+	int testinputlength[] = { 3,4,5 };												//TODO:need to calculate those programatically
+
+	/*for (int i = 0; i < (sizeof(example) / sizeof((*example)[0])); i++)
+	{
+		std::cout << "Size of Example #" << i << "\nexample:\t\t" << sizeof(example) << "\texample[i]:\t" << sizeof(example[i])
+			<< "\nexample/example[i]:\t" << sizeof(example)/sizeof(example[i]) << "\texample[i][0]:\t" << sizeof(example[i][0])
+			<< "\n\n";
+	}*/
+
+	for (int i = 0; i < (sizeof(example)/sizeof((*example)[0])); i++)				//iterating through examples
+	{
+		int earliest = INT_MAX, latest = -INT_MAX, lighton = 0;
+		earliest = 100;
+		latest = -100;
+		occupancy temp{};
+		std::vector<occupancy> gaps;
+		for (int j = 0; j < testinputlength[i]; j++)								//iterating through occupancies
+		{
+			//std::cout << "Enter " << example[i][j].enter << ", leave " << example[i][j].leave << ", difference:  " << example[i][j].leave - example[i][j].enter <<".\n";
+			if (j == 0) { lighton = example[i][j].leave - example[i][j].enter; earliest = example[i][j].enter; latest = example[i][j].leave; continue; };
+			if (example[i][j].enter > latest || (example[i][j].enter < earliest && example[i][j].leave < earliest))
+			{
+				if (gaps.size()==0)
+				{
+					if (example[i][j].enter > latest) 
+					{	
+						temp.enter = latest; temp.leave = example[i][j].enter;
+						gaps.emplace_back(temp);
+						lighton += example[i][j].leave - example[i][j].enter; continue;
+					};
+					temp.enter = example[i][j].leave; temp.leave = earliest;
+					gaps.emplace_back(temp);
+					lighton+= example[i][j].leave - example[i][j].enter; continue;
+				};
+				for (int k = 0; k < gaps.size(); k++)
+				{
+					if (gaps.at(k).enter > example[i][j].enter && gaps.at(k).leave > example[i][j].leave) { lighton += example[i][j].leave - gaps.at(k).enter; gaps.at(k).enter = example[i][j].leave; continue; };
+					if (gaps.at(k).enter < example[i][j].enter && gaps.at(k).leave < example[i][j].leave) { lighton += gaps.at(k).leave - example[i][j].enter; gaps.at(k).leave = example[i][j].enter; continue; };
+					if (gaps.at(k).enter < example[i][j].enter && gaps.at(k).leave > example[i][j].leave) 
+					{ 
+						lighton += (gaps.at(k).leave - example[i][j].leave) - (example[i][j].enter - gaps.at(k).enter);
+						temp.enter = example[i][j].leave; temp.leave = gaps.at(k).leave;
+						gaps.emplace_back(temp);
+						gaps.at(k).leave = example[i][j].enter;
+						continue;
+					};
+				};
+			};
+			if (example[i][j].enter < earliest) { lighton+=earliest-example[i][j].enter; earliest = example[i][j].enter; };
+			if (example[i][j].leave > latest) { lighton += example[i][j].leave - latest; latest = example[i][j].leave; };
+		};
+			std::cout << "In case#" << i << " lightbulb was on for " << lighton << ".\n";
+	};
+
+	std::cout << "Press any key to continue ...";
+	_getch();
+	return EXIT_SUCCESS;
+	//https://www.reddit.com/r/dailyprogrammer/comments/7qn07r/20180115_challenge_347_easy_how_long_has_the/
+	//Date of creation: 05.03.2018
+}; 

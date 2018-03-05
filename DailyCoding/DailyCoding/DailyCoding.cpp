@@ -42,7 +42,8 @@ int main()
 		"Day#21\tDateChecker",
 		"Day#22\tDicegame",
 		"Day#23\tBarcodeChecker",
-		"Day#24\tMozart's Musical Dice"
+		"Day#24\tMozart's Musical Dice",
+		"Day#25\tLight Room"
 	};
 	int input = 0;
 	do
@@ -74,6 +75,7 @@ int main()
 		case 21: DiceGame(); break;
 		case 22: BarcodeChecker(); break;
 		case 23: MozartsMusicalDice(); break;
+		case 24: LightRoom();
 		default:break;
 		};
 	} while (input != (sizeof(challenges) / sizeof(*challenges)));
