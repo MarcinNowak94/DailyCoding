@@ -574,7 +574,6 @@ int MozartsMusicalDice()
 	//date of creation: 01.03.2017
 };
 
-
 int LightRoom()
 {
 	struct occupancy
@@ -647,3 +646,33 @@ int LightRoom()
 	//https://www.reddit.com/r/dailyprogrammer/comments/7qn07r/20180115_challenge_347_easy_how_long_has_the/
 	//Date of creation: 05.03.2018
 }; 
+
+std::string SolveCryptaritmethic(std::string input)
+{
+	std::string answer="Nothing here yet!";
+	//Logic goes here
+	//INPUT COFFE+TIME TO GET CODE
+	return answer;
+};
+int Cryptarithmetic_Solver()
+{
+	std::string example[]
+	{
+		"SEND + MORE == MONEY",
+		"THIS + IS + HIS == CLAIM",
+		"WHAT + WAS + THY == CAUSE"
+		"HIS + HORSE + IS == SLAIN",
+		"HERE + SHE == COMES",
+		"FOR + LACK + OF == TREAD",
+		"I + WILL + PAY + THE == THEFT"
+	};
+	for (int i = 0; i < (sizeof(example) / sizeof(*example)); i++)
+	{
+		std::cout << example[i] << " answer:\n" << SolveCryptaritmethic(example[i]) << '\n';
+	};
+	std::cout << "Press any key to continue...";
+	_getch();
+	return EXIT_SUCCESS;
+	//https://www.reddit.com/r/dailyprogrammer/comments/7p5p2o/20180108_challenge_346_easy_cryptarithmetic_solver/
+	//Date of creation: 07.03.18
+}

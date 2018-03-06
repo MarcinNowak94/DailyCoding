@@ -48,3 +48,10 @@ int MozartsMusicalDice();
 int LightRoom();
 
 #endif // !LIGHTROOM_H
+
+#ifndef CRYPTARITHMETIC_SOLVER_H
+#define CRYPTARITHMETIC_SOLVER_H
+
+int Cryptarithmetic_Solver();
+
+#endif // !CRYPTARITHMETIC_SOLVER_H

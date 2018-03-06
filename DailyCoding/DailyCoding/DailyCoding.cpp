@@ -17,7 +17,12 @@ const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipisci
 
 int main()
 {
-	std::string challenges[]
+	std::string ranges[]
+	{
+		"Days 1-25",
+		"Days 26-50"
+	};
+	std::string challenges1to25[]
 	{
 		"Day#1\tFirst Reverse",
 		"Day#2\tFirst Factorial",
@@ -45,46 +50,71 @@ int main()
 		"Day#24\tMozart's Musical Dice",
 		"Day#25\tLight Room"
 	};
-	int input = 0;
+	std::string challenges26to50[]
+	{
+		"Day#26\tCryptarithmetic Solver"
+	};
+	int input[2]{};
 	do
 	{
-		input = simplemenu(challenges, "Pick challange solution");
-		switch (input)
+		input[0] = simplemenu(ranges, "Pick range");
+		switch (input[0])
 		{
-		case 0: FirstReverse(); break;
-		case 1: FirstFactorial(); break;
-		case 2: LongestWord(); break;
-		case 3: LetterChanges(); break;
-		case 4: SimpleAdding(); break;
-		case 5: LetterCapitalize(); break;
-		case 6: SimpleSymbols(); break;
-		case 7: CheckNums(); break;
-		case 8: TimeConvert(); break;
-		case 9: AlphabetSoup(); break;
-		case 10: Distance_between_two_cities(); break;
-		case 11: Happy_Numbers(); break;
-		case 12: Coin_Flipper(); break;
-		case 13: Fibonacci(); break;
-		case 14: Talking_Clock(); break;
-		case 15: Packet_Assembler(); break;
-		case 16: Consecutive_Distance_Rating(); break;
-		case 17: Adding_Calculator(); break;
-		case 18: Repeating_Numbers(); break;
-		case 19: FizzBuzz(); break;
-		case 20: Date_Checker(); break;
-		case 21: DiceGame(); break;
-		case 22: BarcodeChecker(); break;
-		case 23: MozartsMusicalDice(); break;
-		case 24: LightRoom();
-		default:break;
+		case 0: {
+			do
+			{
+				input[1] = simplemenu(challenges1to25, "Pick challange solution");
+				switch (input[1])
+				{
+				case 0: FirstReverse(); break;
+				case 1: FirstFactorial(); break;
+				case 2: LongestWord(); break;
+				case 3: LetterChanges(); break;
+				case 4: SimpleAdding(); break;
+				case 5: LetterCapitalize(); break;
+				case 6: SimpleSymbols(); break;
+				case 7: CheckNums(); break;
+				case 8: TimeConvert(); break;
+				case 9: AlphabetSoup(); break;
+				case 10: Distance_between_two_cities(); break;
+				case 11: Happy_Numbers(); break;
+				case 12: Coin_Flipper(); break;
+				case 13: Fibonacci(); break;
+				case 14: Talking_Clock(); break;
+				case 15: Packet_Assembler(); break;
+				case 16: Consecutive_Distance_Rating(); break;
+				case 17: Adding_Calculator(); break;
+				case 18: Repeating_Numbers(); break;
+				case 19: FizzBuzz(); break;
+				case 20: Date_Checker(); break;
+				case 21: DiceGame(); break;
+				case 22: BarcodeChecker(); break;
+				case 23: MozartsMusicalDice(); break;
+				case 24: LightRoom();
+				default:break;
+				};
+			} while (input[1] != (sizeof(challenges1to25) / sizeof(*challenges1to25)));
+		}; break;
+		case 1: {
+			do
+			{
+				input[1] = simplemenu(challenges26to50, "Pick challange solution");
+				switch (input[1])
+				{
+				case 0: Cryptarithmetic_Solver(); break;				
+				default:break;
+				};
+			} while (input[1] != (sizeof(challenges26to50) / sizeof(*challenges26to50)));
+		}; break;
+		default: break;
 		};
-	} while (input != (sizeof(challenges) / sizeof(*challenges)));
-	return 0;
+	} while (input[0]!=(sizeof(ranges)/sizeof(*ranges)));
 	std::cout << "\n\a\tFarewell!\n"
 		<< "Press any key to exit...";
 	_getch();
+	return 0;
 	//date of creation: 03.09.2017
 }
 
 //TODO: Continue practicing and developping programming skills
-//Created by: Marcin Nowak
+//Created by: Marcin Nowak	https://github.com/marcinnowak94
