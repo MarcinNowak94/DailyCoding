@@ -647,11 +647,56 @@ int LightRoom()
 	//Date of creation: 05.03.2018
 }; 
 
-std::string SolveCryptaritmethic(std::string input)
+std::string SolveCryptaritmethic(const std::string & input)
 {
 	std::string answer="Nothing here yet!";
-	//Logic goes here
-	//INPUT COFFE+TIME TO GET CODE
+	//process input into data and operators
+	std::vector<std::vector<char>> word;		//collection of letters and words
+	word.resize(sizeof(char)*input.length());
+	word.emplace_back(); word.at(0).emplace_back(0);
+	std::vector<char> operators;				//collection of operators
+	operators.emplace_back();
+	//std::cout << "Recieved " << input << " : "<< input.size() << "\n";
+	//extract letters from data 
+	for (int  i = 0; i < input.length(); i++)
+	{
+		static bool found = false;
+		//std::cout << input.at(i) << ",";
+		if (isblank(input.at(i))) continue;
+		if (isalpha(input.at(i)))
+		{
+			for (int j = 0; j < word.size(); j++)
+			{
+				for (int k = 0; k < word[j].size(); k++)
+				{
+					if (word[j][k] == input.at(i)) { found = true; break; };
+				};
+			};
+			if (found == false) word.back().emplace_back(input.at(i));
+			continue;
+		};
+		if ('+'== input.at(i) || '-'== input.at(i) || '='==input.at(i))
+		{
+			switch (input.at(i))
+			{
+			case '-': operators.emplace_back(input.at(i)); break;
+			case '+': operators.emplace_back(input.at(i)); break;
+			case '=': operators.emplace_back(input.at(i)); i++; break;
+			default: break;
+			};
+		};
+	};
+	//assume values of letters & check assumption
+	bool assumption = false;
+	struct assumption { const int value; char letter; };
+	assumption value[10]=( {0,NULL}, {1,NULL}, {2,NULL}, {3,NULL}, {4,NULL}, {5,NULL}, {6,NULL}, {7,NULL}, {8,NULL}, {9 ,NULL} );
+	do
+	{
+	
+	} while (assumption==true);
+
+	//return right answer
+
 	return answer;
 };
 int Cryptarithmetic_Solver()
@@ -660,7 +705,7 @@ int Cryptarithmetic_Solver()
 	{
 		"SEND + MORE == MONEY",
 		"THIS + IS + HIS == CLAIM",
-		"WHAT + WAS + THY == CAUSE"
+		"WHAT + WAS + THY == CAUSE",
 		"HIS + HORSE + IS == SLAIN",
 		"HERE + SHE == COMES",
 		"FOR + LACK + OF == TREAD",
