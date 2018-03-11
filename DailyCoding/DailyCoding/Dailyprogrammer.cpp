@@ -75,7 +75,7 @@ int Talking_Clock()
 	//date of creation: 26.09.2017
 };
 
-static struct packet
+struct packet
 {
 	int message_ID;			//which message this packet is a part of
 	int packet_ID;			//the index of this packet in the message (zero-indexed)
@@ -654,13 +654,13 @@ std::string SolveCryptaritmethic(const std::string & input)
 	std::vector<std::vector<char>> word;		//collection of letters and words
 	word.emplace_back();
 	std::vector<char> operators;				//collection of operators
-	std::vector<char> characters;
+	struct assume { char letter; int value; };
+	std::vector<assume> characters;
 	//std::cout << "Recieved " << input << " : "<< input.size() << "\n";
 	//extract letters from data 
 	for (int  i = 0; i < input.length(); i++)
 	{
 		bool found = false;
-		//std::cout << input.at(i) << ",";
 		if (isblank(input.at(i))) continue;
 		if (isalpha(input.at(i)))
 		{
@@ -672,7 +672,7 @@ std::string SolveCryptaritmethic(const std::string & input)
 					if (word[j][k] == input.at(i)) { found = true; break; };
 				};
 			};
-			if (found == false) {std::cout << input.at(i) << '\n'; characters.emplace_back(input.at(i));}
+			if (found == false) { assume temp{ input.at(i),NULL }; characters.emplace_back(temp); }
 			word.back().emplace_back(input.at(i));
 			continue;
 		};
@@ -687,7 +687,7 @@ std::string SolveCryptaritmethic(const std::string & input)
 			};
 		};
 	};
-	for (int i = 0; i < word.size(); i++)
+	/*for (int i = 0; i < word.size(); i++)
 	{
 		for (int j = 0; j < word.at(i).size(); j++)
 		{
@@ -698,22 +698,54 @@ std::string SolveCryptaritmethic(const std::string & input)
 	std::cout << "\nDifferent characters: ";
 	for (int i = 0; i < characters.size(); i++)
 	{
-		std::cout << characters.at(i); std::cout << ', ';
+		std::cout << characters.at(i).letter; std::cout << ", ";
 	};
-	std::cout << '\n';
-	
+	std::cout << '\n';*/
 	//assume values of letters & check assumption
-	/*bool assumption = false;
-	struct values { int value=NULL; char character=NULL; };
-	std::vector<values> assume;
-	
+	bool assumption = false;
 
-	do
+	answer.clear();
+	for (int i = 0; i < characters.size(); i++)
 	{
-	
-	} while (assumption==true);*/
+		//assume values - bruteforce, need not to repeat assumptions. IDEA: Map already used/unused values ?
+		characters[i].value = i;		//placeholder TODO
 
-	//return right answer
+		//prepare answer
+		answer += ' \'';
+		answer += characters[i].letter;
+		answer += "\'=";
+		answer += std::to_string(characters[i].value);
+	};
+	std::string temp;
+	int* number;
+	number = new int[word.size()];
+	for (int i = 0; i < word.size(); i++)
+	{
+		temp.clear();
+		for (int j = 0; j < word[i].size(); j++)
+		{
+			for (int k = 0; k < characters.size(); k++)
+			{	if (characters[k].letter == word[i][j]) { temp += std::to_string(characters[k].value); break; };	};
+		};
+		std::cout << temp << "\n";
+		number[i] = std::stoi(temp);
+	};
+	for (int i = 0, sum=number[i]; i < operators.size(); i++)
+	{
+		std::cout << "sum = " << sum << "\n";
+		if (operators[i] == '+') { sum += number[i + 1]; continue; };
+		if (operators[i] == '-') { sum -= number[i + 1]; continue; };
+		if (operators[i] == '*') { sum *= number[i + 1]; continue; };
+		if (operators[i] == '/') { sum /= number[i + 1]; continue; };
+		if (operators[i] == '=') { if (sum == number[i + 1]) { assumption = true; break; }; break; };
+	};
+	 delete[] number;
+	
+	 /*do
+	{
+		
+
+	} while (assumption==true);*/
 
 	return answer;
 };
