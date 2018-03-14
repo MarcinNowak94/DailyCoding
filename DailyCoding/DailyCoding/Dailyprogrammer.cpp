@@ -647,6 +647,8 @@ int LightRoom()
 	//Date of creation: 05.03.2018
 }; 
 
+
+
 std::string SolveCryptaritmethic(const std::string & input)
 {
 	std::string answer="Nothing here yet!";
@@ -656,7 +658,6 @@ std::string SolveCryptaritmethic(const std::string & input)
 	std::vector<char> operators;				//collection of operators
 	struct assume { char letter; int value; };
 	std::vector<assume> characters;
-	//std::cout << "Recieved " << input << " : "<< input.size() << "\n";
 	//extract letters from data 
 	for (int  i = 0; i < input.length(); i++)
 	{
@@ -703,19 +704,22 @@ std::string SolveCryptaritmethic(const std::string & input)
 	std::cout << '\n';*/
 	//assume values of letters & check assumption
 	bool assumption = false;
-
+	int possiblevalues[10] = { 0,1,2,3,4,5,6,7,8,9 };
+	
+	//do {
 	answer.clear();
 	for (int i = 0; i < characters.size(); i++)
 	{
 		//assume values - bruteforce, need not to repeat assumptions. IDEA: Map already used/unused values ?
-		characters[i].value = i;		//placeholder TODO
-
+		// TODO: make brutforce algorithm (checking all permutations assumed values to n-long character set)
+		/*placeholder*/ characters[i].value = i;
 		//prepare answer
 		answer += ' \'';
 		answer += characters[i].letter;
 		answer += "\'=";
 		answer += std::to_string(characters[i].value);
 	};
+	std::cout << "Tested solution: " << answer << '\n';
 	std::string temp;
 	int* number;
 	number = new int[word.size()];
@@ -727,26 +731,20 @@ std::string SolveCryptaritmethic(const std::string & input)
 			for (int k = 0; k < characters.size(); k++)
 			{	if (characters[k].letter == word[i][j]) { temp += std::to_string(characters[k].value); break; };	};
 		};
-		std::cout << temp << "\n";
+		//std::cout << temp << "\n";
 		number[i] = std::stoi(temp);
 	};
 	for (int i = 0, sum=number[i]; i < operators.size(); i++)
 	{
-		std::cout << "sum = " << sum << "\n";
+		//std::cout << "sum = " << sum << "\n";
 		if (operators[i] == '+') { sum += number[i + 1]; continue; };
 		if (operators[i] == '-') { sum -= number[i + 1]; continue; };
 		if (operators[i] == '*') { sum *= number[i + 1]; continue; };
 		if (operators[i] == '/') { sum /= number[i + 1]; continue; };
 		if (operators[i] == '=') { if (sum == number[i + 1]) { assumption = true; break; }; break; };
 	};
-	 delete[] number;
-	
-	 /*do
-	{
-		
-
-	} while (assumption==true);*/
-
+	delete[] number;
+	//} while (assumption==false);
 	return answer;
 };
 int Cryptarithmetic_Solver()
