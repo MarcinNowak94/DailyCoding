@@ -55,3 +55,10 @@ int LightRoom();
 int Cryptarithmetic_Solver();
 
 #endif // !CRYPTARITHMETIC_SOLVER_H
+
+#ifndef BOWLINGFRAMESDISPLAY_H
+#define BOWLINGFRAMESDISPLAY_H
+
+int BowlingFramesDisplay();
+
+#endif // !BOWLINGFRAMESDISPLAY_H

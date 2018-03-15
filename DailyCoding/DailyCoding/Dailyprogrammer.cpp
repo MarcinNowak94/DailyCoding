@@ -647,8 +647,6 @@ int LightRoom()
 	//Date of creation: 05.03.2018
 }; 
 
-
-
 std::string SolveCryptaritmethic(const std::string & input)
 {
 	std::string answer="Nothing here yet!";
@@ -769,3 +767,30 @@ int Cryptarithmetic_Solver()
 	//https://www.reddit.com/r/dailyprogrammer/comments/7p5p2o/20180108_challenge_346_easy_cryptarithmetic_solver/
 	//Date of creation: 07.03.18
 }
+
+std::string DisplayBowlingFrame(int input[], int size)
+{
+	std::string bowlingframe={};
+
+	return bowlingframe;
+};
+int BowlingFramesDisplay()
+{
+	int examples[][]
+	{																	//Outputs:
+		(6, 4, 5, 3, 10, 10, 8, 1, 8, 0, 10, 6, 3, 7, 3, 5, 3),			// 6/ 53 X  X  81 8- X  63 7/ 53
+		(9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0),	// 9- 9- 9- 9- 9- 9- 9- 9- 9- 9-
+		(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10),				// X  X  X  X  X  X  X  X  X  XXX
+		(5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5),// 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5
+		(10, 3, 7, 6, 1, 10, 10, 10, 2, 8, 9, 0, 7, 3, 10, 10, 10),		// X  3/ 61 X  X  X  2/ 9- 7/ XXX
+		(9, 0, 3, 7, 6, 1, 3, 7, 8, 1, 5, 5, 0, 10, 8, 0, 7, 3, 8, 2, 8)// 9- 3/ 61 3/ 81 5/ -/ 8- 7/ 8/8
+	};
+	for (int i = 0; i < sizeof(examples)/sizeof(examples[0]); i++)
+	{
+		std::cout << DisplayBowlingFrame(examples[i], sizeof(examples[i])/sizeof(examples[i][0])) << '\n';
+	};
+	std::cout << "\aPress any key to continue...";
+	_getch();
+	return EXIT_SUCCESS;
+ //https://www.reddit.com/r/dailyprogrammer/comments/7so37o/20180124_challenge_348_intermediate_bowling/
+};

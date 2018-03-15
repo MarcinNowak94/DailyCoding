@@ -52,7 +52,8 @@ int main()
 	};
 	std::string challenges26to50[]
 	{
-		"Day#26\tCryptarithmetic Solver"
+		"Day#26\tCryptarithmetic Solver",
+		"Day#27\tBowling Frames Display"
 	};
 	int input[2]{};
 	do
@@ -101,7 +102,8 @@ int main()
 				input[1] = simplemenu(challenges26to50, "Pick challange solution");
 				switch (input[1])
 				{
-				case 0: Cryptarithmetic_Solver(); break;				
+				case 0: Cryptarithmetic_Solver(); break;
+				case 1: BowlingFramesDisplay(); break;
 				default:break;
 				};
 			} while (input[1] != (sizeof(challenges26to50) / sizeof(*challenges26to50)));
