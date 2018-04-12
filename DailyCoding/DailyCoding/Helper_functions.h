@@ -31,3 +31,27 @@ template<class T=int>
 inline T Absolute(T number) { return number > 0 ? number : -number; };
 
 #endif
+
+#ifndef SPEAK_H
+#define SPEAK_H
+
+int speak(const std::wstring & text);
+
+#endif // !SPEAK_H
+#ifndef TOSPEECH_H
+#define TOSPEECH_H
+
+template <class T>
+void tospeech(T& text)
+{
+	//cast any text input to wstring
+	std::wstring sapiinput = L"No data was provided!";
+	if (typeid(text)==typeid(std::string))	{sapiinput = std::wstring(text.begin(), text.end()); };
+	if (typeid(text) == typeid(char*)) 
+	{
+	//TODO
+	};
+	speak(sapiinput);
+};
+
+#endif // !TOSPEECH_H
