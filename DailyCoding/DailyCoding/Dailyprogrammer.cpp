@@ -9,7 +9,7 @@ void clock(std::string time)
 	std::string digits[] { "oh", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
 	std::string decimal[] { "\b", "ten", "twenty", "thirty", "fourty", "fifty" };
 	std::string suffix[] {"am", "pm"};
-	std::cout << '\n' << time<< ": ";
+	std::cout << time<< ": ";
 	std::string final = "It's ";
 	int hours = std::stoi(time.substr(0, 2));
 	int minutes = std::stoi(time.substr(3, 4));
@@ -19,9 +19,9 @@ void clock(std::string time)
 	else if (minutes > 9 && minutes < 20) { final.append(digits[minutes]); }
 	else if (0 == minutes % 10) { final.append(decimal[minutes / 10]); }
 	else { final.append(decimal[minutes / 10]); final.append(" "); final.append(digits[minutes % 10]); };
-	final.append(" ");
-	final.append(suffix[hours / 12]);
+	final.append(" " + suffix[hours / 12] + '\n');
 	std::cout << final;
+	tospeech(final);
 	return;
 };
 int Talking_Clock()
@@ -53,12 +53,16 @@ int Talking_Clock()
 		It's eight twenty nine pm
 		It's nine pm
 	*/
-	//clock("00:00");
-	//clock("01:30");
-	//clock("12:05");
-	//clock("14:01");
-	//clock("20:29");
-	//clock("21:00");
+	std::string sample[] =
+	{
+	"00:00",
+	"01:30",
+	"12:05",
+	"14:01",
+	"20:29",
+	"21:00"
+	};
+	for (int i = 0; i < sizeof(sample) / sizeof(sample[0]); i++) {	clock(sample[i]);	};
 	std::string randomtime;
 	for (size_t i = 0; i < 10; i++)
 	{
@@ -71,6 +75,7 @@ int Talking_Clock()
 		} while (randomtime.length()<5);
 		clock(randomtime);
 	};	
+	std::cout << "Press any key to continue...\n";
 	_getch();
 	return 0;
 	//date of creation: 26.09.2017
@@ -88,6 +93,7 @@ int Assembler(std::string incoming_packet)
 {	
 	packet incoming;
 	int elementpos = 0;
+	//Tokenize incoming data and assign values to packet data type
 	//get message_ID
 	incoming.message_ID = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find_first_of(' ')));		
 	if(elementpos!=incoming_packet.length()) elementpos = incoming_packet.find_first_not_of(' ', incoming_packet.find_first_of(' '));					//next non-blank character
@@ -656,7 +662,6 @@ void computepermutations(std::vector<int> & values)
 		guess.emplace_back(values);
 	} while (std::next_permutation(values.begin(), values.end()));
 };
-
 std::string SolveCryptaritmethic(const std::string & input)
 {
 	std::string answer="Nothing here yet!";
