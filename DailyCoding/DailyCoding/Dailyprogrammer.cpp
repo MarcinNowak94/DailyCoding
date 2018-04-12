@@ -2,6 +2,7 @@
 #include "dailyprogrammer.h"
 #include "Helper_functions.h"
 #include <sstream> //stream manipulation
+#include <algorithm>
 
 void clock(std::string time)
 {
@@ -647,9 +648,19 @@ int LightRoom()
 	//Date of creation: 05.03.2018
 }; 
 
+std::vector<std::vector<int>> guess;
+void computepermutations(std::vector<int> & values)
+{
+	do
+	{
+		guess.emplace_back(values);
+	} while (std::next_permutation(values.begin(), values.end()));
+};
+
 std::string SolveCryptaritmethic(const std::string & input)
 {
 	std::string answer="Nothing here yet!";
+
 	//process input into data and operators
 	std::vector<std::vector<char>> word;		//collection of letters and words
 	word.emplace_back();
@@ -702,47 +713,63 @@ std::string SolveCryptaritmethic(const std::string & input)
 	std::cout << '\n';*/
 	//assume values of letters & check assumption
 	bool assumption = false;
-	int possiblevalues[10] = { 0,1,2,3,4,5,6,7,8,9 };
 	
+	std::vector<int> possiblevalue{ 1,2,3,4,5,6,7,8,9,0 };
+	const long permutations = 3628800;
+	if (guess.capacity()==0)
+	{
+		std::cout << "Guess size before resizing: " << guess.capacity() << "\n";
+		guess.reserve(sizeof(possiblevalue)*permutations);
+		std::cout << "Guess size after resizing: " << guess.capacity() << "\n";
+		computepermutations(possiblevalue);
+	};
+	std::cout << "There are " << guess.size() << " combinations\n";
 	//do {
-	answer.clear();
-	for (int i = 0; i < characters.size(); i++)
+	
+	for (int it = 0; it < guess.size(); it++)
 	{
-		//assume values - bruteforce, need not to repeat assumptions. IDEA: Map already used/unused values ?
-		// TODO: make brutforce algorithm (checking all permutations assumed values to n-long character set)
-		/*placeholder*/ characters[i].value = i;
-		//prepare answer
-		answer += ' \'';
-		answer += characters[i].letter;
-		answer += "\'=";
-		answer += std::to_string(characters[i].value);
-	};
-	std::cout << "Tested solution: " << answer << '\n';
-	std::string temp;
-	int* number;
-	number = new int[word.size()];
-	for (int i = 0; i < word.size(); i++)
-	{
-		temp.clear();
-		for (int j = 0; j < word[i].size(); j++)
+		answer.clear();
+		for (int i = 0; i < characters.size(); i++)
 		{
-			for (int k = 0; k < characters.size(); k++)
-			{	if (characters[k].letter == word[i][j]) { temp += std::to_string(characters[k].value); break; };	};
+			//assume values - bruteforce, need not to repeat assumptions. IDEA: Map already used/unused values ?
+			// TODO: make brutforce algorithm (checking all permutations assumed values to n-long character set)
+			/*placeholder*/ characters[i].value = guess[it][i];
+			//prepare answer
+			answer += ' \'';
+			answer += characters[i].letter;
+			answer += "\'=";
+			answer += std::to_string(characters[i].value);
 		};
-		//std::cout << temp << "\n";
-		number[i] = std::stoi(temp);
+		//std::cout << "Tested solution: " << answer << '\n';
+		std::string temp;
+
+		int* number;
+		number = new int[word.size()];
+		for (int i = 0; i < word.size(); i++)
+		{
+			temp.clear();
+			for (int j = 0; j < word[i].size(); j++)
+			{
+				for (int k = 0; k < characters.size(); k++)
+				{
+					if (characters[k].letter == word[i][j]) { temp += std::to_string(characters[k].value); break; };
+				};
+			};
+			//std::cout << temp << "\n";
+			number[i] = std::stoi(temp);
+		};
+		for (int i = 0, sum = number[i]; i < operators.size(); i++)
+		{
+			//std::cout << "sum = " << sum << "\n";
+			if (operators[i] == '+') { sum += number[i + 1]; continue; };
+			if (operators[i] == '-') { sum -= number[i + 1]; continue; };
+			if (operators[i] == '*') { sum *= number[i + 1]; continue; };
+			if (operators[i] == '/') { sum /= number[i + 1]; continue; };
+			if (operators[i] == '=') { if (sum == number[i + 1]) { assumption = true; delete[] number; return answer; }; break; };
+		};
+		delete[] number;
 	};
-	for (int i = 0, sum=number[i]; i < operators.size(); i++)
-	{
-		//std::cout << "sum = " << sum << "\n";
-		if (operators[i] == '+') { sum += number[i + 1]; continue; };
-		if (operators[i] == '-') { sum -= number[i + 1]; continue; };
-		if (operators[i] == '*') { sum *= number[i + 1]; continue; };
-		if (operators[i] == '/') { sum /= number[i + 1]; continue; };
-		if (operators[i] == '=') { if (sum == number[i + 1]) { assumption = true; break; }; break; };
-	};
-	delete[] number;
-	//} while (assumption==false);
+	//} while (assumption==false );
 	return answer;
 };
 int Cryptarithmetic_Solver()
@@ -759,7 +786,7 @@ int Cryptarithmetic_Solver()
 	};
 	for (int i = 0; i < (sizeof(example) / sizeof(*example)); i++)
 	{
-		std::cout << example[i] << " answer:\n" << SolveCryptaritmethic(example[i]) << '\n';
+		std::cout << example[i] << " answer:\n" << SolveCryptaritmethic(example[i]) << "\n\n\a";
 	};
 	std::cout << "Press any key to continue...";
 	_getch();
@@ -768,26 +795,40 @@ int Cryptarithmetic_Solver()
 	//Date of creation: 07.03.18
 }
 
-std::string DisplayBowlingFrame(int input[], int size)
+std::string DisplayBowlingFrame(std::vector<int> input)
 {
-	std::string bowlingframe={};
+	const int frames = 10;	//bowling game consists of 10 frames
+	const int pins = 10;	//in which player has 2 attempts to knock down 10 pins
+	//If the player knocks down all 10 pins on the first roll, that should be displayed as X, and the next number will be the first roll of the next frame.
+	//If the player doesn't knock down any pins, that should be displayed as -
+	//If the player gets a spare (knocks down the remaining pins on the second roll of the frame, that should be displayed as /
 
+	std::string bowlingframe={};
+	//enum struck {-,1,2,3,4,5,6,7,8,9,X};
+	//std::cout << "Array " << &input << ", size= " << input.size() << '\n';
+	for (int i = 0, frame=0; i < input.size() && frame<10 ; i++, frame++)
+	{
+		//if (input[i] == 0) bowlingframe.append("-");
+		if (input[i] == pins) { bowlingframe.append("X  "); continue; };
+		if (input[i] + input[i + 1] == pins) { bowlingframe.append(std::to_string(input[i]) + "/ "); i++; continue; };
+		bowlingframe.append(std::to_string(input[i])); bowlingframe.append(std::to_string(input[++i]) + " ");
+	};
 	return bowlingframe;
 };
 int BowlingFramesDisplay()
 {
-	int examples[][]
+	std::vector<std::vector<int>> examples=
 	{																	//Outputs:
-		(6, 4, 5, 3, 10, 10, 8, 1, 8, 0, 10, 6, 3, 7, 3, 5, 3),			// 6/ 53 X  X  81 8- X  63 7/ 53
-		(9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0),	// 9- 9- 9- 9- 9- 9- 9- 9- 9- 9-
-		(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10),				// X  X  X  X  X  X  X  X  X  XXX
-		(5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5),// 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5
-		(10, 3, 7, 6, 1, 10, 10, 10, 2, 8, 9, 0, 7, 3, 10, 10, 10),		// X  3/ 61 X  X  X  2/ 9- 7/ XXX
-		(9, 0, 3, 7, 6, 1, 3, 7, 8, 1, 5, 5, 0, 10, 8, 0, 7, 3, 8, 2, 8)// 9- 3/ 61 3/ 81 5/ -/ 8- 7/ 8/8
+		{6, 4, 5, 3, 10, 10, 8, 1, 8, 0, 10, 6, 3, 7, 3, 5, 3},			// 6/ 53 X  X  81 8- X  63 7/ 53
+		{9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0 },	// 9- 9- 9- 9- 9- 9- 9- 9- 9- 9-
+		{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},				// X  X  X  X  X  X  X  X  X  XXX
+		{5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5},// 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5
+		{10, 3, 7, 6, 1, 10, 10, 10, 2, 8, 9, 0, 7, 3, 10, 10, 10},		// X  3/ 61 X  X  X  2/ 9- 7/ XXX
+		{9, 0, 3, 7, 6, 1, 3, 7, 8, 1, 5, 5, 0, 10, 8, 0, 7, 3, 8, 2, 8}// 9- 3/ 61 3/ 81 5/ -/ 8- 7/ 8/8
 	};
-	for (int i = 0; i < sizeof(examples)/sizeof(examples[0]); i++)
+	for (int i = 0; i < examples.size(); i++)
 	{
-		std::cout << DisplayBowlingFrame(examples[i], sizeof(examples[i])/sizeof(examples[i][0])) << '\n';
+		std::cout << DisplayBowlingFrame(examples[i]) << '\n';
 	};
 	std::cout << "\aPress any key to continue...";
 	_getch();
