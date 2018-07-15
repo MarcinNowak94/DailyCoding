@@ -21,6 +21,14 @@ void clock(std::string time)
 	else { final.append(decimal[minutes / 10]); final.append(" "); final.append(digits[minutes % 10]); };
 	final.append(" " + suffix[hours / 12] + '\n');
 	std::cout << final;
+	//temp - t test tospeech functionality
+	char* solution;
+	solution = new char[final.size()];
+	/*for (size_t i = 0; i < final.length(); i++)
+	{
+		solution[i] = final[i];
+	};*/
+	//tospeech(solution);
 	tospeech(final);
 	return;
 };
@@ -822,6 +830,7 @@ std::string DisplayBowlingFrame(std::vector<int> input)
 };
 int BowlingFramesDisplay()
 {
+	//TODO:	Fix - output needs to be strictly formatted
 	std::vector<std::vector<int>> examples=
 	{																	//Outputs:
 		{6, 4, 5, 3, 10, 10, 8, 1, 8, 0, 10, 6, 3, 7, 3, 5, 3},			// 6/ 53 X  X  81 8- X  63 7/ 53
@@ -840,3 +849,86 @@ int BowlingFramesDisplay()
 	return EXIT_SUCCESS;
  //https://www.reddit.com/r/dailyprogrammer/comments/7so37o/20180124_challenge_348_intermediate_bowling/
 };
+
+std::string Decode_AlphabetCipher(std::string keyword, std::string message)
+{
+	std::string chart[] =
+	{	"abcdefghijklmnopqrstuvwxyz",
+		"bcdefghijklmnopqrstuvwxyza",
+		"cdefghijklmnopqrstuvwxyzab",
+		"defghijklmnopqrstuvwxyzabc",
+		"efghijklmnopqrstuvwxyzabcd",
+		"fghijklmnopqrstuvwxyzabcde",
+		"ghijklmnopqrstuvwxyzabcdef",
+		"hijklmnopqrstuvwxyzabcdefg",
+		"ijklmnopqrstuvwxyzabcdefgh",
+		"jklmnopqrstuvwxyzabcdefghi",
+		"klmnopqrstuvwxyzabcdefghij",
+		"lmnopqrstuvwxyzabcdefghijk",
+		"mnopqrstuvwxyzabcdefghijkl",
+		"nopqrstuvwxyzabcdefghijklm",
+		"opqrstuvwxyzabcdefghijklmn",
+		"pqrstuvwxyzabcdefghijklmno",
+		"qrstuvwxyzabcdefghijklmnop",
+		"rstuvwxyzabcdefghijklmnopq",
+		"stuvwxyzabcdefghijklmnopqr",
+		"tuvwxyzabcdefghijklmnopqrs",
+		"uvwxyzabcdefghijklmnopqrst",
+		"vwxyzabcdefghijklmnopqrstu",
+		"wxyzabcdefghijklmnopqrstuv",
+		"xyzabcdefghijklmnopqrstuvw",
+		"yzabcdefghijklmnopqrstuvwx",
+		"zabcdefghijklmnopqrstuvwxy"
+	};
+
+	//diagnostic
+	std::cout << "\nRecieved:\nKeyword:\t" << keyword << "\nmessage:\t" << message << "\n";
+	std::cout << "Charts element [0][0]:\t" << chart[0][0] << " (this should be 'a')\n";
+	std::cout << "Charts element [0][25]:\t" << chart[0][25] << " (this should be 'z')\n";
+	//expand keyword to message length and fill with original keyword reoeated as sequece
+	//encode message with corresponding chart values
+	//return solution 
+	return "Answer goes here";
+}
+void AlphabetCipher()
+{
+	std::string answer = "EMPTY";
+	std::string input[][7] =			//TODO: Find out why - if dimension y is not specified VC throws an error "Array cannot contain elements of this type" (type is resolved to const char*)
+	{ 
+		{ "snitch", "thepackagehasbeendelivered" },
+		{ "bond", "theredfoxtrotsquietlyatmidnight" },
+		{ "train", "murderontheorientexpress" },
+		{ "garden", "themolessnuckintothegardenlastnight" },
+
+		{ "cloak", "klatrgafedvtssdwywcyty" },
+		{ "python", "pjphmfamhrcaifxifvvfmzwqtmyswst" },
+		{ "moore", "rcfpsgfspiecbcc" }
+	};
+	std::string outputs[] =
+	{
+		"lumicjcnoxjhkomxpkwyqogywq",
+		"uvrufrsryherugdxjsgozogpjralhvg",
+		"flrlrkfnbuxfrqrgkefckvsa",
+		"zhvpsyksjqypqiewsgnexdvqkncdwgtixkx",
+
+		"iamtheprettiestunicorn",
+		"alwayslookonthebrightsideoflife",
+		"foryoureyesonly"
+	};
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		answer = Decode_AlphabetCipher(input[i][0], input[i][1]);
+		std::cout << "\nAnswer " << answer << " is ";
+		if (answer == outputs[i]) { std::cout << "correct."; }
+		else { std::cout << "incorrect."; };
+	};
+
+	std::cout << "Nothing to see here YET...\n"
+		<< "Press any key to continue...\n";
+	_getch();
+	_getch();	//TODO: for some reason thi is needed now, will investigate that later
+	return;
+
+	//https://www.reddit.com/r/dailyprogrammer/comments/879u8b/20180326_challenge_355_easy_alphabet_cipher/
+}

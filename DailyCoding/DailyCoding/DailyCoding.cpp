@@ -53,7 +53,8 @@ int main()
 	std::string challenges26to50[]
 	{
 		"Day#26\tCryptarithmetic Solver",
-		"Day#27\tBowling Frames Display"
+		"Day#27\tBowling Frames Display",
+		"Day#28\tAlphabet Cipher"
 	};
 	int input[2]{};
 	do
@@ -104,6 +105,7 @@ int main()
 				{
 				case 0: Cryptarithmetic_Solver(); break;
 				case 1: BowlingFramesDisplay(); break;
+				case 2: AlphabetCipher(); break;
 				default:break;
 				};
 			} while (input[1] != (sizeof(challenges26to50) / sizeof(*challenges26to50)));

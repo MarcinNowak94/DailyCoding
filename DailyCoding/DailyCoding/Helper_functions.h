@@ -41,17 +41,25 @@ int speak(const std::wstring & text);
 #ifndef TOSPEECH_H
 #define TOSPEECH_H
 
+//Temporary(?) solution to template problem
+//void tospeech(char* & text)
+//{
+//	std::wstring sapiinput{};
+//	for (int letter = 0; text[letter] != '\0'; letter++) { sapiinput += (wchar_t)text[letter]; };
+//	speak(sapiinput);
+//};
+
 template <class T>
 void tospeech(T& text)
 {
 	//cast any text input to wstring
 	std::wstring sapiinput = L"No data was provided!";
-	if (typeid(text)==typeid(std::string))	{sapiinput = std::wstring(text.begin(), text.end()); };
-	if (typeid(text) == typeid(char*)) 
+	if (typeid(text) == typeid(std::string)) { speak(std::wstring(text.begin(), text.end())); };	//if text is char* this line produces error - need to fix this
+	/*if (typeid(text) == typeid(char*)) 
 	{
-	//TODO
-	};
-	speak(sapiinput);
+		std::cout << "Passed parameter is char*, this part of code should not work - there is another function specialisation for this. THIS IS AN ERROR!\n";
+	};*/
 };
+
 
 #endif // !TOSPEECH_H

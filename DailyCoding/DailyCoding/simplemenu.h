@@ -117,7 +117,6 @@ int simplemenudisplay(std::vector<bool> menu, const T menuoptions[], T2 amountof
 template<class T>
 int simplemenu(T & optionstodisplay)
 {
-	//TODO: calculate amount of options
 	std::vector<bool> menu(1);	//temporary vector remembering position of cursor
 	menu.at(0) = 1;					//initializing cursor position at 1st element
 	for (auto i = 0; i <= (sizeof(optionstodisplay) / sizeof(*optionstodisplay)); i++, menu.push_back(0));		//extra element for "back\exit"
@@ -132,10 +131,7 @@ int simplemenu(T & optionstodisplay, T2 & header)
 	//TODO: calculate amount of options
 	std::vector<bool> menu(1);	//temporary vector remembering position of cursor
 	menu.at(0) = 1;					//initializing cursor position at 1st element
-	for (auto i = 0; i < (sizeof(optionstodisplay) / sizeof(*optionstodisplay)); i++)
-	{
-		menu.push_back(0);
-	};
+	for (auto i = 0; i < (sizeof(optionstodisplay) / sizeof(*optionstodisplay)); i++) {menu.push_back(0);};
 	int cursorpos = 0;
 	cursorpos = simplemenudisplay(menu, optionstodisplay, (sizeof(optionstodisplay) / sizeof(*optionstodisplay)), cursorpos, header);
 	return cursorpos;

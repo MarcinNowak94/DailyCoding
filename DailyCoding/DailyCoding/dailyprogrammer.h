@@ -62,3 +62,10 @@ int Cryptarithmetic_Solver();
 int BowlingFramesDisplay();
 
 #endif // !BOWLINGFRAMESDISPLAY_H
+
+#ifndef ALPHABETCIPHER_H
+#define ALPHABETCIPHER_H
+
+void AlphabetCipher();
+
+#endif // !ALPHABETCIPHER_H
