@@ -850,10 +850,10 @@ int BowlingFramesDisplay()
  //https://www.reddit.com/r/dailyprogrammer/comments/7so37o/20180124_challenge_348_intermediate_bowling/
 };
 
-std::string Decode_AlphabetCipher(const std::string & keyword, const std::string & message)
+std::string Decode_AlphabetCipher(const std::string & keyword, const std::string & message, bool decode)
 {
 	const std::string chart[] =
-	{	"abcdefghijklmnopqrstuvwxyz",
+	{ "abcdefghijklmnopqrstuvwxyz",
 		"bcdefghijklmnopqrstuvwxyza",
 		"cdefghijklmnopqrstuvwxyzab",
 		"defghijklmnopqrstuvwxyzabc",
@@ -882,12 +882,18 @@ std::string Decode_AlphabetCipher(const std::string & keyword, const std::string
 	};
 	int asciioffset = 97;	//offset of lower case letters in ascii encoding
 	std::string solution{};
-	for (int letter = 0; letter < message.length(); letter++)
-	{	
-		solution += chart[(int)keyword[letter % keyword.length()] - asciioffset][(int)message[letter] - asciioffset];
+	if (!decode)
+	{
+		for (int letter = 0; letter < message.length(); letter++)
+		{ solution += chart[(int)keyword[letter % keyword.length()] - asciioffset][(int)message[letter] - asciioffset]; }
+	}
+	else
+	{
+		for (int letter = 0; letter < message.length(); letter++)
+		{	solution += chart[0][chart[(int)keyword[letter % keyword.length()] - asciioffset].find(message[letter])];	};
 	};
 	return solution;
-}
+};
 void AlphabetCipher()
 {
 	std::string answer{};
@@ -913,19 +919,21 @@ void AlphabetCipher()
 		"alwayslookonthebrightsideoflife",
 		"foryoureyesonly"
 	};
-
+	bool decode=false;
+	//bonus does not work correctly need to figure out decoding
 	for (int i = 0; i < sizeof(output)/sizeof(*output); i++)
 	{
-		std::cout << "\n\nCodeword:\t" << input[i][0] << "\tmessage:\t" << input[i][1] << "\nAnswer '" << output[i] << "' expected";
-		answer = Decode_AlphabetCipher(input[i][0], input[i][1]);
-		std::cout << "\nAnswer '" << answer << "'\tis ";
+		if (i == 4) decode = true;
+		std::cout << "\n\nCodeword:\t" << input[i][0] << "\nmessage:\t" << input[i][1];
+		answer = Decode_AlphabetCipher(input[i][0], input[i][1], decode);
+		std::cout << "\nAnswer:\t\t" << answer << " is ";
 		if (answer == output[i]) { std::cout << "correct."; }
 		else { std::cout << "incorrect."; };
 	};
 
 	std::cout << "\n\nPress any key to continue ...";
 	_getch();
-	_getch();	//TODO: for some reason thi is needed now, will investigate that later
+	_getch();	//TODO: Needs fix each key press is registered as two after one of last updates. FIX: change default keyboard character encoding? 
 	return;
 
 	//https://www.reddit.com/r/dailyprogrammer/comments/879u8b/20180326_challenge_355_easy_alphabet_cipher/
