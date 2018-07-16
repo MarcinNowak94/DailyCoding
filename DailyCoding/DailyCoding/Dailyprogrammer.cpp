@@ -850,9 +850,9 @@ int BowlingFramesDisplay()
  //https://www.reddit.com/r/dailyprogrammer/comments/7so37o/20180124_challenge_348_intermediate_bowling/
 };
 
-std::string Decode_AlphabetCipher(std::string keyword, std::string message)
+std::string Decode_AlphabetCipher(const std::string & keyword, const std::string & message)
 {
-	std::string chart[] =
+	const std::string chart[] =
 	{	"abcdefghijklmnopqrstuvwxyz",
 		"bcdefghijklmnopqrstuvwxyza",
 		"cdefghijklmnopqrstuvwxyzab",
@@ -880,20 +880,18 @@ std::string Decode_AlphabetCipher(std::string keyword, std::string message)
 		"yzabcdefghijklmnopqrstuvwx",
 		"zabcdefghijklmnopqrstuvwxy"
 	};
-
-	//diagnostic
-	std::cout << "\nRecieved:\nKeyword:\t" << keyword << "\nmessage:\t" << message << "\n";
-	std::cout << "Charts element [0][0]:\t" << chart[0][0] << " (this should be 'a')\n";
-	std::cout << "Charts element [0][25]:\t" << chart[0][25] << " (this should be 'z')\n";
-	//expand keyword to message length and fill with original keyword reoeated as sequece
-	//encode message with corresponding chart values
-	//return solution 
-	return "Answer goes here";
+	int asciioffset = 97;	//offset of lower case letters in ascii encoding
+	std::string solution{};
+	for (int letter = 0; letter < message.length(); letter++)
+	{	
+		solution += chart[(int)keyword[letter % keyword.length()] - asciioffset][(int)message[letter] - asciioffset];
+	};
+	return solution;
 }
 void AlphabetCipher()
 {
-	std::string answer = "EMPTY";
-	std::string input[][7] =			//TODO: Find out why - if dimension y is not specified VC throws an error "Array cannot contain elements of this type" (type is resolved to const char*)
+	std::string answer{};
+	std::string input[][2] =			//TODO: Find out why - if dimension y is not specified VC throws an error "Array cannot contain elements of this type" (type is resolved to const char*)
 	{ 
 		{ "snitch", "thepackagehasbeendelivered" },
 		{ "bond", "theredfoxtrotsquietlyatmidnight" },
@@ -904,7 +902,7 @@ void AlphabetCipher()
 		{ "python", "pjphmfamhrcaifxifvvfmzwqtmyswst" },
 		{ "moore", "rcfpsgfspiecbcc" }
 	};
-	std::string outputs[] =
+	std::string output[] =
 	{
 		"lumicjcnoxjhkomxpkwyqogywq",
 		"uvrufrsryherugdxjsgozogpjralhvg",
@@ -916,16 +914,16 @@ void AlphabetCipher()
 		"foryoureyesonly"
 	};
 
-	for (size_t i = 0; i < 3; i++)
+	for (int i = 0; i < sizeof(output)/sizeof(*output); i++)
 	{
+		std::cout << "\n\nCodeword:\t" << input[i][0] << "\tmessage:\t" << input[i][1] << "\nAnswer '" << output[i] << "' expected";
 		answer = Decode_AlphabetCipher(input[i][0], input[i][1]);
-		std::cout << "\nAnswer " << answer << " is ";
-		if (answer == outputs[i]) { std::cout << "correct."; }
+		std::cout << "\nAnswer '" << answer << "'\tis ";
+		if (answer == output[i]) { std::cout << "correct."; }
 		else { std::cout << "incorrect."; };
 	};
 
-	std::cout << "Nothing to see here YET...\n"
-		<< "Press any key to continue...\n";
+	std::cout << "\n\nPress any key to continue ...";
 	_getch();
 	_getch();	//TODO: for some reason thi is needed now, will investigate that later
 	return;
