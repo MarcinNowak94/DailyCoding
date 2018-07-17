@@ -54,7 +54,8 @@ int main()
 	{
 		"#26\tCryptarithmetic Solver",
 		"#27\tBowling Frames Display",
-		"#28\tAlphabet Cipher"
+		"#28\tAlphabet Cipher",
+		"#29\tClosest Airborne Plane"
 	};
 	int input[2]{};		//input for menu and submenus
 	do
@@ -106,6 +107,7 @@ int main()
 				case 0: Cryptarithmetic_Solver(); break;
 				case 1: BowlingFramesDisplay(); break;
 				case 2: AlphabetCipher(); break;
+				case 3: ClosestAirbornePlane(); break;
 				default:break;
 				};
 			} while (input[1] != (sizeof(challenges26to50) / sizeof(*challenges26to50)));

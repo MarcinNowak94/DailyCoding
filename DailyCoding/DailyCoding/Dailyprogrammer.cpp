@@ -3,6 +3,8 @@
 #include "Helper_functions.h"
 #include <sstream> //stream manipulation
 #include <algorithm>
+#include "rapidjson/rapidjson.h"	//JSON builder and parser
+#include "curl/curl.h"				//libcurl	HTTP requests
 
 void clock(std::string time)
 {
@@ -894,7 +896,7 @@ std::string Decode_AlphabetCipher(const std::string & keyword, const std::string
 	};
 	return solution;
 };
-void AlphabetCipher()
+int AlphabetCipher()
 {
 	std::string answer{};
 	std::string input[][2] =			//TODO: Find out why - if dimension y is not specified VC throws an error "Array cannot contain elements of this type" (type is resolved to const char*)
@@ -935,8 +937,55 @@ void AlphabetCipher()
 	std::cout << "\n\nPress any key to continue ...";
 	_getch();
 	_getch();	//TODO: Needs fix each key press is registered as two after one of last updates. FIX: change default keyboard character encoding? 
-	return;
+	return 0;
 
 	//https://www.reddit.com/r/dailyprogrammer/comments/879u8b/20180326_challenge_355_easy_alphabet_cipher/
 	//date of creation: 15-16.07.2018
 }
+
+
+struct Lattitude
+{
+	float Value{};
+	enum direction { N = 0, S = 1 };
+	direction Direction{};
+};
+struct Longitude
+{
+	float Value{};
+	enum direction { E = 0, W = 1 };
+	direction Direction{};
+};
+struct Coordinates
+{
+	Lattitude Lattitude{};
+	Longitude Longitude{};
+};
+int ClosestAirbornePlane()
+{
+	//Get data from https://opensky-network.org/api/states/all
+	//(needs library, suggested libcurl https://curl.haxx.se/libcurl/ ) 
+	
+	//Learning JSON as per https://stackoverflow.com/questions/24884490/using-libcurl-and-jsoncpp-to-parse-from-https-webserver
+	//https://github.com/Tencent/rapidjson/blob/master/example/tutorial/tutorial.cpp
+	//Test data:	http://date.jsontest.com/
+	//Loop through JSON entries and store the nearest one using Euclidean distance https://en.wikipedia.org/wiki/Euclidean_distance
+	//Display full info of the closest airborne aeroplane
+	
+	//Bonus: Geodesic distance formula for more accuracy: https://en.wikipedia.org/wiki/Great-circle_distance
+	//Private bonus: Get current device location ( https://developers.google.com/maps/documentation/geolocation/intro - need to investigate this)
+	Coordinates EiffelTower =		{{48.8584, Lattitude::direction::N},
+									{2.2945, Longitude::direction::E } };
+	Coordinates JohnFKennedyAirport { { 40.6413, Lattitude::direction::N },
+									{73.7781, Longitude::direction::W } };
+	std::cout << "\nEiffelTower\nLat:\t" << EiffelTower.Lattitude.Value << " " << EiffelTower.Lattitude.Direction
+		<< "\nLon:\t" << EiffelTower.Longitude.Value << " " << EiffelTower.Longitude.Direction
+		<< "\n\nJFKAirport\nLat:\t" << JohnFKennedyAirport.Lattitude.Value << " " << JohnFKennedyAirport.Lattitude.Direction
+		<< "\nLon:" << JohnFKennedyAirport.Longitude.Value << " " << JohnFKennedyAirport.Longitude.Direction;
+	_getch();
+	std::cout << "\n\nPress any key to continue...";
+	_getch();
+	return 0;
+	//https://www.reddit.com/r/dailyprogrammer/comments/8i5zc3/20180509_challenge_360_intermediate_find_the/
+	//Date of creation: 17.07.2018
+};

@@ -66,6 +66,13 @@ int BowlingFramesDisplay();
 #ifndef ALPHABETCIPHER_H
 #define ALPHABETCIPHER_H
 
-void AlphabetCipher();
+int AlphabetCipher();
 
 #endif // !ALPHABETCIPHER_H
+
+#ifndef CLOSESTAIRBORNEPLANE_H
+#define CLOSESTAIRBORNEPLANE_H
+
+int ClosestAirbornePlane();
+
+#endif // !CLOSESTAIRBORNEPLANE_H
