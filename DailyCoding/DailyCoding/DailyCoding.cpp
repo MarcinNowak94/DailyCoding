@@ -19,44 +19,44 @@ int main()
 {
 	std::string ranges[]
 	{
-		"Days 1-25",
-		"Days 26-50"
+		"01-25",
+		"26-50"
 	};
 	std::string challenges1to25[]
 	{
-		"Day#1\tFirst Reverse",
-		"Day#2\tFirst Factorial",
-		"Day#3\tLongest word in sentence",
-		"Day#4\tLetter changes",
-		"Day#5\tSimple adding",
-		"Day#6\tLetter captitalize",
-		"Day#7\tSimple Symbols",
-		"Day#8\tChecknums",
-		"Day#9\tTime convert",
-		"Day#10\tAlphabet soup",
-		"Day#11\tDistance between two cities",
-		"Day#12\tHappy numbers",
-		"Day#13\tCoin flipper",
-		"Day#14\tFibonacci sequence",
-		"Day#15\tTalking clock",
-		"Day#16\tPacket Assembler",
-		"Day#17\tSequences",
-		"Day#18\tAdding Calculator",
-		"Day#19\tRepeating Numbers",
-		"Day#20\tFizzBuzz",
-		"Day#21\tDateChecker",
-		"Day#22\tDicegame",
-		"Day#23\tBarcodeChecker",
-		"Day#24\tMozart's Musical Dice",
-		"Day#25\tLight Room"
+		"#1\tFirst Reverse",
+		"#2\tFirst Factorial",
+		"#3\tLongest word in sentence",
+		"#4\tLetter changes",
+		"#5\tSimple adding",
+		"#6\tLetter captitalize",
+		"#7\tSimple Symbols",
+		"#8\tChecknums",
+		"#9\tTime convert",
+		"#10\tAlphabet soup",
+		"#11\tDistance between two cities",
+		"#12\tHappy numbers",
+		"#13\tCoin flipper",
+		"#14\tFibonacci sequence",
+		"#15\tTalking clock",
+		"#16\tPacket Assembler",
+		"#17\tSequences",
+		"#18\tAdding Calculator",
+		"#19\tRepeating Numbers",
+		"#20\tFizzBuzz",
+		"#21\tDateChecker",
+		"#22\tDicegame",
+		"#23\tBarcodeChecker",
+		"#24\tMozart's Musical Dice",
+		"#25\tLight Room"
 	};
 	std::string challenges26to50[]
 	{
-		"Day#26\tCryptarithmetic Solver",
-		"Day#27\tBowling Frames Display",
-		"Day#28\tAlphabet Cipher"
+		"#26\tCryptarithmetic Solver",
+		"#27\tBowling Frames Display",
+		"#28\tAlphabet Cipher"
 	};
-	int input[2]{};
+	int input[2]{};		//input for menu and submenus
 	do
 	{
 		input[0] = simplemenu(ranges, "Pick range");

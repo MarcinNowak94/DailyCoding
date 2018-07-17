@@ -923,6 +923,7 @@ void AlphabetCipher()
 	//bonus does not work correctly need to figure out decoding
 	for (int i = 0; i < sizeof(output)/sizeof(*output); i++)
 	{
+		Timer timer;		//execution time
 		if (i == 4) decode = true;
 		std::cout << "\n\nCodeword:\t" << input[i][0] << "\nmessage:\t" << input[i][1];
 		answer = Decode_AlphabetCipher(input[i][0], input[i][1], decode);
@@ -937,4 +938,5 @@ void AlphabetCipher()
 	return;
 
 	//https://www.reddit.com/r/dailyprogrammer/comments/879u8b/20180326_challenge_355_easy_alphabet_cipher/
+	//date of creation: 15-16.07.2018
 }

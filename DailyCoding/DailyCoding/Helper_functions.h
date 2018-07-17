@@ -1,4 +1,5 @@
 #include <random>
+#include <chrono>
 
 #pragma once
 #ifndef ISVOVEL_H
@@ -63,3 +64,22 @@ void tospeech(T& text)
 
 
 #endif // !TOSPEECH_H
+
+#ifndef TIMER_H
+#define TIMIER_H
+struct Timer
+{
+	std::chrono::time_point<std::chrono::steady_clock> start, end;
+	std::chrono::duration<float> duration;
+	Timer()
+	{
+		start = std::chrono::high_resolution_clock::now();
+	};
+	~Timer()
+	{
+		duration = std::chrono::high_resolution_clock::now() - start;
+		std::cout << "\nExecution time:\t"<< duration.count()*1000.0f << "ms";
+	};
+	//Credit to Yan Chernikov:	https://www.youtube.com/watch?v=oEx5vGNFrLk
+};
+#endif // !TIMER_H
