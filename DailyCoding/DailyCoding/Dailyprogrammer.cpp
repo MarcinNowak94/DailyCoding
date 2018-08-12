@@ -103,7 +103,7 @@ static std::vector<packet> message;
 int Assembler(std::string incoming_packet)
 {	
 	packet incoming;
-	int elementpos = 0;
+	size_t elementpos = 0;
 	//Tokenize incoming data and assign values to packet data type
 	//get message_ID
 	incoming.message_ID = std::stoi(incoming_packet.substr(elementpos, incoming_packet.find_first_of(' ')));		
@@ -288,7 +288,7 @@ int Packet_Assembler()
 		"9949    3   10  So we'll hunt him. ",
 		"7469    3   7   glitter in the dark near the Tannhäuser",
 		"6450    4   11  venal and virulent vermin vanguarding vice and vouchsafing the violently vicious",
-		"6450    0   11  Voilà!In view, a humble vaudevillian veteran, cast vicariously as both victim",
+		"6450    0   11  Voilà!In view, a humble vaudevillian veteran, cast vicariously as both victim",		//character à is not present in current codingpage
 		"9949    5   10  Because he's not a hero. "
 	};
 	for (size_t i = 0; i < sizeof(challenge_input)/sizeof(challenge_input[0]); i++)
@@ -507,7 +507,7 @@ int MozartsMusicalDice()
 	std::string filename = "mozart-dice-starting.txt";
 	file.open(filename);
 	if (!file.is_open()) { std::cout << "Failed to open " << filename << "!\a\n"; _getch(); return EXIT_FAILURE; };
-	static struct note
+	struct note
 	{
 		std::string name = {};
 		float beat = NULL;
@@ -751,7 +751,7 @@ std::string SolveCryptaritmethic(const std::string & input)
 			// TODO: make brutforce algorithm (checking all permutations assumed values to n-long character set)
 			/*placeholder*/ characters[i].value = guess[it][i];
 			//prepare answer
-			answer += ' \'';
+			answer += (char)' \'';
 			answer += characters[i].letter;
 			answer += "\'=";
 			answer += std::to_string(characters[i].value);
