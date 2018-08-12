@@ -76,3 +76,10 @@ int AlphabetCipher();
 int ClosestAirbornePlane();
 
 #endif // !CLOSESTAIRBORNEPLANE_H
+
+#ifndef TALLYPROGRAM_H
+#define TALLYPROGRAM_H
+
+int TallyProgram();
+
+#endif // !TALLYPROGRAM_H

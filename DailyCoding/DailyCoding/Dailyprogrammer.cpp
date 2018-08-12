@@ -1098,3 +1098,62 @@ int ClosestAirbornePlane()
 	*/
 };
 
+std::string Tally(const std::string tally)
+{
+	const int ASCIIoffset = 'a';
+	//TODO: do not initialize so program could count points for n players instead of fixed amount of 5 
+	std::vector<int> score(5);
+
+	//Counting score
+	for each (char character in tally)
+	{
+		if (!islower(character))
+		{
+			score.at(tolower(character) - ASCIIoffset)--; continue;
+		};
+		score.at(character - ASCIIoffset)++;
+	};
+
+	//prepare answer
+	//TODO: sort scores in ascending order
+	//std::sort(score.begin(), score.end());	//this could work if there was a way not to lose track of player scores
+	std::string result{};
+	for (int player = 0; player < score.size(); player++)
+	{
+		//std::cout << char(i + offset) << " : " << score.at(i) << ',';
+		result += (char)(player + ASCIIoffset);
+		result += " : " + std::to_string(score.at(player)) + ", ";
+	};
+	return result;
+};
+int TallyProgram()
+{
+
+	std::string input[] =
+	{
+		"abcde",
+		"dbbaCEDbdAacCEAadcB",
+		"EbAAdbBEaBaaBBdAccbeebaec"			//c : 3, d : 2, a : 1, e :1, b : 0  
+	};
+	std::string output[] =
+	{
+		"a : 1, b : 1, c : 1, d : 1, e : 1",
+		"b : 2, d : 2, a : 1, c : 0, e : -2",
+		"c : 3, d : 2, a : 1, e : 1, b : 0"
+
+	};
+
+	for (int i = 0; i < (sizeof(input)/sizeof(input[0])); i++)
+	{
+		std::cout << "\n\nInput:\t\t" << input[i] 
+			<< "\nRestlt:\t\t" << Tally(input[i])
+			<< "\nExpected:\t" << output[i];
+	};
+
+	std::cout << "\n\nPress any key to continue ...";
+	_getch();
+	_getch(); 
+	return EXIT_SUCCESS;
+	//https://www.reddit.com/r/dailyprogrammer/comments/8jcffg/20180514_challenge_361_easy_tally_program/
+	//Date of creation: 12.08.2018
+}
