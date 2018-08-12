@@ -1,10 +1,11 @@
 ﻿#include "stdafx.h"
 #include "dailyprogrammer.h"
 #include "Helper_functions.h"
-#include <sstream> //stream manipulation
+#include <sstream>							//stream manipulation
 #include <algorithm>
-#include "rapidjson/rapidjson.h"	//JSON builder and parser
-#include "curl/curl.h"				//libcurl	HTTP requests
+//#include "..\Includes\rapidjson\rapidjson.h"	//JSON builder and parser
+//#include "..\Includes\rapidjson\document.h"
+//#include "..\Includes\curl\curl.h"			//libcurl	HTTP requests
 
 void clock(std::string time)
 {
@@ -944,6 +945,22 @@ int AlphabetCipher()
 }
 
 
+/*
+//-----------------------------------------------------------------------------------------------------------------
+namespace
+{
+	std::size_t callback(
+		const char* in,
+		std::size_t size,
+		std::size_t num,
+		std::string* out)
+	{
+		const std::size_t totalBytes(size * num);
+		out->append(in, totalBytes);
+		return totalBytes;
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------
 struct Lattitude
 {
 	float Value{};
@@ -961,8 +978,15 @@ struct Coordinates
 	Lattitude Lattitude{};
 	Longitude Longitude{};
 };
+*/
 int ClosestAirbornePlane()
 {
+	std::cout << "\n\aThis project is posptponed untill i figure out how to link libraries (mainly CURL)"
+		<< "\n\nPress any key to continue ...";
+	_getch();
+	_getch();
+	return 0;
+	/*
 	//Get data from https://opensky-network.org/api/states/all
 	//(needs library, suggested libcurl https://curl.haxx.se/libcurl/ ) 
 	
@@ -974,6 +998,89 @@ int ClosestAirbornePlane()
 	
 	//Bonus: Geodesic distance formula for more accuracy: https://en.wikipedia.org/wiki/Great-circle_distance
 	//Private bonus: Get current device location ( https://developers.google.com/maps/documentation/geolocation/intro - need to investigate this)
+
+	//Test data
+	const std::string url("http://date.jsontest.com/");
+	//---------------------------------------------------------------------------------------------------------------------------------------------
+	CURL* curl = curl_easy_init();
+	// Set remote URL.
+	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+	// Don't bother trying IPv6, which would increase DNS resolution time.
+	curl_easy_setopt(curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+	// Don't wait forever, time out after 10 seconds.
+	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
+	// Follow HTTP redirects if necessary.
+	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+	// Response information.
+	int httpCode(0);
+	std::unique_ptr<std::string> httpData(new std::string());
+	// Hook up data handling function.
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callback);
+
+	// Hook up data container (will be passed as the last parameter to the
+	// callback handling function).  Can be any pointer type, since it will
+	// internally be passed as a void pointer.
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, httpData.get());
+
+	// Run our HTTP GET command, capture the HTTP response code, and clean up.
+	curl_easy_perform(curl);
+	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
+	curl_easy_cleanup(curl);
+
+	if (httpCode == 200)
+	{
+		std::cout << "\nGot successful response from " << url << std::endl;
+
+		std::cout << "\nData: " << *httpData << "\a";
+		_getch();
+		_getch();
+		// Response looks good - done using Curl now.  Try to parse the results
+		// and print them out.
+
+		//different JSONAPI than used in my project - needs to change
+		//Json::Value jsonData;
+		//Json::Reader jsonReader;
+		
+		/*
+		rapidjson::Document document;
+
+		//in situ parsing
+		if (document.ParseInsitu(string variable).HasParseError())
+			return 1;
+
+
+		if (jsonReader.parse(*httpData, jsonData))
+		{
+			std::cout << "Successfully parsed JSON data" << std::endl;
+			std::cout << "\nJSON data received:" << std::endl;
+			std::cout << jsonData.toStyledString() << std::endl;
+
+			const std::string dateString(jsonData["date"].asString());
+			const std::size_t unixTimeMs(
+				jsonData["milliseconds_since_epoch"].asUInt64());
+			const std::string timeString(jsonData["time"].asString());
+
+			std::cout << "Natively parsed:" << std::endl;
+			std::cout << "\tDate string: " << dateString << std::endl;
+			std::cout << "\tUnix timeMs: " << unixTimeMs << std::endl;
+			std::cout << "\tTime string: " << timeString << std::endl;
+			std::cout << std::endl;
+		}
+		else
+		{
+			std::cout << "Could not parse HTTP data as JSON" << std::endl;
+			std::cout << "HTTP data was:\n" << *httpData.get() << std::endl;
+			return 1;
+		}
+		
+	}
+	else
+	{
+		std::cout << "Couldn't GET from " << url << " - exiting" << std::endl;
+		return 1;
+	}
+	//---------------------------------------------------------------------------------------------------------------------------------------------
+
 	Coordinates EiffelTower =		{{48.8584, Lattitude::direction::N},
 									{2.2945, Longitude::direction::E } };
 	Coordinates JohnFKennedyAirport { { 40.6413, Lattitude::direction::N },
@@ -988,4 +1095,6 @@ int ClosestAirbornePlane()
 	return 0;
 	//https://www.reddit.com/r/dailyprogrammer/comments/8i5zc3/20180509_challenge_360_intermediate_find_the/
 	//Date of creation: 17.07.2018
+	*/
 };
+
