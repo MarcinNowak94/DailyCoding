@@ -8,9 +8,9 @@ int FizzBuzz()
 	std::cout << "FizzBuzz game results for numbers 1 up to 100-150(picked at random):\n";
 	for (int i = 1; i < random(100, 150); i++)
 	{
-		if (i % 15 == 0) { std::cout << i << ":\tFizzBuzz\n"; continue; };
-		if (i % 5 == 0) { std::cout << i << ":\tBuzz\n"; continue; };
-		if (i % 3 == 0) { std::cout << i << ":\tFizz\n"; continue; };
+		if (i % 15 == 0)	{ std::cout << i << ":\tFizzBuzz\n"; continue; };
+		if (i % 5 == 0)		{ std::cout << i << ":\tBuzz\n"; continue; };
+		if (i % 3 == 0)		{ std::cout << i << ":\tFizz\n"; continue; };
 		std::cout << i << "\n";
 	};
 	std::cout << "/aPress any key to continue...";
@@ -34,15 +34,9 @@ int Date_Checker()
 	do
 	{
 		std::cout << "Input date from years 2001-2099 to check:\n";
-		//ensuring parameters are correct
 		int day,month, year;
 		day = month = year = 0;
-		/*std::cout << "Day: ";
-		std::cin >> day;
-		std::cout << "Month: ";
-		std::cin >> month;
-		std::cout << "Year: ";
-		std::cin >> year;*/
+		
 		std::cout << "input as dd mm yyyy: ";
 		std::cin >> day;
 		std::cin >> month;
@@ -57,42 +51,31 @@ int Date_Checker()
 
 int DiceGame()
 {
-	double first=0, second=0;
-	int gamelength = 5, roundlength = 10, diceroll = 0, dice1 = 0, dice2 = 1;
+	double player[2] = { 0, 0 };
+	int players = 2, gamelength = 5, roundlength = 10, diceroll = 0, dice1 = 0, dice2 = 1;
 
 	for (int i = 1; i < gamelength+1; i++)
 	{
-		//first players round
-		for (int j = 1; j < roundlength+1; j++)
+		for (int activeplayer=0; activeplayer<players; activeplayer++ )
 		{
-			dice1 = random(1, 6);
-			dice2 = random(1, 6);
-			if (j==1 && (dice1 + dice2 == 7 || dice1 + dice2 == 11)) break;
-			if (j==1 && (dice1 + dice2 == 2 || dice1 + dice2 == 12)) 
+			//first players round
+			for (int j = 1; j < roundlength + 1; j++)
 			{
-				for (int k = 1; k < roundlength+1; k++)	{first += (12 / k+1);};
-				break;
+				dice1 = random(1, 6);
+				dice2 = random(1, 6);
+				if (j == 1 && (dice1 + dice2 == 7 || dice1 + dice2 == 11)) break;
+				if (j == 1 && (dice1 + dice2 == 2 || dice1 + dice2 == 12))
+				{
+					for (int k = 1; k < roundlength + 1; k++) { player[activeplayer] += (12 / k + 1); };
+					break;
+				};
+				if (dice1 + dice2 == 5) break;
+				player[activeplayer] += (dice1 + dice2 / j);
 			};
-			if (dice1 + dice2 == 5) break;
-			first += (dice1 + dice2 / j);
-		};
-		//second players round
-		for (int j = 1; j < roundlength+1; j++)
-		{
-			dice1 = random(1, 6);
-			dice2 = random(1, 6);
-			if (j == 1 && (dice1 + dice2 == 7 || dice1 + dice2 == 11)) break;
-			if (j == 1 && (dice1 + dice2 == 2 || dice1 + dice2 == 12))
-			{
-				for (int k = 1; k < roundlength+1; k++)	{second += (12 / k);};
-				break;
-			};
-			if (dice1 + dice2 == 5) break;
-			second += (dice1 + dice2 / j);
 		};
 	};
-	std::cout << "\n\aEnd of match.\nFinal results:\t First: " << first << ".\tSecond: " << second << ".\nWinner: ";
-	if (first < second) { std::cout << "First.\n"; }
+	std::cout << "\n\aEnd of match.\nFinal results:\t First: " << player[0] << ".\tSecond: " << player[1] << ".\nWinner: ";
+	if (player[0] < player[1]) { std::cout << "First.\n"; }
 	else { std::cout << "Second.\n"; };
 
 	/*Specified rules:
