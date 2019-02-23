@@ -1,18 +1,8 @@
 #include "stdafx.h"
 #include "coderbyte.h"
 #include "helper_functions.h"
-/*
-int FirstReverse();					//https://coderbyte.com/language/First%20Reverse
-int FirstFactorial();				//https://coderbyte.com/language/First%20Factorial
-int LongestWord();					//https://coderbyte.com/language/Longest%20Word
-int LetterChanges();				//https://coderbyte.com/language/Letter%20Changes
-int SimpleAdding();					//https://coderbyte.com/language/Simple%20Adding
-int LetterCapitalize();				//https://coderbyte.com/language/Letter%20Capitalize
-int SimpleSymbols();				//https://coderbyte.com/language/Simple%20Symbols
-int CheckNums();					//https://coderbyte.com/language/Check%20Nums
-int TimeConvert();					//https://coderbyte.com/language/Time%20Convert
-int AlphabetSoup();					//https://coderbyte.com/language/Alphabet%20Soup
-*/
+
+
 int FirstReverse()
 {
 	std::string teststring = "Hello World and Coders";
@@ -24,6 +14,7 @@ int FirstReverse()
 	return 0;
 
 	//date of creation: 03.09.2017
+	//https://coderbyte.com/language/First%20Reverse
 };
 
 int FirstFactorial(int num)
@@ -40,6 +31,8 @@ int FirstFactorial()
 	_getch();
 	return 0;
 	//date of creation: 04.09.2017
+	//https://coderbyte.com/language/First%20Factorial
+
 };
 
 int LongestWord()
@@ -63,6 +56,7 @@ int LongestWord()
 	_getch();
 	return 0;
 	//date of creation: 05.09.2017
+	//https://coderbyte.com/language/Longest%20Word
 }
 
 int LetterChanges()
@@ -82,6 +76,7 @@ int LetterChanges()
 	_getch();
 	return 0;
 	//date of creation: 06.09.2017
+	//https://coderbyte.com/language/Letter%20Changes
 }
 
 int SimpleAdding()
@@ -97,6 +92,7 @@ int SimpleAdding()
 	_getch();
 	return 0;
 	//date of creation: 07.09.2017
+	//https://coderbyte.com/language/Simple%20Adding
 };
 
 int LetterCapitalize()
@@ -113,6 +109,7 @@ int LetterCapitalize()
 	_getch();
 	return 0;
 	//date of creation: 07.09.2017
+	//https://coderbyte.com/language/Letter%20Capitalize
 }
 
 int SimpleSymbols()
@@ -137,6 +134,7 @@ int SimpleSymbols()
 	_getch();
 	return 0;
 	//date of creation: 08.09.2017
+	//https://coderbyte.com/language/Simple%20Symbols
 };
 
 int chknms(int & num1, int & num2)
@@ -154,6 +152,7 @@ int CheckNums()
 	_getch();
 	return 0;
 	//date of creation: 09.09.2017
+	//https://coderbyte.com/language/Check%20Nums
 };
 
 int TimeConvert()
@@ -166,6 +165,7 @@ int TimeConvert()
 	_getch();
 	return 0;
 	//date of creation: 10.09.2017
+	//https://coderbyte.com/language/Time%20Convert
 };
 
 int AlphabetSoup()
@@ -193,4 +193,5 @@ int AlphabetSoup()
 	_getch();
 	return 0;
 	//date of creation: 11.09.2017
+	//https://coderbyte.com/language/Alphabet%20Soup
 }

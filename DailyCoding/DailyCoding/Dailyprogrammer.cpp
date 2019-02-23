@@ -944,7 +944,6 @@ int AlphabetCipher()
 	//date of creation: 15-16.07.2018
 }
 
-
 /*
 //-----------------------------------------------------------------------------------------------------------------
 namespace
@@ -1156,4 +1155,4 @@ int TallyProgram()
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/8jcffg/20180514_challenge_361_easy_tally_program/
 	//Date of creation: 12.08.2018
-}
+};
