@@ -12,7 +12,8 @@ int Distance_between_two_cities()
 	};
 	city City1{ "City1", random(-90,90), random(-180,180) };
 	city City2{ "City2", random(-90,90), random(-180,180) };
-	std::cout << "Distance between :\n" << City1.name << "(" << City1.lattitude << " lat., " << City1.longitude << "lon.) and \n"
+	std::cout << "Distance between :\n" 
+		<< City1.name << "(" << City1.lattitude << " lat., " << City1.longitude << "lon.) and \n"
 		<< City2.name << "(" << City2.lattitude << " lat., " << City2.longitude << "lon.) is "
 		<< sqrt((abs(City1.lattitude - City2.lattitude))*(abs(City1.lattitude - City2.lattitude)) + (abs(City1.longitude - City2.longitude))*(abs(City1.longitude - City2.longitude))) << " units.";
 	_getch();

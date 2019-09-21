@@ -140,10 +140,10 @@ int BarcodeChecker()
 	
 	std::string barcode1 = "69207020772112";	//code 692070207721 with addon 12
 	std::string barcode2 = "075678164125";		//scanner can sometimes ommit predecating 0, real barcode: 0075678164125
-	std::cout << "Barcode1 (" << barcode1 << ") EAN-8 code " << CheckEAN(barcode1, 1) << ".\n";
-	std::cout << "Barcode1 (" << barcode1 << ") EAN-13 code " << CheckEAN(barcode1, 2) << ".\n";
-	std::cout << "Barcode2 (" << barcode2 << ") EAN-8 code " << CheckEAN(barcode2, 1) << ".\n";
-	std::cout << "Barcode2 (" << barcode2 << ") EAN-13 code " << CheckEAN(barcode2, 2) << ".\n";
+	std::cout << "Barcode1 (" << barcode1 << ") EAN-8 code " << CheckEAN(barcode1, EAN_8) << ".\n";
+	std::cout << "Barcode1 (" << barcode1 << ") EAN-13 code " << CheckEAN(barcode1, EAN_13) << ".\n";
+	std::cout << "Barcode2 (" << barcode2 << ") EAN-8 code " << CheckEAN(barcode2, EAN_8) << ".\n";
+	std::cout << "Barcode2 (" << barcode2 << ") EAN-13 code " << CheckEAN(barcode2, EAN_13) << ".\n";
 	std::cout << "Press any key to continue...";
 	_getch();
 	return EXIT_SUCCESS;

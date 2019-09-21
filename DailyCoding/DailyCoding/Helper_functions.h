@@ -78,7 +78,7 @@ struct Timer
 	~Timer()
 	{
 		duration = std::chrono::high_resolution_clock::now() - start;
-		std::cout << "\nExecution time:\t"<< duration.count()*1000.0f << "ms";
+		std::cout << "\nExecution time:\t"<< duration.count()*1000.0f << " ms";
 	};
 	//Credit to Yan Chernikov:	https://www.youtube.com/watch?v=oEx5vGNFrLk
 };
