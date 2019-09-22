@@ -16,7 +16,6 @@ int Distance_between_two_cities()
 		<< City1.name << "(" << City1.lattitude << " lat., " << City1.longitude << "lon.) and \n"
 		<< City2.name << "(" << City2.lattitude << " lat., " << City2.longitude << "lon.) is "
 		<< sqrt((abs(City1.lattitude - City2.lattitude))*(abs(City1.lattitude - City2.lattitude)) + (abs(City1.longitude - City2.longitude))*(abs(City1.longitude - City2.longitude))) << " units.";
-	_getch();
 	return 0;
 	//date of creation: 13.09.2017
 };
@@ -37,7 +36,6 @@ int Happy_Numbers()
 		if (100 == iterations) { i--; continue; };
 		std::cout << "\nHappy number #" << i+1 << ": " << temp;
 	};
-	_getch();
 	return 0;
 	//date of creation: 14.09.2017
 };
@@ -55,7 +53,6 @@ int Coin_Flipper()
 		if (i % 10 == 0) std::cout << "\n";
 	};
 	std::cout << "\nHeads: " << heads << "(" << (heads*100)/amount_of_flips << "%), Tails: " << tails << "(" << (tails*100)/amount_of_flips << "%).";
-	_getch();
 	return 0;
 	//date of creation: 15.09.2017
 };
@@ -68,7 +65,6 @@ int Fibonacci()
 	{
 		std::cout << ' ' << i;
 	};
-	_getch();
 	return 0;
 	//date of creation: 16.09.2017
 };

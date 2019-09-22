@@ -9,13 +9,15 @@
 
 void clock(std::string time)
 {
-	std::string digits[] { "oh", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+	std::string digits[] { "oh", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", 
+		                   "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
 	std::string decimal[] { "\b", "ten", "twenty", "thirty", "fourty", "fifty" };
 	std::string suffix[] {"am", "pm"};
-	std::cout << time<< ": ";
+	std::cout << time << ": ";
 	std::string final = "It's ";
-	int hours = std::stoi(time.substr(0, 2));
+	int hours	= std::stoi(time.substr(0, 2));
 	int minutes = std::stoi(time.substr(3, 4));
+	
 	if (0 == hours) { final.append(digits[12]); } else final.append(digits[hours % 12]);
 	final.append(" ");
 	if (0 == minutes) { final.append("\b"); }
@@ -24,14 +26,7 @@ void clock(std::string time)
 	else { final.append(decimal[minutes / 10]); final.append(" "); final.append(digits[minutes % 10]); };
 	final.append(" " + suffix[hours / 12] + '\n');
 	std::cout << final;
-	//temp - t test tospeech functionality
-	char* solution;
-	solution = new char[final.size()];
-	/*for (size_t i = 0; i < final.length(); i++)
-	{
-		solution[i] = final[i];
-	};*/
-	//tospeech(solution);
+
 	tospeech(final);
 	return;
 };
@@ -64,8 +59,7 @@ int Talking_Clock()
 		It's eight twenty nine pm
 		It's nine pm
 	*/
-	std::string sample[] =
-	{
+	std::string sample[] = 	{
 	"00:00",
 	"01:30",
 	"12:05",
@@ -73,7 +67,8 @@ int Talking_Clock()
 	"20:29",
 	"21:00"
 	};
-	for (int i = 0; i < sizeof(sample) / sizeof(sample[0]); i++) {	clock(sample[i]);	};
+	for each (auto sample in sample) { clock(sample); };
+	
 	std::string randomtime;
 	for (size_t i = 0; i < 10; i++)
 	{
@@ -86,8 +81,6 @@ int Talking_Clock()
 		} while (randomtime.length()<5);
 		clock(randomtime);
 	};	
-	std::cout << "Press any key to continue...\n";
-	_getch();
 	return 0;
 	//date of creation: 26.09.2017
 };
@@ -146,7 +139,6 @@ int Assembler(std::string incoming_packet)
 };
 int Packet_Assembler()
 {
-	{
 		//https://www.reddit.com/r/dailyprogrammer/comments/72ivih/20170926_challenge_333_easy_packet_assembler/
 		/*
 		Description
@@ -292,23 +284,21 @@ int Packet_Assembler()
 			"6450    0   11  Voilà!In view, a humble vaudevillian veteran, cast vicariously as both victim",		//character à is not present in current codingpage
 			"9949    5   10  Because he's not a hero. "
 		};
-
-		Timer Timer;
-		for each (auto line in challenge_input) {
-			Assembler(line);
+		{
+			Timer Timer;
+			for each (auto line in challenge_input) {
+				Assembler(line);
+			}
 		}
-
 		std::cout << "\nPacket messages: \n";
 		for each (auto line in message) {
 			std::cout << line.message_ID << '\t' << line.packet_ID << '\t' << line.message << "\n";
 		};
 
 		message.clear();
-	} //need this scope in order to see timer 
-	_getch();
 	return 0;
 	//date of creation: 26-28.09.2017
-}
+};
 
 bool fill(std::istream & input, int & amount, int & length, std::vector<std::vector<int>> & tab)
 {
@@ -374,7 +364,6 @@ int Consecutive_Distance_Rating()
 	std::istringstream str2("6 11 31 63 53 56 96 62 73 25 54 55 64 77 39 35 38 41 42 76 73 40 31 10 30 63 57 87 37 31 58 83 34 76 38 18 62 55 92 88 57 90 10 11 96 12 26 8 7 25 52 17 45 64 11 35 12 89 57 21 55 56 81 54 100 22 62 50");
 	std::cin.rdbuf(str2.rdbuf());
 	sequences(std::cin, 2);
-	_getch();
 	return 0;
 	//date of creation: 19.10.2017
 };
@@ -451,7 +440,6 @@ int Adding_Calculator()
 	{
 		calc(std::cin);
 	};
-	_getch();
 	return 0;
 	//date of creation: 30.11.2017
 };
@@ -502,8 +490,6 @@ int Repeating_Numbers()
 		"124489903108444899"
 	};
 	checkRepetitions(input, (sizeof(input) / sizeof(input[0]))-1);
-	std::cout << "Press any key to continue...";
-	_getch();
 	return 0;
 	//date of creation: 04.12.2017
 };
@@ -594,8 +580,6 @@ int MozartsMusicalDice()
 	};
 	outputfile.close();
 	//Stretchgoal: convert output directly to midi/mp3 file 
-	std::cout << "Press any key to continue...";
-	_getch();
 	return EXIT_SUCCESS;
 	//date of creation: 01.03.2017
 };
@@ -665,9 +649,6 @@ int LightRoom()
 		};
 			std::cout << "In case#" << i << " lightbulb was on for " << lighton << ".\n";
 	};
-
-	std::cout << "Press any key to continue ...";
-	_getch();
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/7qn07r/20180115_challenge_347_easy_how_long_has_the/
 	//Date of creation: 05.03.2018
@@ -676,8 +657,7 @@ int LightRoom()
 std::vector<std::vector<int>> guess;
 void computepermutations(std::vector<int> & values)
 {
-	do
-	{
+	do	{
 		guess.emplace_back(values);
 	} while (std::next_permutation(values.begin(), values.end()));
 };
@@ -812,8 +792,6 @@ int Cryptarithmetic_Solver()
 	{
 		std::cout << example[i] << " answer:\n" << SolveCryptaritmethic(example[i]) << "\n\n\a";
 	};
-	std::cout << "Press any key to continue...";
-	_getch();
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/7p5p2o/20180108_challenge_346_easy_cryptarithmetic_solver/
 	//Date of creation: 07.03.18
@@ -855,8 +833,6 @@ int BowlingFramesDisplay()
 	{
 		std::cout << DisplayBowlingFrame(examples[i]) << '\n';
 	};
-	std::cout << "\aPress any key to continue...";
-	_getch();
 	return EXIT_SUCCESS;
  //https://www.reddit.com/r/dailyprogrammer/comments/7so37o/20180124_challenge_348_intermediate_bowling/
 };
@@ -942,12 +918,7 @@ int AlphabetCipher()
 		if (answer == output[i]) { std::cout << "correct."; }
 		else { std::cout << "incorrect."; };
 	};
-
-	std::cout << "\n\nPress any key to continue ...";
-	_getch();
-	_getch();	//TODO: Needs fix each key press is registered as two after one of last updates. FIX: change default keyboard character encoding? 
 	return 0;
-
 	//https://www.reddit.com/r/dailyprogrammer/comments/879u8b/20180326_challenge_355_easy_alphabet_cipher/
 	//date of creation: 15-16.07.2018
 }
@@ -1097,8 +1068,6 @@ int ClosestAirbornePlane()
 		<< "\n\nJFKAirport\nLat:\t" << JohnFKennedyAirport.Lattitude.Value << " " << JohnFKennedyAirport.Lattitude.Direction
 		<< "\nLon:" << JohnFKennedyAirport.Longitude.Value << " " << JohnFKennedyAirport.Longitude.Direction;
 	_getch();
-	std::cout << "\n\nPress any key to continue...";
-	_getch();
 	return 0;
 	//https://www.reddit.com/r/dailyprogrammer/comments/8i5zc3/20180509_challenge_360_intermediate_find_the/
 	//Date of creation: 17.07.2018
@@ -1156,10 +1125,6 @@ int TallyProgram()
 			<< "\nRestlt:\t\t" << Tally(input[i])
 			<< "\nExpected:\t" << output[i];
 	};
-
-	std::cout << "\n\nPress any key to continue ...";
-	_getch();
-	_getch(); 
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/8jcffg/20180514_challenge_361_easy_tally_program/
 	//Date of creation: 12.08.2018

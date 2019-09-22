@@ -12,16 +12,61 @@
 #include "idea_bag.h"
 #include "dailyprogrammer.h"
 #include "other.h"
+#include "Helper_functions.h"
 
 const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra, nisl id laoreet porta, sapien risus luctus nibh, et dapibus velit nisi ac tortor.";
 
+int run(int(*function)()) {
+	int retval{};
+	{ Timer timer; 
+	retval=function(); }; 
+	std::cout << "\nPress any key to continue...\n\a";
+	_getch();
+	return retval;
+};
+
 int main()
 {
-	std::string ranges[]
-	{
+	std::string ranges[]{
 		"01-25",
 		"26-50"
 	};
+
+	int (*function_batch1[])() = {
+		&FirstReverse, 
+		&FirstFactorial, 
+		&LongestWord,
+		&LetterChanges,
+		&SimpleAdding,
+		&LetterCapitalize,
+		&SimpleSymbols,
+		&CheckNums,
+		&TimeConvert,
+		&AlphabetSoup,
+		&Distance_between_two_cities,
+		&Happy_Numbers,
+		&Coin_Flipper,
+		&Fibonacci,
+		&Talking_Clock,
+		&Packet_Assembler,
+		&Consecutive_Distance_Rating,
+		&Adding_Calculator,
+		&Repeating_Numbers,
+		&FizzBuzz,
+		&Date_Checker,
+		&DiceGame,
+		&BarcodeChecker,
+		&MozartsMusicalDice,
+		&LightRoom
+		};
+	int (*function_batch2[])() = {
+		&Cryptarithmetic_Solver,
+		&BowlingFramesDisplay,
+		&AlphabetCipher,
+		&ClosestAirbornePlane,
+		&TallyProgram
+	};
+
 	std::string challenges1to25[]
 	{
 		"#1\tFirst Reverse",
@@ -68,50 +113,16 @@ int main()
 			do
 			{
 				input[1] = simplemenu(challenges1to25, "Pick challange solution");
-				switch (input[1])
-				{
-				case 0: FirstReverse(); break;
-				case 1: FirstFactorial(); break;
-				case 2: LongestWord(); break;
-				case 3: LetterChanges(); break;
-				case 4: SimpleAdding(); break;
-				case 5: LetterCapitalize(); break;
-				case 6: SimpleSymbols(); break;
-				case 7: CheckNums(); break;
-				case 8: TimeConvert(); break;
-				case 9: AlphabetSoup(); break;
-				case 10: Distance_between_two_cities(); break;
-				case 11: Happy_Numbers(); break;
-				case 12: Coin_Flipper(); break;
-				case 13: Fibonacci(); break;
-				case 14: Talking_Clock(); break;
-				case 15: Packet_Assembler(); break;
-				case 16: Consecutive_Distance_Rating(); break;
-				case 17: Adding_Calculator(); break;
-				case 18: Repeating_Numbers(); break;
-				case 19: FizzBuzz(); break;
-				case 20: Date_Checker(); break;
-				case 21: DiceGame(); break;
-				case 22: BarcodeChecker(); break;
-				case 23: MozartsMusicalDice(); break;
-				case 24: LightRoom();
-				default:break;
-				};
+				if (!(input[1] < (sizeof(challenges1to25) / sizeof(*challenges1to25)))) break;
+				run(function_batch1[input[1]]);
 			} while (input[1] != (sizeof(challenges1to25) / sizeof(*challenges1to25)));
 		}; break;
 		case 1: {
 			do
 			{
 				input[1] = simplemenu(challenges26to50, "Pick challange solution");
-				switch (input[1])
-				{
-				case 0: Cryptarithmetic_Solver(); break;
-				case 1: BowlingFramesDisplay(); break;
-				case 2: AlphabetCipher(); break;
-				case 3: ClosestAirbornePlane(); break;
-				case 4: TallyProgram(); break;
-				default:break;
-				};
+				if (!(input[1] < (sizeof(challenges26to50) / sizeof(*challenges26to50)))) break;
+				run(function_batch2[input[1]]);
 			} while (input[1] != (sizeof(challenges26to50) / sizeof(*challenges26to50)));
 		}; break;
 		default: break;
