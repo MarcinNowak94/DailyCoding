@@ -7,7 +7,6 @@
 
 #include "stdafx.h"
 #include "simplemenu.h"
-#include <string>
 #include "coderbyte.h"
 #include "idea_bag.h"
 #include "dailyprogrammer.h"
