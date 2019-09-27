@@ -7,35 +7,38 @@
 //#include "..\Includes\rapidjson\document.h"
 //#include "..\Includes\curl\curl.h"			//libcurl	HTTP requests
 
-void clock(std::string time)
-{
+void clock(std::string time){
 	std::string digits[] { "oh", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", 
 		                   "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
 	std::string decimal[] { "\b", "ten", "twenty", "thirty", "fourty", "fifty" };
 	std::string suffix[] {"am", "pm"};
-	std::cout << time << ": ";
-	std::string final = "It's ";
-	int hours	= std::stoi(time.substr(0, 2));
+	int hours = std::stoi(time.substr(0, 2));
 	int minutes = std::stoi(time.substr(3, 4));
 	
-	if (0 == hours) { final.append(digits[12]); } else final.append(digits[hours % 12]);
-	final.append(" ");
-	if (0 == minutes) { final.append("\b"); }
-	else if (minutes > 9 && minutes < 20) { final.append(digits[minutes]); }
-	else if (0 == minutes % 10) { final.append(decimal[minutes / 10]); }
-	else { final.append(decimal[minutes / 10]); final.append(" "); final.append(digits[minutes % 10]); };
-	final.append(" " + suffix[hours / 12] + '\n');
-	std::cout << final;
+	std::string verbal = "It's ";	
+	if (0 == hours) { verbal.append(digits[12]); } else verbal.append(digits[hours % 12]);
+	verbal.append(" ");
+	if (0 == minutes) { verbal.append("\b"); }
+	else if (minutes > 9 && minutes < 20) { verbal.append(digits[minutes]); }
+	else if (0 == minutes % 10) { verbal.append(decimal[minutes / 10]); }
+	else { 
+		verbal.append(decimal[minutes / 10]); 
+		verbal.append(" "); 
+		verbal.append(digits[minutes % 10]); 
+	};
+	verbal.append(" " + suffix[hours / 12]);
+	std::cout << time << ": " << verbal;
 
-	tospeech(final);
+	tospeech(verbal);
 	return;
 };
-int Talking_Clock()
-{
+int Talking_Clock() {
 	//https://www.reddit.com/r/dailyprogrammer/comments/6jr76h/20170627_challenge_321_easy_talking_clock/
 	/*
 	Description
-		No more hiding from your alarm clock!You've decided you want your computer to keep you updated on the time so you're never late again.A talking clock takes a 24 - hour time and translates it into words.
+		No more hiding from your alarm clock! You've decided you want your computer 
+		to keep you updated on the time so you're never late again. 
+		A talking clock takes a 24 - hour time and translates it into words.
 
 		Input Description
 		An hour(0 - 23) followed by a colon followed by the minute(0 - 59).
@@ -59,7 +62,7 @@ int Talking_Clock()
 		It's eight twenty nine pm
 		It's nine pm
 	*/
-	std::string sample[] = 	{
+	std::string sample[] = {
 	"00:00",
 	"01:30",
 	"12:05",
@@ -67,21 +70,21 @@ int Talking_Clock()
 	"20:29",
 	"21:00"
 	};
-	for each (auto sample in sample) { clock(sample); };
-	
-	std::string randomtime;
-	for (size_t i = 0; i < 10; i++)
-	{
-		do
-		{
+	for each (auto sample in sample) { clock(sample); std::cout << '\n'; };
+
+	std::string randomtime{};
+	for (size_t i = 0; i < 10; i++)	{
+		do	{
 			randomtime.clear();
 			randomtime.append(std::to_string(random(0, 12)));
 			randomtime.append(":");
 			randomtime.append(std::to_string(random(0, 59)));
 		} while (randomtime.length()<5);
 		clock(randomtime);
+		std::cout << '\n';
 	};	
-	return 0;
+	return EXIT_SUCCESS;
+
 	//date of creation: 26.09.2017
 };
 
@@ -93,49 +96,38 @@ struct packet
 	std::string message{};	//part of message
 };
 static std::vector<packet> message;
-packet Tokenize(const std::string &incoming_packet, const char delimiter=' ')
-{
-	packet		tokenized_packet;
-	size_t		position = 0;
-	std::string token[4]{};
 
-	//Get first 3 parts of packet
-	for (size_t part = 0; part < (sizeof(token)/sizeof(token[0]))-1; part++) {
-		token[part] = incoming_packet.substr(position, incoming_packet.find(delimiter, position)-position);
-		if (position != incoming_packet.length()) position = incoming_packet.find_first_not_of(delimiter, incoming_packet.find(delimiter, position));
+packet TurnIntoPacket(const std::string &incoming_packet, const char delimiter = ' ') {
+	packet	packet;
+
+	//Extract tokens
+	std::vector<std::string> Tokenized = Tokenize(incoming_packet, ' ');
+
+	//Turn tokens into packet
+	packet.message_ID		= std::stoi(Tokenized[0]);
+	packet.packet_ID		= std::stoi(Tokenized[1]);
+	packet.num_of_packets	= std::stoi(Tokenized[2]);
+	for (int token = 3; token < Tokenized.size(); token++){
+		packet.message += Tokenized.at(token) + delimiter;
 	};
-
-	//turn rest of string into message
-	if (position != incoming_packet.length() && position !=-1) 	{
-		token[3] = incoming_packet.substr(position, incoming_packet.length()-position);
-	}
 	
-	tokenized_packet.message_ID		= std::stoi(token[0]);
-	tokenized_packet.packet_ID		= std::stoi(token[1]);
-	tokenized_packet.num_of_packets = std::stoi(token[2]);
-	tokenized_packet.message		= token[3];
-
-	return tokenized_packet;
+	return packet;
 };
-int Assembler(std::string incoming_packet)
-{	
-	packet incoming = Tokenize(incoming_packet, ' ');
+int Assembler(std::string incoming_packet){	
+	packet incoming = TurnIntoPacket(incoming_packet, ' ');
 
 	//storing and sorting
-	if (message.size()>=1)
-	{
-		for (size_t i = 0; i < message.size(); i++)
-		{
-			if (incoming.message_ID == message.at(i).message_ID) 
-			{
+	if (message.size()>=1)	{
+		for (size_t i = 0; i < message.size(); i++)	{
+			if (incoming.message_ID == message.at(i).message_ID) {
 				if (incoming.packet_ID < message.at(i).packet_ID) { message.insert(message.begin() + i, incoming); break;}
-				else if (i == message.size() - 1) { message.insert(message.begin() + i + 1, incoming); break; };
+				else if (i == message.size() - 1)				  { message.insert(message.begin() + i + 1, incoming); break; };
 			}
 			else if(incoming.message_ID<message.at(i).message_ID) { message.insert(message.begin()+i--,incoming); break;};
 		};
 	}
 	else message.push_back(incoming);
-	return 0;
+	return EXIT_SUCCESS;
 };
 int Packet_Assembler()
 {
@@ -284,56 +276,61 @@ int Packet_Assembler()
 			"6450    0   11  Voilà!In view, a humble vaudevillian veteran, cast vicariously as both victim",		//character à is not present in current codingpage
 			"9949    5   10  Because he's not a hero. "
 		};
-		{
-			Timer Timer;
-			for each (auto line in challenge_input) {
-				Assembler(line);
-			}
+
+		//Messages
+		for each (auto line in messages) {
+			Assembler(line);
+		};
+		std::cout << "\nPacket messages: \n";
+		for each (auto line in message) {
+			std::cout << line.message_ID << '\t' << line.packet_ID << '\t' << line.message << "\n";
+		};
+		message.clear();
+
+		//Challenge_input
+		for each (auto line in challenge_input) {
+			Assembler(line);
 		}
 		std::cout << "\nPacket messages: \n";
 		for each (auto line in message) {
 			std::cout << line.message_ID << '\t' << line.packet_ID << '\t' << line.message << "\n";
 		};
-
 		message.clear();
 	return 0;
 	//date of creation: 26-28.09.2017
 };
 
-bool fill(std::istream & input, int & amount, int & length, std::vector<std::vector<int>> & tab)
-{
+//TODO: Possibly to fix, i might have omitted a part of challenge
+bool fill(std::istream & input, int & amount, int & length, std::vector<std::vector<int>> & tab) {
 	input >> amount;
 	input >> length;
 	int temp = 0;
-	for (int seq = 0; seq<amount; seq++)
-	{
+
+	for (int seq = 0; seq<amount; seq++) {
 		std::cout << "\n ";
 		std::vector<int> row;
 		tab.push_back(row);
-		for (int num = 0; num<length; num++)
-		{
+		for (int num = 0; num<length; num++) {
 			input >> temp;
-			tab[seq].push_back(temp); std::cout << tab[seq][num] << "\t";
+			tab[seq].push_back(temp); 
+			std::cout << tab[seq][num] << "\t";
 		};
 	};
 	return true;
 };
-void sequences(std::istream & input, int difference=1)
-{
+void sequences(std::istream & input, int difference=1) {
 	int numofseq;
 	int seqlen;
 	std::vector<std::vector<int>> seqtab;
 	int seqtotal = 0;
 	int everyseq = 0;
+	
 	//parsing input
 	fill(input, numofseq, seqlen, seqtab);
 	std::cout << "\nSearching for sequences of " << difference << ":";
-	for (int seq = 0; seq<numofseq; seq++)
-	{
-		for (int num = 0; num<seqlen; num++)
-		{
-			for (int n = num; n<seqtab[seq].size(); n++)
-			{
+	for (int seq = 0; seq<numofseq; seq++) {
+		for (int num = 0; num<seqlen; num++) {
+			for (int n = num; n<seqtab[seq].size(); n++) {
 				if (seqtab[seq][num] + difference == seqtab[seq][n] || seqtab[seq][num]-difference== seqtab[seq][n])
 				{ seqtotal += (n - num);};
 			};
@@ -345,65 +342,55 @@ void sequences(std::istream & input, int difference=1)
 	std::cout << "\nTotal length of sequences: " << everyseq;
 	return;
 };
-int Consecutive_Distance_Rating()
-{
+int Consecutive_Distance_Rating() {
 	//https://www.reddit.com/r/dailyprogrammer/comments/759fha/20171009_challenge_335_easy_consecutive_distance/
-	/* "6 11
-		31 63 53 56 96 62 73 25 54 55 64
-		77 39 35 38 41 42 76 73 40 31 10
-		30 63 57 87 37 31 58 83 34 76 38
-		18 62 55 92 88 57 90 10 11 96 12
-		26 8 7 25 52 17 45 64 11 35 12
-		89 57 21 55 56 81 54 100 22 62 50"*/
-	//initializing stream as test input specification
-	std::istringstream str("6 11 31 63 53 56 96 62 73 25 54 55 64 77 39 35 38 41 42 76 73 40 31 10 30 63 57 87 37 31 58 83 34 76 38 18 62 55 92 88 57 90 10 11 96 12 26 8 7 25 52 17 45 64 11 35 12 89 57 21 55 56 81 54 100 22 62 50");
-	std::cin.rdbuf(str.rdbuf());
+	
+	//initializing stream as specified
+	std::istringstream testinput("6 11 31 63 53 56 96 62 73 25 54 55 64 77 39 35 38 41 42 76 73 40 31 10 30 63 57 87 37 31 58 83 34 76 38 18 62 55 92 88 57 90 10 11 96 12 26 8 7 25 52 17 45 64 11 35 12 89 57 21 55 56 81 54 100 22 62 50");
+	std::istringstream bonusinput("6 20 76 74 45 48 13 75 16 14 79 58 78 82 46 89 81 88 27 64 21 63 37 35 88 57 55 29 96 11 25 42 24 81 82 58 15 2 3 41 43 36 54 64 52 39 36 98 32 87 95 12 40 79 41 13 53 35 48 42 33 75 21 87 89 26 85 59 54 2 24 25 41 46 88 60 63 23 91 62 61 6 94 66 18 57 58 54 93 53 19 16 55 22 51 8 67 20 17 56 21 59 6 19 45 46 7 70 36 2 56 47 33 75 94 50 34 35 73 72 39 5");
+	
 	std::cout << "\nDefault version: ";
+	std::cin.rdbuf(testinput.rdbuf());
 	sequences(std::cin);
+
 	std::cout << "\n\nBonus version: ";
-	std::istringstream str2("6 11 31 63 53 56 96 62 73 25 54 55 64 77 39 35 38 41 42 76 73 40 31 10 30 63 57 87 37 31 58 83 34 76 38 18 62 55 92 88 57 90 10 11 96 12 26 8 7 25 52 17 45 64 11 35 12 89 57 21 55 56 81 54 100 22 62 50");
-	std::cin.rdbuf(str2.rdbuf());
+	std::cin.rdbuf(bonusinput.rdbuf());
 	sequences(std::cin, 2);
-	return 0;
+	
+	return EXIT_SUCCESS;
 	//date of creation: 19.10.2017
 };
 
-void calc(std::istream & procedure)
-{
-	int a = 0, b = 0, result = 0;
+//TODO: Revisit
+void calc(std::istream & procedure){
+	int a, b, result = 0;
 	char operation;
 	procedure >> a; procedure >> operation; procedure >> b;
 	std::cout << "\n" << a << " " << operation << " " << b << " =";
-	switch (operation)
-	{
+	switch (operation)	{
 	case '+': {std::cout << (a + b); return; }; break;
 	case '-': {std::cout << (a + (-b)); return; }; break;
-	case '*': 
-	{
+	case '*': {
 		if (0 == b) {std::cout << 0; return; };
 		if (0 > b) { for (int amount = 0; amount < -b; amount++, result += a); std::cout << -result; return; };
 		for (int amount = 0; amount < b; amount++, result += a);
 		std::cout << result;
 		return;
 	}; break;
-	case '/': 
-	{
-		if (b == 0) { std::cout << "Not-defined\n"; return; };
+	case '/': {
+		if (b == 0)							  { std::cout << "Not-defined\n"; return; };
 		if ((Absolute(a) + -Absolute(b)) < 0) { std::cout << 0; return; };
-		if (Absolute(a) < Absolute(b)) { std::cout << "Non-integral answer\n"; return; };
-		if (a < 0)
-		{
+		if (Absolute(a) < Absolute(b))		  { std::cout << "Non-integral answer\n"; return; };
+		if (a < 0)	{
 			a = -a;
-			do
-			{
+			do	{
 				a += -Absolute(b);
 				result++;
 			} while (a > 0);
 			std::cout << -result;
 			return;
 		};
-		do
-		{
+		do	{
 			if (a < Absolute(b)) { std::cout << "Non-integral answer\n"; break; }; //need to figure out a way to not return value while breaking 
 			a += -Absolute(b);
 			result++;
@@ -412,15 +399,13 @@ void calc(std::istream & procedure)
 		return;
 		//TODO: Revisit 
 	}; break;
-	case '^': 
-	{
-		if (b < 0) { std::cout << "Non-integral answer\n"; return; };
+	case '^': {
+		if (b < 0)	{ std::cout << "Non-integral answer\n"; return; };
 		if (b == 0) { std::cout << 1; return; };
 		bool isnegative = false;
-		if (a < 0) { a = -a; isnegative = true; };
+		if (a < 0)	{ a = -a; isnegative = true; };
 		int number = a;
-		for (int amount = 0; amount < Absolute(b)-1; amount++)
-		{
+		for (int amount = 0; amount < Absolute(b)-1; amount++) {
 			for (int amount2 = 0; amount2 < number; amount2++, result+=a);
 			a = result;
 			result = 0;
@@ -428,44 +413,37 @@ void calc(std::istream & procedure)
 		std::cout << (isnegative == true ? -a : a);
 		return;
 	}; break;
-	default: std::cout <<"\n\aUnknown Operator '" << operation << "'!";
+	default:  std::cout <<"\n\aUnknown Operator '" << operation << "'!";
 	}; return;
-}
-int Adding_Calculator()
-{
+};
+int Adding_Calculator() {
 	//https://www.reddit.com/r/dailyprogrammer/comments/6ze9z0/20170911_challenge_331_easy_the_adding_calculator/
 	std::istringstream str("12 + 25 -30 + 100 100 - 30 100 - -30 -25 - 29 -41 - -10 9 * 3 9 * -4 -4 * 8 -12 * -9 100 / 2 75 / -3 -75 / 3 7 / 3 0 / 0 5 ^ 3 -5 ^ 3 -8 ^ 3 -1 ^ 1 1 ^ 1 0 ^ 5 5 ^ 0 10 ^ -3");
 	std::cin.rdbuf(str.rdbuf());
-	while (std::cin)
-	{
+	while (std::cin) {
 		calc(std::cin);
 	};
-	return 0;
+	return EXIT_SUCCESS;
+
 	//date of creation: 30.11.2017
 };
 
-void checkRepetitions(std::string input[], int amountofinputs)
-{
+void checkRepetitions(std::string input[], int amountofinputs) {
 	int sequence = 0;
-	do
-	{
+	do	{
 		int startpos = 0;
 		std::vector<std::string> answers(1);
 		answers.at(0) = '\0';
 		std::cout << "Sequence #" << sequence << '\t' << input[sequence] << ":\n";
-		do
-		{
+		do	{
 			int offset = 2;
-			do
-			{
+			do	{
 				int timespresent = 1;
 				std::string number = input[sequence].substr(startpos, offset);
-				for (int i = startpos+1; i < input[sequence].length(); i++)
-				{
+				for (int i = startpos+1; i < input[sequence].length(); i++) {
 					if (number == input[sequence].substr(i, offset)) timespresent++;
 				};
-				if (timespresent != 1) 
-				{
+				if (timespresent != 1)	{
 					bool isalreadyfound = 0;
 					for (int i = 0; i < answers.size(); i++) if (number == answers.at(i)) isalreadyfound=1;
 					if (!isalreadyfound) { std::cout << number << ':' << timespresent << '\n'; answers.push_back(number);};
@@ -479,30 +457,27 @@ void checkRepetitions(std::string input[], int amountofinputs)
 	} while (sequence<=amountofinputs);
 	return;
 };
-int Repeating_Numbers()
-{
+int Repeating_Numbers() {
 	//https://www.reddit.com/r/dailyprogrammer/comments/7eh6k8/20171121_challenge_341_easy_repeating_numbers/
-	std::string input[] =
-	{
+	std::string input[] = {
 		"82156821568221",
 		"11111011110111011",
 		"98778912332145",
 		"124489903108444899"
 	};
 	checkRepetitions(input, (sizeof(input) / sizeof(input[0]))-1);
-	return 0;
+	return EXIT_SUCCESS;
 	//date of creation: 04.12.2017
 };
 
-int MozartsMusicalDice()
-{
+//TODO: This needs some heavy refactoring
+int MozartsMusicalDice() {
 	//https://www.reddit.com/r/dailyprogrammer/comments/7i1ib1/20171206_challenge_343_intermediate_mozarts/
 	std::ifstream file;
 	std::string filename = "mozart-dice-starting.txt";
 	file.open(filename);
 	if (!file.is_open()) { std::cout << "Failed to open " << filename << "!\a\n"; _getch(); return EXIT_FAILURE; };
-	struct note
-	{
+	struct note	{
 		std::string name = {};
 		float beat = NULL;
 		float duration = NULL;
@@ -510,18 +485,16 @@ int MozartsMusicalDice()
 	std::vector<std::vector<note>> measure;
 	{
 		std::string tempname = {};
-		float tempbeat = NULL;
-		float tempduration = NULL;
-		note temp = { tempname, tempbeat, tempduration };
+		float tempbeat		 = NULL;
+		float tempduration	 = NULL;
+		note temp			 = { tempname, tempbeat, tempduration };
 		const int measurelength = 3;
-
 		float measurestartbeat = 0;	//initializing measurestart before reading
-		do
-		{
+		
+		do	{
 			std::vector<note> tempmeasure;
 			measurestartbeat = tempbeat;
-			do
-			{
+			do	{
 				file >> tempname;
 				file >> tempbeat;
 				file >> tempduration;
@@ -537,8 +510,7 @@ int MozartsMusicalDice()
 	};	//scoped all temporary variables
 	file.close();
 	//-----------------------------------------------------pick 16 measures according to scheme
-	int scheme[16][11] =
-	{
+	int scheme[16][11] = {
 	{96, 32, 69, 40, 148, 104, 152, 119, 98, 3, 54},
 	{22, 6, 95, 17, 74, 157, 60, 84, 142, 87, 130},
 	{141, 128, 158, 113, 163, 27, 171, 114, 42, 165, 10 },
@@ -561,17 +533,14 @@ int MozartsMusicalDice()
 	outputfile.open(outfilename);
 	if (!outputfile.is_open()) { std::cout << "Failed to open outputfile!\a"; _getch(); return EXIT_FAILURE; };
 	float beat = 0;
-	for (int i = 0, diceresult=2; i < 16; i++)
-	{
+	for (int i = 0, diceresult=2; i < 16; i++) {
 		diceresult = (random(1, 6)+random(1, 6))-1;	//ommitting impossible '1' roll 
 		std::cout <<"\t"<< i+1 << " measure " << scheme[i][diceresult] << '\n' << '\a';
-		for (int j = 0; j < measure.at(scheme[i][diceresult]).size(); j++)
-		{
+		for (int j = 0; j < measure.at(scheme[i][diceresult]).size(); j++) {
 			std::cout << measure.at(scheme[i][diceresult]).at(j).name << ' '
 				<< beat + measure.at(scheme[i][diceresult]).at(j).beat << ' ' << measure.at(scheme[i][diceresult]).at(j).duration << '\n';
 		};
-		for (int j = 0; j < measure.at(scheme[i][diceresult]).size(); j++)
-		{
+		for (int j = 0; j < measure.at(scheme[i][diceresult]).size(); j++) {
 			//save to file or send directly to http://ufx.space/stuff/mozart-dice/ 
 			outputfile << measure.at(scheme[i][diceresult]).at(j).name << ' '
 				<< beat+measure.at(scheme[i][diceresult]).at(j).beat << ' ' << measure.at(scheme[i][diceresult]).at(j).duration << '\n';
@@ -580,48 +549,38 @@ int MozartsMusicalDice()
 	};
 	outputfile.close();
 	//Stretchgoal: convert output directly to midi/mp3 file 
+	
 	return EXIT_SUCCESS;
 	//date of creation: 01.03.2017
 };
 
-int LightRoom()
-{
-	struct occupancy
-	{
+//TODO: This needs some HEAVY refactoring
+int LightRoom() {
+	struct occupancy {
 		int enter = NULL;
 		int leave = NULL;
 	};
-	occupancy exampleinput[] ={ {1, 3}, {2,3},{4,5} };								//Output: 3
-	occupancy testinput1[] = { {2,4}, {3, 6}, {1, 3}, {6,8} };						//Output: 7
-	occupancy testinput2[] = { {6,8}, {5,8}, {8,9}, {5,7}, {4,7} };					//Output: 5
-	occupancy* example[] = { exampleinput, testinput1, testinput2 };
+	occupancy exampleinput[] = { {1,3}, {2,3}, {4,5} };						//Output: 3
+	occupancy testinput1[]	 = { {2,4}, {3,6}, {1,3}, {6,8} };				//Output: 7
+	occupancy testinput2[]	 = { {6,8}, {5,8}, {8,9}, {5,7}, {4,7} };		//Output: 5
+	occupancy* example[]	 = { exampleinput, testinput1, testinput2 };
+	int testinputlength[]	 = { 3,4,5 };									//TODO:need to calculate those programatically
 
-	int testinputlength[] = { 3,4,5 };												//TODO:need to calculate those programatically
-
-	/*for (int i = 0; i < (sizeof(example) / sizeof((*example)[0])); i++)
-	{
-		std::cout << "Size of Example #" << i << "\nexample:\t\t" << sizeof(example) << "\texample[i]:\t" << sizeof(example[i])
-			<< "\nexample/example[i]:\t" << sizeof(example)/sizeof(example[i]) << "\texample[i][0]:\t" << sizeof(example[i][0])
-			<< "\n\n";
-	}*/
-
-	for (int i = 0; i < (sizeof(example)/sizeof((*example)[0])); i++)				//iterating through examples
-	{
+	//iterating through examples
+	for (int i = 0; i < (sizeof(example)/sizeof((*example)[0])); i++) {		
 		int earliest = INT_MAX, latest = -INT_MAX, lighton = 0;
-		earliest = 100;
-		latest = -100;
+		earliest =  100;
+		latest	 = -100;
 		occupancy temp{};
 		std::vector<occupancy> gaps;
-		for (int j = 0; j < testinputlength[i]; j++)								//iterating through occupancies
-		{
+
+		//iterating through occupancies
+		for (int j = 0; j < testinputlength[i]; j++) {
 			//std::cout << "Enter " << example[i][j].enter << ", leave " << example[i][j].leave << ", difference:  " << example[i][j].leave - example[i][j].enter <<".\n";
 			if (j == 0) { lighton = example[i][j].leave - example[i][j].enter; earliest = example[i][j].enter; latest = example[i][j].leave; continue; };
-			if (example[i][j].enter > latest || (example[i][j].enter < earliest && example[i][j].leave < earliest))
-			{
-				if (gaps.size()==0)
-				{
-					if (example[i][j].enter > latest) 
-					{	
+			if (example[i][j].enter > latest || (example[i][j].enter < earliest && example[i][j].leave < earliest))	{
+				if (gaps.size()==0)	{
+					if (example[i][j].enter > latest) {	
 						temp.enter = latest; temp.leave = example[i][j].enter;
 						gaps.emplace_back(temp);
 						lighton += example[i][j].leave - example[i][j].enter; continue;
@@ -630,12 +589,10 @@ int LightRoom()
 					gaps.emplace_back(temp);
 					lighton+= example[i][j].leave - example[i][j].enter; continue;
 				};
-				for (int k = 0; k < gaps.size(); k++)
-				{
+				for (int k = 0; k < gaps.size(); k++) {
 					if (gaps.at(k).enter > example[i][j].enter && gaps.at(k).leave > example[i][j].leave) { lighton += example[i][j].leave - gaps.at(k).enter; gaps.at(k).enter = example[i][j].leave; continue; };
 					if (gaps.at(k).enter < example[i][j].enter && gaps.at(k).leave < example[i][j].leave) { lighton += gaps.at(k).leave - example[i][j].enter; gaps.at(k).leave = example[i][j].enter; continue; };
-					if (gaps.at(k).enter < example[i][j].enter && gaps.at(k).leave > example[i][j].leave) 
-					{ 
+					if (gaps.at(k).enter < example[i][j].enter && gaps.at(k).leave > example[i][j].leave) { 
 						lighton += (gaps.at(k).leave - example[i][j].leave) - (example[i][j].enter - gaps.at(k).enter);
 						temp.enter = example[i][j].leave; temp.leave = gaps.at(k).leave;
 						gaps.emplace_back(temp);
@@ -645,24 +602,24 @@ int LightRoom()
 				};
 			};
 			if (example[i][j].enter < earliest) { lighton+=earliest-example[i][j].enter; earliest = example[i][j].enter; };
-			if (example[i][j].leave > latest) { lighton += example[i][j].leave - latest; latest = example[i][j].leave; };
+			if (example[i][j].leave > latest)	{ lighton += example[i][j].leave - latest; latest = example[i][j].leave; };
 		};
 			std::cout << "In case#" << i << " lightbulb was on for " << lighton << ".\n";
 	};
+
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/7qn07r/20180115_challenge_347_easy_how_long_has_the/
 	//Date of creation: 05.03.2018
 }; 
 
+//TODO: FIX & refactor
 std::vector<std::vector<int>> guess;
-void computepermutations(std::vector<int> & values)
-{
+void computepermutations(std::vector<int> & values) {
 	do	{
 		guess.emplace_back(values);
 	} while (std::next_permutation(values.begin(), values.end()));
 };
-std::string SolveCryptaritmethic(const std::string & input)
-{
+std::string SolveCryptaritmethic(const std::string & input) {
 	std::string answer="Nothing here yet!";
 
 	//process input into data and operators
@@ -776,10 +733,8 @@ std::string SolveCryptaritmethic(const std::string & input)
 	//} while (assumption==false );
 	return answer;
 };
-int Cryptarithmetic_Solver()
-{
-	std::string example[]
-	{
+int Cryptarithmetic_Solver() {
+	std::string example[] {
 		"SEND + MORE == MONEY",
 		"THIS + IS + HIS == CLAIM",
 		"WHAT + WAS + THY == CAUSE",
@@ -792,13 +747,14 @@ int Cryptarithmetic_Solver()
 	{
 		std::cout << example[i] << " answer:\n" << SolveCryptaritmethic(example[i]) << "\n\n\a";
 	};
+
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/7p5p2o/20180108_challenge_346_easy_cryptarithmetic_solver/
 	//Date of creation: 07.03.18
 }
 
-std::string DisplayBowlingFrame(std::vector<int> input)
-{
+//TODO: FIX
+std::string DisplayBowlingFrame(std::vector<int> input) {
 	const int frames = 10;	//bowling game consists of 10 frames
 	const int pins = 10;	//in which player has 2 attempts to knock down 10 pins
 	//If the player knocks down all 10 pins on the first roll, that should be displayed as X, and the next number will be the first roll of the next frame.
@@ -808,8 +764,7 @@ std::string DisplayBowlingFrame(std::vector<int> input)
 	std::string bowlingframe={};
 	//enum struck {-,1,2,3,4,5,6,7,8,9,X};
 	//std::cout << "Array " << &input << ", size= " << input.size() << '\n';
-	for (int i = 0, frame=0; i < input.size() && frame<10 ; i++, frame++)
-	{
+	for (int i = 0, frame=0; i < input.size() && frame<10 ; i++, frame++) {
 		//if (input[i] == 0) bowlingframe.append("-");
 		if (input[i] == pins) { bowlingframe.append("X  "); continue; };
 		if (input[i] + input[i + 1] == pins) { bowlingframe.append(std::to_string(input[i]) + "/ "); i++; continue; };
@@ -817,11 +772,10 @@ std::string DisplayBowlingFrame(std::vector<int> input)
 	};
 	return bowlingframe;
 };
-int BowlingFramesDisplay()
-{
+int BowlingFramesDisplay() {
 	//TODO:	Fix - output needs to be strictly formatted
-	std::vector<std::vector<int>> examples=
-	{																	//Outputs:
+	std::vector<std::vector<int>> examples=	{																	
+																		//Outputs:
 		{6, 4, 5, 3, 10, 10, 8, 1, 8, 0, 10, 6, 3, 7, 3, 5, 3},			// 6/ 53 X  X  81 8- X  63 7/ 53
 		{9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0 },	// 9- 9- 9- 9- 9- 9- 9- 9- 9- 9-
 		{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},				// X  X  X  X  X  X  X  X  X  XXX
@@ -829,18 +783,18 @@ int BowlingFramesDisplay()
 		{10, 3, 7, 6, 1, 10, 10, 10, 2, 8, 9, 0, 7, 3, 10, 10, 10},		// X  3/ 61 X  X  X  2/ 9- 7/ XXX
 		{9, 0, 3, 7, 6, 1, 3, 7, 8, 1, 5, 5, 0, 10, 8, 0, 7, 3, 8, 2, 8}// 9- 3/ 61 3/ 81 5/ -/ 8- 7/ 8/8
 	};
-	for (int i = 0; i < examples.size(); i++)
-	{
+	for (int i = 0; i < examples.size(); i++) {
 		std::cout << DisplayBowlingFrame(examples[i]) << '\n';
 	};
+
 	return EXIT_SUCCESS;
- //https://www.reddit.com/r/dailyprogrammer/comments/7so37o/20180124_challenge_348_intermediate_bowling/
+	//https://www.reddit.com/r/dailyprogrammer/comments/7so37o/20180124_challenge_348_intermediate_bowling/
 };
 
-std::string Decode_AlphabetCipher(const std::string & keyword, const std::string & message, bool decode)
-{
-	const std::string chart[] =
-	{ "abcdefghijklmnopqrstuvwxyz",
+//TODO: Make chart programatically
+std::string Decode_AlphabetCipher(const std::string & keyword, const std::string & message, bool decode) {
+	const std::string chart[] =	{	
+		"abcdefghijklmnopqrstuvwxyz",
 		"bcdefghijklmnopqrstuvwxyza",
 		"cdefghijklmnopqrstuvwxyzab",
 		"defghijklmnopqrstuvwxyzabc",
@@ -867,15 +821,13 @@ std::string Decode_AlphabetCipher(const std::string & keyword, const std::string
 		"yzabcdefghijklmnopqrstuvwx",
 		"zabcdefghijklmnopqrstuvwxy"
 	};
-	int asciioffset = 97;	//offset of lower case letters in ascii encoding
+	int asciioffset = 97;			//offset of lower case letters in ascii encoding
 	std::string solution{};
-	if (!decode)
-	{
+	if (!decode) {
 		for (int letter = 0; letter < message.length(); letter++)
 		{ solution += chart[(int)keyword[letter % keyword.length()] - asciioffset][(int)message[letter] - asciioffset]; }
 	}
-	else
-	{
+	else {
 		for (int letter = 0; letter < message.length(); letter++)
 		{	solution += chart[0][chart[(int)keyword[letter % keyword.length()] - asciioffset].find(message[letter])];	};
 	};
@@ -884,7 +836,7 @@ std::string Decode_AlphabetCipher(const std::string & keyword, const std::string
 int AlphabetCipher()
 {
 	std::string answer{};
-	std::string input[][2] =			//TODO: Find out why - if dimension y is not specified VC throws an error "Array cannot contain elements of this type" (type is resolved to const char*)
+	std::string input[][2] = 
 	{ 
 		{ "snitch", "thepackagehasbeendelivered" },
 		{ "bond", "theredfoxtrotsquietlyatmidnight" },
@@ -908,9 +860,8 @@ int AlphabetCipher()
 	};
 	bool decode=false;
 	//bonus does not work correctly need to figure out decoding
-	for (int i = 0; i < sizeof(output)/sizeof(*output); i++)
-	{
-		Timer timer;		//execution time
+	for (int i = 0; i < sizeof(output)/sizeof(*output); i++) {
+		Timer timer;						//execution time
 		if (i == 4) decode = true;
 		std::cout << "\n\nCodeword:\t" << input[i][0] << "\nmessage:\t" << input[i][1];
 		answer = Decode_AlphabetCipher(input[i][0], input[i][1], decode);
@@ -918,7 +869,7 @@ int AlphabetCipher()
 		if (answer == output[i]) { std::cout << "correct."; }
 		else { std::cout << "incorrect."; };
 	};
-	return 0;
+	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/879u8b/20180326_challenge_355_easy_alphabet_cipher/
 	//date of creation: 15-16.07.2018
 }
@@ -1102,25 +1053,20 @@ std::string Tally(const std::string tally)
 	};
 	return result;
 };
-int TallyProgram()
-{
+int TallyProgram() {
 
-	std::string input[] =
-	{
+	std::string input[]	 = {
 		"abcde",
 		"dbbaCEDbdAacCEAadcB",
 		"EbAAdbBEaBaaBBdAccbeebaec"			//c : 3, d : 2, a : 1, e :1, b : 0  
 	};
-	std::string output[] =
-	{
+	std::string output[] = {
 		"a : 1, b : 1, c : 1, d : 1, e : 1",
 		"b : 2, d : 2, a : 1, c : 0, e : -2",
 		"c : 3, d : 2, a : 1, e : 1, b : 0"
-
 	};
 
-	for (int i = 0; i < (sizeof(input)/sizeof(input[0])); i++)
-	{
+	for (int i = 0; i < (sizeof(input)/sizeof(input[0])); i++) {
 		std::cout << "\n\nInput:\t\t" << input[i] 
 			<< "\nRestlt:\t\t" << Tally(input[i])
 			<< "\nExpected:\t" << output[i];

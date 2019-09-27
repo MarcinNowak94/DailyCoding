@@ -4,8 +4,7 @@
 //#include <sphelper.h>		//for SpFindBestToken
 //helper functions
 
-bool isvovel(const char & character)
-{
+bool isvovel(const char & character){
 	const char vovels[]{ 'a', 'e', 'i', 'o', 'u' };
 	for (int i = 0; i < (sizeof(vovels) / sizeof(*vovels)); i++)
 	{
@@ -15,8 +14,7 @@ bool isvovel(const char & character)
 	//date of creation: 06.09.2017
 };
 
-int speak(const std::wstring & text)
-{
+int speak(const std::wstring & text){
 	ISpVoice * pVoice = NULL;	//not mandatory - just initializing 
 
 	if (FAILED(::CoInitialize(NULL)))
@@ -44,3 +42,14 @@ int speak(const std::wstring & text)
 	::CoUninitialize();
 	return TRUE;
 }
+
+std::vector<std::string> Tokenize(const std::string &String, const char delimiter) {
+	size_t position = 0;
+	std::vector<std::string> Tokenized = {};
+
+	while (position < String.length()) {
+		Tokenized.push_back(String.substr(position, String.find(delimiter, position) - position));
+		if (position != String.length()) position = String.find_first_not_of(delimiter, String.find(delimiter, position));
+	};
+	return Tokenized;
+};

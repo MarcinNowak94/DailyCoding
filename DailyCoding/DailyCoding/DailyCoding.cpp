@@ -14,7 +14,6 @@
 #include "other.h"
 #include "Helper_functions.h"
 
-const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra, nisl id laoreet porta, sapien risus luctus nibh, et dapibus velit nisi ac tortor.";
 const int menulimit = 25;
 
 int run(int(*function)()) {
