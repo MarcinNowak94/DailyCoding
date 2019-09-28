@@ -30,7 +30,7 @@ bool isValidDate(const int & day, const int & month, const int & year) {
 int Date_Checker() {
 	char exit = 'y';
 	do	{
-		std::cout << "Input date from years 2001-2099 to check:\n";
+		std::cout << "\nInput date from years 2001-2099 to check:\n";
 		int day,month, year;
 		day = month = year = 0;
 		
@@ -42,7 +42,7 @@ int Date_Checker() {
 
 		std::cout << "Check another date ? Y/N: ";
 		exit = _getch();
-	} while (exit =='y' && exit =='Y');
+	} while (exit =='y' || exit =='Y');
 	return EXIT_SUCCESS;
 };
 
@@ -131,12 +131,11 @@ std::string CheckEAN(std::string barcode, const int &type) {
 	};
 	return( "Not defined!\a");
 };
-int BarcodeChecker()
-{
+int BarcodeChecker() {
 	std::string barcodes[] = { "69207020772112",	//code 692070207721 with addon 12  
 								"075678164125" };	//scanner can sometimes ommit predecating 0, real barcode: 0075678164125
-	for each (auto barcode in barcodes)
-	{
+	
+	for each (auto barcode in barcodes) {
 		std::cout << "Barcode (" << barcode << ") EAN-8  code " << CheckEAN(barcode, EAN_8)  << ".\n";
 		std::cout << "Barcode (" << barcode << ") EAN-13 code " << CheckEAN(barcode, EAN_13) << ".\n";
 	};
