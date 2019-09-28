@@ -10,28 +10,27 @@ int Distance_between_two_cities(){
 	};
 	city cities[] = { { "City1", random(-90,90), random(-180,180) },
 					  { "City2", random(-90,90), random(-180,180) } };
-	
+
 	std::cout << "\n\nDistance between :\n"
 		<< cities[0].name << "(" << cities[0].lattitude << " lat., " << cities[0].longitude << "lon.) and \n"
 		<< cities[1].name << "(" << cities[1].lattitude << " lat., " << cities[1].longitude << "lon.) is "
-		<< sqrt((abs(cities[0].lattitude - cities[1].lattitude))*(abs(cities[0].lattitude - cities[1].lattitude)) + 
-		        (abs(cities[0].longitude - cities[1].longitude))*(abs(cities[0].longitude - cities[1].longitude))) << " units.";
+		<< sqrt(pow(abs(cities[0].lattitude - cities[1].lattitude), 2) + 
+		        pow(abs(cities[0].longitude - cities[1].longitude), 2)) << " units.";
 
 	return 0;
 	//date of creation: 13.09.2017
 };
 
-int Happy_Numbers()
-{
+int Happy_Numbers(){
 	unsigned int num, temp, iterations;
-	for (int i = 0; i < 8; i++)
-	{
+	for (int i = 0; i < 8; i++)	{
 		iterations = 0;
 		num = random();
 		temp = num;
-		while (1!=num && iterations<=100)
-		{
-			num = (((num/100)*(num/100)) + (num / 10)*(num / 10)) + ((num % 10)*(num % 10));
+		while (1!=num && iterations<=100) {
+			num = (pow((num / 100),2) + 
+				   pow((num / 10) ,2) + 
+				   pow((num % 10) ,2));
 			iterations++;
 		};
 		if (100 == iterations) { i--; continue; };
@@ -41,8 +40,7 @@ int Happy_Numbers()
 	//date of creation: 14.09.2017
 };
 
-int Coin_Flipper()
-{
+int Coin_Flipper() {
 	unsigned int amount_of_flips = random();
 	std::cout << "\nStatistics for flipping coin " << amount_of_flips << " time/s :\n";
 	unsigned int heads, tails;
