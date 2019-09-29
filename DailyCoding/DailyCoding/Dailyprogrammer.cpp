@@ -129,8 +129,7 @@ int Assembler(std::string incoming_packet){
 	else message.push_back(incoming);
 	return EXIT_SUCCESS;
 };
-int Packet_Assembler()
-{
+int Packet_Assembler(){
 		//https://www.reddit.com/r/dailyprogrammer/comments/72ivih/20170926_challenge_333_easy_packet_assembler/
 		/*
 		Description
@@ -300,35 +299,32 @@ int Packet_Assembler()
 	//date of creation: 26-28.09.2017
 };
 
-//TODO: Possibly to fix, i might have omitted a part of challenge
 bool fill(std::istream & input, int & amount, int & length, std::vector<std::vector<int>> & tab) {
 	input >> amount;
 	input >> length;
-	int temp = 0;
+	int number = 0;
 
 	for (int seq = 0; seq<amount; seq++) {
-		std::cout << "\n ";
+		std::cout << '\n ';
 		std::vector<int> row;
 		tab.push_back(row);
 		for (int num = 0; num<length; num++) {
-			input >> temp;
-			tab[seq].push_back(temp); 
-			std::cout << tab[seq][num] << "\t";
+			input >> number;
+			tab[seq].push_back(number); 
+			std::cout << tab[seq][num] << '\t';
 		};
 	};
 	return true;
 };
 void sequences(std::istream & input, int difference=1) {
-	int numofseq;
-	int seqlen;
+	int sequences, seqlen, seqtotal, total;
+		sequences= seqlen= seqtotal= total= 0;
 	std::vector<std::vector<int>> seqtab;
-	int seqtotal = 0;
-	int everyseq = 0;
 	
 	//parsing input
-	fill(input, numofseq, seqlen, seqtab);
+	fill(input, sequences, seqlen, seqtab);
 	std::cout << "\nSearching for sequences of " << difference << ":";
-	for (int seq = 0; seq<numofseq; seq++) {
+	for (int seq = 0; seq<sequences; seq++) {
 		for (int num = 0; num<seqlen; num++) {
 			for (int n = num; n<seqtab[seq].size(); n++) {
 				if (seqtab[seq][num] + difference == seqtab[seq][n] || seqtab[seq][num]-difference== seqtab[seq][n])
@@ -336,10 +332,10 @@ void sequences(std::istream & input, int difference=1) {
 			};
 		};
 		std::cout << "\nsequence " << seq  << ": " << seqtotal;
-		everyseq += seqtotal;
+		total += seqtotal;
 		seqtotal = 0;
 	};
-	std::cout << "\nTotal length of sequences: " << everyseq;
+	std::cout << "\nTotal length of sequences: " << total;
 	return;
 };
 int Consecutive_Distance_Rating() {
@@ -372,10 +368,8 @@ void calc(std::istream & procedure){
 	case '-': {std::cout << (a + (-b)); return; }; break;
 	case '*': {
 		if (0 == b) {std::cout << 0; return; };
-		if (0 > b) { for (int amount = 0; amount < -b; amount++, result += a); std::cout << -result; return; };
-		for (int amount = 0; amount < b; amount++, result += a);
-		std::cout << result;
-		return;
+		for (int amount = 0; amount < abs(b); amount++, result += a);	
+		std::cout << (b > 0 ? result : -result);	return;
 	}; break;
 	case '/': {
 		if (b == 0)							  { std::cout << "Not-defined\n"; return; };
@@ -397,7 +391,6 @@ void calc(std::istream & procedure){
 		} while (a > 0);
 		std::cout << (b < 0 ? -result : result);
 		return;
-		//TODO: Revisit 
 	}; break;
 	case '^': {
 		if (b < 0)	{ std::cout << "Non-integral answer\n"; return; };
@@ -470,86 +463,91 @@ int Repeating_Numbers() {
 	//date of creation: 04.12.2017
 };
 
-//TODO: This needs some heavy refactoring
+//TODO: Refactor & stretchgoal
 int MozartsMusicalDice() {
 	//https://www.reddit.com/r/dailyprogrammer/comments/7i1ib1/20171206_challenge_343_intermediate_mozarts/
 	std::ifstream file;
 	std::string filename = "mozart-dice-starting.txt";
 	file.open(filename);
 	if (!file.is_open()) { std::cout << "Failed to open " << filename << "!\a\n"; _getch(); return EXIT_FAILURE; };
-	struct note	{
+	
+	struct note {
 		std::string name = {};
 		float beat = NULL;
 		float duration = NULL;
 	};
 	std::vector<std::vector<note>> measure;
+	
+	//Scope for temporary variables 
 	{
-		std::string tempname = {};
-		float tempbeat		 = NULL;
-		float tempduration	 = NULL;
-		note temp			 = { tempname, tempbeat, tempduration };
 		const int measurelength = 3;
 		float measurestartbeat = 0;	//initializing measurestart before reading
 		
-		do	{
+		std::string tempname = {};
+		float tempbeat = NULL;
+		float tempduration = NULL;
+
+		do {
 			std::vector<note> tempmeasure;
 			measurestartbeat = tempbeat;
-			do	{
+			do {
 				file >> tempname;
 				file >> tempbeat;
 				file >> tempduration;
-				temp = { tempname, tempbeat, tempduration };
-				temp.beat -= measurestartbeat;	//normalizing beat timing
-				//std::cout << '\t' << temp.name << '\t' << temp.beat << '\t' << temp.duration << '\n';
-				tempmeasure.emplace_back(temp);
+				//std::cout << tempname << '\t' << tempbeat << '\t' << tempduration << '\n';
+				tempmeasure.emplace_back(note{ tempname, tempbeat-measurestartbeat/*normalizing timing*/, tempduration });
 				if (file.eof()) break;
-			} while (temp.beat + temp.duration <= measurelength);
+			} while (tempbeat-measurestartbeat + tempduration <= measurelength);
 			measure.emplace_back(tempmeasure);
 			//std::cout << "Measure " << measure.size() << ": " << measure.back().size() << " notes\n";
 		} while (!file.eof());
 	};	//scoped all temporary variables
 	file.close();
+	
 	//-----------------------------------------------------pick 16 measures according to scheme
-	int scheme[16][11] = {
-	{96, 32, 69, 40, 148, 104, 152, 119, 98, 3, 54},
-	{22, 6, 95, 17, 74, 157, 60, 84, 142, 87, 130},
-	{141, 128, 158, 113, 163, 27, 171, 114, 42, 165, 10 },
-	{41, 63, 13, 85, 45, 167, 53, 50, 156, 61, 103},
-	{105, 146, 153, 161, 80, 154, 99, 140, 75, 135, 28 },
-	{122, 46, 55, 2, 97, 68, 133, 86, 129, 47, 37},
-	{11, 134, 110, 159, 36, 118, 21, 169, 62, 147, 106 },
-	{30, 81, 24, 100, 107, 91, 127, 94, 123, 33, 5},
-	{70, 117, 66, 90, 25, 138, 16, 120, 65, 102, 35 },
-	{121, 39, 136, 176, 143, 71, 155, 88, 77, 4, 20},
-	{26, 126, 15, 7, 64, 150, 57, 48, 19, 31, 108 },
-	{9, 56, 132, 34, 125, 29, 175, 166, 82, 164, 92},
-	{112, 174, 73, 67, 76, 101, 43, 51, 137, 144, 12 },
-	{49, 18, 58, 160, 136, 162, 168, 115, 38, 59, 124},
-	{109, 116, 145, 52, 1, 23, 89, 72, 149, 173, 44 },
-	{14, 83, 79, 170, 93, 151, 172, 111, 8, 78, 131}
+	const int scheme[16][11] = {
+	{96,  32,  69,  40,  148, 104, 152, 119, 98,  3,   54 },
+	{22,  6,   95,  17,  74,  157, 60,  84,  142, 87,  130},
+	{141, 128, 158, 113, 163, 27,  171, 114, 42,  165, 10 },
+	{41,  63,  13,  85,  45,  167, 53,  50,  156, 61,  103},
+	{105, 146, 153, 161, 80,  154, 99,  140, 75,  135, 28 },
+	{122, 46,  55,  2,   97,  68,  133, 86,  129, 47,  37 },
+	{11,  134, 110, 159, 36,  118, 21,  169, 62,  147, 106},
+	{30,  81,  24,  100, 107, 91,  127, 94,  123, 33,  5  },
+	{70,  117, 66,  90,  25,  138, 16,  120, 65,  102, 35 },
+	{121, 39,  136, 176, 143, 71,  155, 88,  77,  4,   20 },
+	{26,  126, 15,  7,   64,  150, 57,  48,  19,  31,  108},
+	{9,   56,  132, 34,  125, 29,  175, 166, 82,  164, 92 },
+	{112, 174, 73,  67,  76,  101, 43,  51,  137, 144, 12 },
+	{49,  18,  58,  160, 136, 162, 168, 115, 38,  59,  124},
+	{109, 116, 145, 52,  1,   23,  89,  72,  149, 173, 44 },
+	{14,  83,  79,  170, 93,  151, 172, 111, 8,   78,  131}
 	};
-	std::string outfilename = "output.txt";
+	float beat = 0;
+	const int length = 16;
+
+	std::string outfilename = "Composition.txt";
 	std::ofstream outputfile;
 	outputfile.open(outfilename);
-	if (!outputfile.is_open()) { std::cout << "Failed to open outputfile!\a"; _getch(); return EXIT_FAILURE; };
-	float beat = 0;
-	for (int i = 0, diceresult=2; i < 16; i++) {
-		diceresult = (random(1, 6)+random(1, 6))-1;	//ommitting impossible '1' roll 
-		std::cout <<"\t"<< i+1 << " measure " << scheme[i][diceresult] << '\n' << '\a';
+	if (!outputfile.is_open()) { std::cout << "Failed to open outputfile\a " << outfilename; _getch(); return EXIT_FAILURE; };
+	
+	for (int i = 0, diceresult = 2; i < length; i++, beat+=3) {
+		diceresult = (random(1, 6) + random(1, 6)) - 1;	//ommitting impossible '1' roll 
+		std::cout << "\t" << i + 1 << " measure " << scheme[i][diceresult] << '\n';
 		for (int j = 0; j < measure.at(scheme[i][diceresult]).size(); j++) {
-			std::cout << measure.at(scheme[i][diceresult]).at(j).name << ' '
-				<< beat + measure.at(scheme[i][diceresult]).at(j).beat << ' ' << measure.at(scheme[i][diceresult]).at(j).duration << '\n';
-		};
-		for (int j = 0; j < measure.at(scheme[i][diceresult]).size(); j++) {
+			std::cout << measure.at(scheme[i][diceresult]).at(j).name        << ' '
+				      << measure.at(scheme[i][diceresult]).at(j).beat + beat << ' ' 
+				      << measure.at(scheme[i][diceresult]).at(j).duration    << '\n';
+			
 			//save to file or send directly to http://ufx.space/stuff/mozart-dice/ 
-			outputfile << measure.at(scheme[i][diceresult]).at(j).name << ' '
-				<< beat+measure.at(scheme[i][diceresult]).at(j).beat << ' ' << measure.at(scheme[i][diceresult]).at(j).duration << '\n';
+			outputfile << measure.at(scheme[i][diceresult]).at(j).name        << ' '
+					   << measure.at(scheme[i][diceresult]).at(j).beat + beat << ' '
+				       << measure.at(scheme[i][diceresult]).at(j).duration    << '\n';
 		};
-		beat += 3;
 	};
 	outputfile.close();
 	//Stretchgoal: convert output directly to midi/mp3 file 
-	
+
 	return EXIT_SUCCESS;
 	//date of creation: 01.03.2017
 };

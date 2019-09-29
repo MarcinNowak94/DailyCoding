@@ -6,8 +6,7 @@
 
 bool isvovel(const char & character){
 	const char vovels[]{ 'a', 'e', 'i', 'o', 'u' };
-	for (int i = 0; i < (sizeof(vovels) / sizeof(*vovels)); i++)
-	{
+	for (int i = 0; i < (sizeof(vovels) / sizeof(*vovels)); i++) {
 		if (character == vovels[i]) return true;
 	};
 	return false;
@@ -29,8 +28,7 @@ int speak(const std::wstring & text){
 	//pVoice->SetVoice(cpToken);									//setting initialized voice to token
 	//cpToken->Release();											//releasing token
 
-	if (SUCCEEDED(hr))
-	{
+	if (SUCCEEDED(hr))	{
 		//hr = pVoice->Speak(text.c_str(), 0, NULL);		//need to figure out a way to convert std::string to wchar_t(LPCWSTR)
 		//std::wcout << "Atempting to speak: " << text.c_str() << ".\n";
 		hr = pVoice->Speak(text.c_str(), 0, NULL);
