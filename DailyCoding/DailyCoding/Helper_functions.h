@@ -73,12 +73,10 @@ struct Timer
 {
 	std::chrono::time_point<std::chrono::steady_clock> start, end;
 	std::chrono::duration<float> duration;
-	Timer()
-	{
+	Timer() {
 		start = std::chrono::high_resolution_clock::now();
 	};
-	~Timer()
-	{
+	~Timer() {
 		duration = std::chrono::high_resolution_clock::now() - start;
 		std::cout << "\nExecution time:\t"<< duration.count()*1000.0f << " ms";
 	};

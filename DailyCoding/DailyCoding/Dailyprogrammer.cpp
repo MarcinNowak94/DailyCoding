@@ -552,57 +552,75 @@ int MozartsMusicalDice() {
 	//date of creation: 01.03.2017
 };
 
-//TODO: This needs some HEAVY refactoring
+//TODO: This needs some refactoring
 int LightRoom() {
 	struct occupancy {
 		int enter = NULL;
 		int leave = NULL;
 	};
-	occupancy exampleinput[] = { {1,3}, {2,3}, {4,5} };						//Output: 3
-	occupancy testinput1[]	 = { {2,4}, {3,6}, {1,3}, {6,8} };				//Output: 7
-	occupancy testinput2[]	 = { {6,8}, {5,8}, {8,9}, {5,7}, {4,7} };		//Output: 5
-	occupancy* example[]	 = { exampleinput, testinput1, testinput2 };
-	int testinputlength[]	 = { 3,4,5 };									//TODO:need to calculate those programatically
+	std::vector<std::vector<occupancy>> example = { 
+		{ {1,3}, {2,3}, {4,5} }					/*Output: 3*/,
+		{ {2,4}, {3,6}, {1,3}, {6,8} }			/*Output: 7*/,
+		{ {6,8}, {5,8}, {8,9}, {5,7}, {4,7} },	/*Output: 5*/
+		{ {15, 18}, {13, 16}, {9, 12}, {3, 4}, 
+	      {17, 20}, {9, 11}, {17, 18}, {4, 5}, 
+	      {5, 6}, {4, 5}, {5, 6}, {13, 16}, 
+	      {2, 3}, {15, 17}, {13, 14}}			/*Output: 14*/ //Needs more tests - returns 13 
+	};
 
 	//iterating through examples
-	for (int i = 0; i < (sizeof(example)/sizeof((*example)[0])); i++) {		
+	for (int ex = 0; ex < example.size(); ex++) {
 		int earliest = INT_MAX, latest = -INT_MAX, lighton = 0;
-		earliest =  100;
-		latest	 = -100;
 		occupancy temp{};
 		std::vector<occupancy> gaps;
 
+		//Migrate logic to this loop from one below
+		/*for each (auto occupancy in example[ex]){
+			lighton = occupancy.leave - occupancy.enter;
+			earliest = earliest < occupancy.enter ? earliest : occupancy.enter;
+			latest = latest > occupancy.leave ? latest : occupancy.leave;
+			std::cout << "Enter:    " << occupancy.enter << "\tLeave: " << occupancy.leave << "\n"
+				      << "Earliest: " << earliest	<< "\tLatest:" << latest << "\n"
+					  << "Light: " << lighton << "\n\n";
+			
+		};*/
+
 		//iterating through occupancies
-		for (int j = 0; j < testinputlength[i]; j++) {
-			//std::cout << "Enter " << example[i][j].enter << ", leave " << example[i][j].leave << ", difference:  " << example[i][j].leave - example[i][j].enter <<".\n";
-			if (j == 0) { lighton = example[i][j].leave - example[i][j].enter; earliest = example[i][j].enter; latest = example[i][j].leave; continue; };
-			if (example[i][j].enter > latest || (example[i][j].enter < earliest && example[i][j].leave < earliest))	{
-				if (gaps.size()==0)	{
-					if (example[i][j].enter > latest) {	
-						temp.enter = latest; temp.leave = example[i][j].enter;
+		for (int occupancy = 0; occupancy < example[ex].size(); occupancy++) {
+			if (occupancy == 0) { 
+				lighton = example[ex][occupancy].leave - example[ex][occupancy].enter; 
+			    earliest = example[ex][occupancy].enter;
+				latest = example[ex][occupancy].leave; 
+				continue; };
+			if (example[ex][occupancy].enter > latest || (example[ex][occupancy].enter < earliest && example[ex][occupancy].leave < earliest)) {
+				if (gaps.size() == 0) {
+					if (example[ex][occupancy].enter > latest) {
+						temp.enter = latest; temp.leave = example[ex][occupancy].enter;
 						gaps.emplace_back(temp);
-						lighton += example[i][j].leave - example[i][j].enter; continue;
+						lighton += example[ex][occupancy].leave - example[ex][occupancy].enter; continue;
 					};
-					temp.enter = example[i][j].leave; temp.leave = earliest;
+					temp.enter = example[ex][occupancy].leave; temp.leave = earliest;
 					gaps.emplace_back(temp);
-					lighton+= example[i][j].leave - example[i][j].enter; continue;
+					lighton += example[ex][occupancy].leave - example[ex][occupancy].enter; continue;
 				};
 				for (int k = 0; k < gaps.size(); k++) {
-					if (gaps.at(k).enter > example[i][j].enter && gaps.at(k).leave > example[i][j].leave) { lighton += example[i][j].leave - gaps.at(k).enter; gaps.at(k).enter = example[i][j].leave; continue; };
-					if (gaps.at(k).enter < example[i][j].enter && gaps.at(k).leave < example[i][j].leave) { lighton += gaps.at(k).leave - example[i][j].enter; gaps.at(k).leave = example[i][j].enter; continue; };
-					if (gaps.at(k).enter < example[i][j].enter && gaps.at(k).leave > example[i][j].leave) { 
-						lighton += (gaps.at(k).leave - example[i][j].leave) - (example[i][j].enter - gaps.at(k).enter);
-						temp.enter = example[i][j].leave; temp.leave = gaps.at(k).leave;
+					if (gaps.at(k).enter > example[ex][occupancy].enter && gaps.at(k).leave > example[ex][occupancy].leave) {
+						lighton += example[ex][occupancy].leave - gaps.at(k).enter; gaps.at(k).enter = example[ex][occupancy].leave; continue; };
+					if (gaps.at(k).enter < example[ex][occupancy].enter && gaps.at(k).leave < example[ex][occupancy].leave) {
+						lighton += gaps.at(k).leave - example[ex][occupancy].enter; gaps.at(k).leave = example[ex][occupancy].enter; continue; };
+					if (gaps.at(k).enter < example[ex][occupancy].enter && gaps.at(k).leave > example[ex][occupancy].leave) {
+						lighton += (gaps.at(k).leave - example[ex][occupancy].leave) - (example[ex][occupancy].enter - gaps.at(k).enter);
+						temp.enter = example[ex][occupancy].leave; temp.leave = gaps.at(k).leave;
 						gaps.emplace_back(temp);
-						gaps.at(k).leave = example[i][j].enter;
+						gaps.at(k).leave = example[ex][occupancy].enter;
 						continue;
 					};
 				};
 			};
-			if (example[i][j].enter < earliest) { lighton+=earliest-example[i][j].enter; earliest = example[i][j].enter; };
-			if (example[i][j].leave > latest)	{ lighton += example[i][j].leave - latest; latest = example[i][j].leave; };
+			if (example[ex][occupancy].enter < earliest) { lighton += earliest - example[ex][occupancy].enter; earliest = example[ex][occupancy].enter; };
+			if (example[ex][occupancy].leave > latest)	 { lighton += example[ex][occupancy].leave - latest; latest = example[ex][occupancy].leave; };
 		};
-			std::cout << "In case#" << i << " lightbulb was on for " << lighton << ".\n";
+		std::cout << "In case#" << ex << " lightbulb was on for " << lighton << ".\n";
 	};
 
 	return EXIT_SUCCESS;
