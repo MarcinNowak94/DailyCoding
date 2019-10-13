@@ -2,196 +2,170 @@
 #include "coderbyte.h"
 #include "helper_functions.h"
 
+const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra, nisl id laoreet porta, sapien risus luctus nibh, et dapibus velit nisi ac tortor.";
 
-int FirstReverse()
-{
+int FirstReverse(){
 	std::string teststring = "Hello World and Coders";
 	std::string reversedstring{};
-	std::cout << teststring.length();
-	for (int i = teststring.length() - 1; i >= 0; reversedstring.push_back(teststring.at(i--)));
-	std::cout << "\n'" << teststring << "' reversed is '" << reversedstring << "'\n";
-	_getch();
-	return 0;
+	for (size_t i = teststring.length() - 1; i >= 0; reversedstring.push_back(teststring.at(i--)));
+	std::cout << "'" << teststring << "' reversed is '" << reversedstring;
+	return EXIT_SUCCESS;
 
 	//date of creation: 03.09.2017
 	//https://coderbyte.com/language/First%20Reverse
 };
 
-int FirstFactorial(int num)
-{
+int FirstFactorial(int num) {
 	if (num == 0) return 1;
 	else return (FirstFactorial(num - 1)*num);
 }
-int FirstFactorial()
-{
+int FirstFactorial(){
 	int minimal = 3;
 	int maximal = 15;
 	int rndnumber = random(minimal, maximal);
-	std::cout << "Factorial of " << rndnumber << " is " << FirstFactorial(rndnumber) << ".\n";
-	_getch();
-	return 0;
+	std::cout << "Factorial of " << rndnumber << " is " << FirstFactorial(rndnumber) << ".";
+	return EXIT_SUCCESS;
+
 	//date of creation: 04.09.2017
 	//https://coderbyte.com/language/First%20Factorial
 
 };
 
-int LongestWord()
-{
-	std::string sen{};//="fun&!! time";
-	std::cout << "Input sentence to check: ";
-	std::getline(std::cin, sen);
+int LongestWord(){
+	std::string sen = loremipsum;
 	std::string temp{}, longest{};
-	for (int i = 0; i < sen.length(); i++)
-	{
+	for (int letter = 0; letter < sen.length(); letter++)	{
 		temp.clear();
-		while (sen.at(i) != ' ' && isalnum(sen.at(i)))
-		{
-			temp.push_back(sen.at(i));
-			i++;
-			if (i >= sen.length()) break;
+		while (sen.at(letter) != ' ' && isalnum(sen.at(letter))) {
+			temp.push_back(sen.at(letter));
+			letter++;
+			if (letter >= sen.length()) break;
 		};
 		if (temp.length() > longest.length()) longest = temp;
 	};
-	std::cout << "Longest word in sentence '" << sen << "' is: " << longest << "\n";
-	_getch();
-	return 0;
+	std::cout << "Longest word in sentence '" << sen << "' is: " << longest;
+	return EXIT_SUCCESS;
+
 	//date of creation: 05.09.2017
 	//https://coderbyte.com/language/Longest%20Word
 }
 
-int LetterChanges()
-{
-	std::string input; // = "fun times!";
-	std::cout << "Input phrase:";
-	getline(std::cin, input);
-	for (int i = 0; i < input.length(); i++)
-	{
-		if (isalpha(input.at(i)))
-		{
-			input.at(i) += 1;
-			if (isvovel(input.at(i)) && islower(input.at(i))) input.at(i) = toupper(input.at(i));
+int LetterChanges() {
+	std::string input = loremipsum;
+	for (int letter = 0; letter < input.length(); letter++)	{
+		if (isalpha(input.at(letter))) {
+			input.at(letter) += 1;
+			if (isvovel(input.at(letter)) && islower(input.at(letter))) input.at(letter) = toupper(input.at(letter));
 		};
 	};
 	std::cout << input;
-	_getch();
-	return 0;
+	return EXIT_SUCCESS;
+
 	//date of creation: 06.09.2017
 	//https://coderbyte.com/language/Letter%20Changes
 }
 
-int SimpleAdding()
-{
-	std::cout << "Input real number:";
-	unsigned int input, sum = 0;
-	std::cin >> input;
-	for (int i = input; i > 0; i--)
-	{
-		sum += i;
-	};
-	std::cout << "Sum = " << sum;
-	_getch();
-	return 0;
+int SimpleAdding(){
+	int minimal = 3;
+	int maximal = 50;
+	int rndnumber = random(minimal, maximal);
+	unsigned int sum = 0;
+
+	for (int i = rndnumber; i > 0; i--) sum += i;
+	std::cout << "Sum of " << rndnumber << " is " << sum;
+	return EXIT_SUCCESS;
+
 	//date of creation: 07.09.2017
 	//https://coderbyte.com/language/Simple%20Adding
 };
 
-int LetterCapitalize()
-{
-	std::string str{};	// = loremipsum;
-	std::cout << "Input text: ";
-	getline(std::cin, str);
-	for (int i = 0; i<str.length(); i++)
-	{
-		if (isalpha(str.at(i))) str.at(i) = toupper(str.at(i));
-		while (' ' != str.at(i) && i<(str.length() - 1))	i++;
+int LetterCapitalize(){
+	std::string str = loremipsum;
+	for (int letter = 0; letter<str.length(); letter++)	{
+		if (isalpha(str.at(letter))) str.at(letter) = toupper(str.at(letter));
+		while (' ' != str.at(letter) && letter<(str.length() - 1))	letter++;
 	};
-	std::cout << "Output text:\n" << str;
-	_getch();
-	return 0;
+	std::cout << "Input text:\n"
+		      << loremipsum
+			  << "\nOutput text:\n" 
+		      << str << '\n';
+	return EXIT_SUCCESS;
+
 	//date of creation: 07.09.2017
 	//https://coderbyte.com/language/Letter%20Capitalize
 }
 
-int SimpleSymbols()
-{
-	std::cout << "\nInput string, letters must be padded with + sign:";
-	std::string str{};				//= "f++d+";//= "+d+=3=+s+";
-	getline(std::cin, str);
+int SimpleSymbols() {
+	//std::cout << "\nInput string, letters must be padded with + sign:";
+	std::string str = "f++d+"; //= "+d+=3=+s+";
 	std::cout << "\nString correct?: ";
 	bool state = false;
-	for (int i = 0; i < str.length(); i++)
-	{
-		if (isalpha(str.at(i)))
-		{
-			if (0 == i) break;
-			if ('+' == str.at(i - 1) && '+' == str.at(i + 1)) { state = true; }
+	for (int letter = 0; letter < str.length(); letter++)	{
+		if (isalpha(str.at(letter))) {
+			if (0 == letter) break;
+			if ('+' == str.at(letter - 1) && '+' == str.at(letter + 1)) { state = true; }
 			else { state = false; break; };
 		};
 	};
 	if (true == state) { str = "true"; }
 	else str = "false";
 	std::cout << str;
-	_getch();
-	return 0;
+	return EXIT_SUCCESS;
+
 	//date of creation: 08.09.2017
 	//https://coderbyte.com/language/Simple%20Symbols
 };
 
-int chknms(int & num1, int & num2)
-{
+int chknms(int & num1, int & num2){
 	if (num1 > num2) return false;
 	if (num1 == num2) return -1;
 	return true;
-
 };
-int CheckNums()
-{
+int CheckNums(){
 	int number1 = random();
 	int number2 = random();
 	std::cout << "Number1=" << number1 << ", Number2=" << number2 << ". Is Number1<Number2 ? " << chknms(number1, number2);
-	_getch();
-	return 0;
+	return EXIT_SUCCESS;
+
 	//date of creation: 09.09.2017
 	//https://coderbyte.com/language/Check%20Nums
 };
 
-int TimeConvert()
-{
+int TimeConvert(){
 	int num = random(1, 3600);
 	int hrs = 0;
 	std::cout << num << "=";
 	while (num >= 60) { num -= 60; hrs++; };
 	std::cout << hrs << ":" << num;
-	_getch();
-	return 0;
+	return EXIT_SUCCESS;
+
 	//date of creation: 10.09.2017
 	//https://coderbyte.com/language/Time%20Convert
 };
 
-int AlphabetSoup()
-{
+int AlphabetSoup(){
 	char helper = ' ';
-	std::string str;
-	std::cout << "Input word: ";
-	getline(std::cin, str);
+	std::string str = loremipsum;
+	if (0==str.length()) {
+		std::cout << "Provide string\a";
+		return EXIT_FAILURE;
+	};
+
 	unsigned short move;
-	do
-	{
+	do	{
 		move = 0;
-		for (int i = 0; i<str.length() - 1; i++)
-		{
-			if ((tolower(str.at(i))) >(tolower(str.at(i + 1))))
-			{
-				helper = str.at(i);
-				str.at(i) = str.at(i + 1);
-				str.at(i + 1) = helper;
+		for (int letter = 0; letter<str.length() - 1; letter++) {
+			if ((tolower(str.at(letter))) >(tolower(str.at(letter + 1)))) {
+				helper = str.at(letter);
+				str.at(letter) = str.at(letter + 1);
+				str.at(letter + 1) = helper;
 				move++;
 			};
 		};
 	} while (0 != move);
 	std::cout << str;
-	_getch();
-	return 0;
+	return EXIT_SUCCESS;
+	
 	//date of creation: 11.09.2017
 	//https://coderbyte.com/language/Alphabet%20Soup
 }

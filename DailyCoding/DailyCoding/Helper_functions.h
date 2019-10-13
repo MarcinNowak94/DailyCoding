@@ -13,8 +13,7 @@ bool isvovel(const char & character);
 #define RANDOM_H
 
 template<class T=int>
-T random(T Min = 1, T Max = 100)
-{
+T random(T Min = 1, T Max = 100){
 	std::random_device rd;	//random number
 	std::mt19937 Random(rd()); //using random number as seed for generator
 	std::uniform_int_distribution<T> Range(Min, Max); //defining range of random numbers
@@ -62,6 +61,9 @@ void tospeech(T& text)
 	};*/
 };
 
+//template<> 
+//void tospeech<char*>(const char* ) {
+//}
 
 #endif // !TOSPEECH_H
 
@@ -71,15 +73,20 @@ struct Timer
 {
 	std::chrono::time_point<std::chrono::steady_clock> start, end;
 	std::chrono::duration<float> duration;
-	Timer()
-	{
+	Timer() {
 		start = std::chrono::high_resolution_clock::now();
 	};
-	~Timer()
-	{
+	~Timer() {
 		duration = std::chrono::high_resolution_clock::now() - start;
-		std::cout << "\nExecution time:\t"<< duration.count()*1000.0f << "ms";
+		std::cout << "\nExecution time:\t"<< duration.count()*1000.0f << " ms";
 	};
 	//Credit to Yan Chernikov:	https://www.youtube.com/watch?v=oEx5vGNFrLk
 };
 #endif // !TIMER_H
+
+#ifndef TOKENIZE_H
+#define TOKENIZE_H
+
+std::vector<std::string> Tokenize(const std::string &String, const char delimiter);
+
+#endif // !TOKENIZE_H

@@ -7,116 +7,103 @@
 
 #include "stdafx.h"
 #include "simplemenu.h"
-#include <string>
 #include "coderbyte.h"
 #include "idea_bag.h"
 #include "dailyprogrammer.h"
 #include "other.h"
+#include "Helper_functions.h"
 
-const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra, nisl id laoreet porta, sapien risus luctus nibh, et dapibus velit nisi ac tortor.";
+const int menulimit = 25;
+
+int run(int(*function)()) {
+	int retval=EXIT_FAILURE;
+	{	Timer timer;
+		if (nullptr == function) { 
+			std::cout << "Such function does not exist yet!"
+					  << "\nPress any key to continue...\n\a";
+			_getch(); 
+			return retval;
+		};
+		retval=function(); 
+	};
+	std::cout << "\nPress any key to continue...\n\a";
+	_getch();
+	return retval;
+};
 
 int main()
 {
-	std::string ranges[]
-	{
+	std::string ranges[]{
 		"01-25",
 		"26-50"
 	};
-	std::string challenges1to25[]
+	const size_t ranges_size = (sizeof(ranges) / sizeof(*ranges));
+	struct Function
 	{
-		"#1\tFirst Reverse",
-		"#2\tFirst Factorial",
-		"#3\tLongest word in sentence",
-		"#4\tLetter changes",
-		"#5\tSimple adding",
-		"#6\tLetter captitalize",
-		"#7\tSimple Symbols",
-		"#8\tChecknums",
-		"#9\tTime convert",
-		"#10\tAlphabet soup",
-		"#11\tDistance between two cities",
-		"#12\tHappy numbers",
-		"#13\tCoin flipper",
-		"#14\tFibonacci sequence",
-		"#15\tTalking clock",
-		"#16\tPacket Assembler",
-		"#17\tSequences",
-		"#18\tAdding Calculator",
-		"#19\tRepeating Numbers",
-		"#20\tFizzBuzz",
-		"#21\tDateChecker",
-		"#22\tDicegame",
-		"#23\tBarcodeChecker",
-		"#24\tMozart's Musical Dice",
-		"#25\tLight Room"
+		int(*function)() = {};
+		std::string name = {};
 	};
-	std::string challenges26to50[]
-	{
-		"#26\tCryptarithmetic Solver",
-		"#27\tBowling Frames Display",
-		"#28\tAlphabet Cipher",
-		"#29\tClosest Airborne Plane << NOT READY",
-		"#30\tTallyProgram"
+
+	//Add functions here 
+	Function functions[][menulimit] = {
+		{
+		 {&FirstReverse,				"#1\tFirst Reverse"},
+		 {&FirstFactorial,				"#2\tFirst Factorial"},
+		 {&LongestWord,					"#3\tLongest word in sentence"},
+		 {&LetterChanges,				"#4\tLetter changes"},
+		 {&SimpleAdding,				"#5\tSimple adding"},
+		 {&LetterCapitalize,			"#6\tLetter captitalize"},
+		 {&SimpleSymbols,				"#7\tSimple Symbols"},
+		 {&CheckNums,					"#8\tChecknums"},
+		 {&TimeConvert,					"#9\tTime convert"},
+		 {&AlphabetSoup,				"#10\tAlphabet soup"},
+		 {&Distance_between_two_cities, "#11\tDistance between two cities"},
+		 {&Happy_Numbers,				"#12\tHappy numbers"},
+		 {&Coin_Flipper,				"#13\tCoin flipper"},
+		 {&Fibonacci,					"#14\tFibonacci sequence"},
+		 {&Talking_Clock,				"#15\tTalking clock"},
+		 {&Packet_Assembler,			"#16\tPacket Assembler"},
+		 {&Consecutive_Distance_Rating, "#17\tSequences"},
+		 {&Adding_Calculator,			"#18\tAdding Calculator"},
+		 {&Repeating_Numbers,			"#19\tRepeating Numbers"},
+		 {&FizzBuzz,					"#20\tFizzBuzz"},
+		 {&Date_Checker,				"#21\tDateChecker"},
+		 {&DiceGame,					"#22\tDicegame"},
+		 {&BarcodeChecker,				"#23\tBarcodeChecker"},
+		 {&MozartsMusicalDice,			"#24\tMozart's Musical Dice"},
+		 {&LightRoom,					"#25\tLight Room"}
+		},{
+		 {&Cryptarithmetic_Solver,		"#26\tCryptarithmetic Solver"},
+		 {&BowlingFramesDisplay,		"#27\tBowling Frames Display"},
+		 {&AlphabetCipher,				"#28\tAlphabet Cipher"},
+		 {&ClosestAirbornePlane,		"#29\tClosest Airborne Plane << NOT READY"},
+		 {&TallyProgram,				"#30\tTallyProgram"}
+		}	
 	};
-	int input[2]{};		//input for menu and submenus
+	
+	//Simplemenu needs string array to display options
+	//This bit grabs all functions and stores it in array
+	std::string challenges[ranges_size][menulimit]{};
+	for (size_t range = 0; range < ranges_size; range++) {
+		for (size_t function = 0; function < menulimit; function++) {
+			challenges[range][function] = functions[range][function].name;
+		};
+	};
+	
+	//input for menu and submenus
+	int input[2]{};
+
+	//menu 
 	do
 	{
 		input[0] = simplemenu(ranges, "Pick range");
-		switch (input[0])
-		{
-		case 0: {
-			do
-			{
-				input[1] = simplemenu(challenges1to25, "Pick challange solution");
-				switch (input[1])
-				{
-				case 0: FirstReverse(); break;
-				case 1: FirstFactorial(); break;
-				case 2: LongestWord(); break;
-				case 3: LetterChanges(); break;
-				case 4: SimpleAdding(); break;
-				case 5: LetterCapitalize(); break;
-				case 6: SimpleSymbols(); break;
-				case 7: CheckNums(); break;
-				case 8: TimeConvert(); break;
-				case 9: AlphabetSoup(); break;
-				case 10: Distance_between_two_cities(); break;
-				case 11: Happy_Numbers(); break;
-				case 12: Coin_Flipper(); break;
-				case 13: Fibonacci(); break;
-				case 14: Talking_Clock(); break;
-				case 15: Packet_Assembler(); break;
-				case 16: Consecutive_Distance_Rating(); break;
-				case 17: Adding_Calculator(); break;
-				case 18: Repeating_Numbers(); break;
-				case 19: FizzBuzz(); break;
-				case 20: Date_Checker(); break;
-				case 21: DiceGame(); break;
-				case 22: BarcodeChecker(); break;
-				case 23: MozartsMusicalDice(); break;
-				case 24: LightRoom();
-				default:break;
-				};
-			} while (input[1] != (sizeof(challenges1to25) / sizeof(*challenges1to25)));
-		}; break;
-		case 1: {
-			do
-			{
-				input[1] = simplemenu(challenges26to50, "Pick challange solution");
-				switch (input[1])
-				{
-				case 0: Cryptarithmetic_Solver(); break;
-				case 1: BowlingFramesDisplay(); break;
-				case 2: AlphabetCipher(); break;
-				case 3: ClosestAirbornePlane(); break;
-				case 4: TallyProgram(); break;
-				default:break;
-				};
-			} while (input[1] != (sizeof(challenges26to50) / sizeof(*challenges26to50)));
-		}; break;
-		default: break;
+		input[1] = 0;
+		while((input[0] != ranges_size) && (input[1] != menulimit)) {
+				input[1] = simplemenu(challenges[input[0]], "Pick challange solution");
+				if (!(input[1] < menulimit)) break;							//end if user chose exit
+				run(functions[input[0]][input[1]].function);
 		};
-	} while (input[0]!=(sizeof(ranges)/sizeof(*ranges)));
+	} while (input[0]!= ranges_size);
 	std::cout << "\n\a\tFarewell!\n"
 		<< "Press any key to exit...";
 	_getch();
