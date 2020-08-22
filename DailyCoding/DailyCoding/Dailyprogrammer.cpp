@@ -635,60 +635,49 @@ void computepermutations(std::vector<int> & values) {
 		guess.emplace_back(values);
 	} while (std::next_permutation(values.begin(), values.end()));
 };
-std::string SolveCryptaritmethic(const std::string & input) {
-	std::string answer="Nothing here yet!";
 
-	//process input into data and operators
-	std::vector<std::vector<char>> word;		//collection of letters and words
-	word.emplace_back();
-	std::vector<char> operators;				//collection of operators
+std::string Get_unique_characters(const std::string & input, std::string ignore) {
+	std::string found_letters{};
+	for (int i = 0; i < input.length(); i++) {
+		const char character = input.at(i);
+		bool unique = true;
+		for each (auto found in found_letters) {
+			if (character == found) { unique = false; break; }
+		}
+		for each (auto found in ignore) {
+			if (character == found) { unique = false; break; }
+		}
+
+
+		if (unique) {found_letters += character;};
+	};
+	return found_letters;
+}
+
+std::string SolveCryptaritmethic(const std::string & input) {
+	std::string answer = "Nothing here yet!";
 	struct assume { char letter; int value; };
 	std::vector<assume> characters;
-	//extract letters from data 
-	for (int  i = 0; i < input.length(); i++)
-	{
-		bool found = false;
-		if (isblank(input.at(i))) continue;
-		if (isalpha(input.at(i)))
-		{
-			if (0 == word.size()) { word.emplace_back();  word.back().emplace_back(input.at(i)); continue; };
-			for (int j = 0; j < word.size(); j++)
-			{
-				for (int k = 0; k < word[j].size(); k++)
-				{
-					if (word[j][k] == input.at(i)) { found = true; break; };
-				};
-			};
-			if (found == false) { assume temp{ input.at(i),NULL }; characters.emplace_back(temp); }
-			word.back().emplace_back(input.at(i));
-			continue;
-		};
-		if ('+'== input.at(i) || '-'== input.at(i) || '='==input.at(i))
-		{
-			switch (input.at(i))
-			{
-			case '-': operators.emplace_back(input.at(i)); word.emplace_back(); break;
-			case '+': operators.emplace_back(input.at(i)); word.emplace_back(); break;
-			case '=': operators.emplace_back(input.at(i)); word.emplace_back(); i++; break;
-			default: break;
-			};
-		};
+
+	std::vector<char> operators;				//collection of operators
+	std::vector<std::string> word;
+	std::vector<std::string> tokenized = Tokenize(input, ' ');
+
+	for each (auto token in tokenized) {
+		std::cout << token << '\n';
+		if (token == "+") { operators.emplace_back('+'); continue; };
+		if (token == "-") { operators.emplace_back('-'); continue; };
+		if (token == "==") { operators.emplace_back('=');   continue; };
+		word.emplace_back(token);
 	};
-	/*for (int i = 0; i < word.size(); i++)
-	{
-		for (int j = 0; j < word.at(i).size(); j++)
-		{
-			std::cout << word.at(i).at(j);
-		};
-		if(i<operators.size()) std::cout << ' ' << operators[i] << ' ';
+
+
+	std::string unique_letters = Get_unique_characters(input, " +-=*//");
+	for each (auto letter in unique_letters){
+		assume temp{ letter,NULL };
+		characters.emplace_back(temp);
 	};
-	std::cout << "\nDifferent characters: ";
-	for (int i = 0; i < characters.size(); i++)
-	{
-		std::cout << characters.at(i).letter; std::cout << ", ";
-	};
-	std::cout << '\n';*/
-	//assume values of letters & check assumption
+
 	bool assumption = false;
 	
 	std::vector<int> possiblevalue{ 1,2,3,4,5,6,7,8,9,0 };
@@ -751,7 +740,7 @@ std::string SolveCryptaritmethic(const std::string & input) {
 };
 int Cryptarithmetic_Solver() {
 	std::string example[] {
-		"SEND + MORE == MONEY",
+		"SEND + MORE == MONEY",			//Issue: Does not take carryover into account
 		"THIS + IS + HIS == CLAIM",
 		"WHAT + WAS + THY == CAUSE",
 		"HIS + HORSE + IS == SLAIN",
@@ -759,8 +748,7 @@ int Cryptarithmetic_Solver() {
 		"FOR + LACK + OF == TREAD",
 		"I + WILL + PAY + THE == THEFT"
 	};
-	for (int i = 0; i < (sizeof(example) / sizeof(*example)); i++)
-	{
+	for (int i = 0; i < (sizeof(example) / sizeof(*example)); i++){
 		std::cout << example[i] << " answer:\n" << SolveCryptaritmethic(example[i]) << "\n\n\a";
 	};
 
@@ -781,8 +769,8 @@ std::string DisplayBowlingFrame(std::vector<int> input) {
 	//enum struck {-,1,2,3,4,5,6,7,8,9,X};
 	//std::cout << "Array " << &input << ", size= " << input.size() << '\n';
 	for (int i = 0, frame=0; i < input.size() && frame<10 ; i++, frame++) {
-		//if (input[i] == 0) bowlingframe.append("-");
-		if (input[i] == pins) { bowlingframe.append("X  "); continue; };
+		if (input[i] == 0)					 { bowlingframe.append("-");   continue; };
+		if (input[i] == pins)				 { bowlingframe.append("X  "); continue;};
 		if (input[i] + input[i + 1] == pins) { bowlingframe.append(std::to_string(input[i]) + "/ "); i++; continue; };
 		bowlingframe.append(std::to_string(input[i])); bowlingframe.append(std::to_string(input[++i]) + " ");
 	};
