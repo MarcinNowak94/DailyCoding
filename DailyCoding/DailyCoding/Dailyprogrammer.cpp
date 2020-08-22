@@ -628,14 +628,7 @@ int LightRoom() {
 	//Date of creation: 05.03.2018
 }; 
 
-//TODO: FIX & refactor
-std::vector<std::vector<int>> guess;
-void computepermutations(std::vector<int> & values) {
-	do	{
-		guess.emplace_back(values);
-	} while (std::next_permutation(values.begin(), values.end()));
-};
-
+//TODO: Check & Refactor
 std::string Get_unique_characters(const std::string & input, std::string ignore) {
 	std::string found_letters{};
 	for (int i = 0; i < input.length(); i++) {
@@ -653,25 +646,25 @@ std::string Get_unique_characters(const std::string & input, std::string ignore)
 	};
 	return found_letters;
 }
-
 std::string SolveCryptaritmethic(const std::string & input) {
 	std::string answer = "Nothing here yet!";
-	struct assume { char letter; int value; };
-	std::vector<assume> characters;
+	unsigned long long tries = 0;
 
 	std::vector<char> operators;				//collection of operators
 	std::vector<std::string> word;
 	std::vector<std::string> tokenized = Tokenize(input, ' ');
-
+	std::string firstletters{};
 	for each (auto token in tokenized) {
-		std::cout << token << '\n';
 		if (token == "+") { operators.emplace_back('+'); continue; };
 		if (token == "-") { operators.emplace_back('-'); continue; };
 		if (token == "==") { operators.emplace_back('=');   continue; };
 		word.emplace_back(token);
+		firstletters += token[0];
 	};
 
 
+	struct assume { char letter; int value; };
+	std::vector<assume> characters;
 	std::string unique_letters = Get_unique_characters(input, " +-=*//");
 	for each (auto letter in unique_letters){
 		assume temp{ letter,NULL };
@@ -679,68 +672,53 @@ std::string SolveCryptaritmethic(const std::string & input) {
 	};
 
 	bool assumption = false;
-	
 	std::vector<int> possiblevalue{ 1,2,3,4,5,6,7,8,9,0 };
-	const long permutations = 3628800;
-	if (guess.capacity()==0)
-	{
-		std::cout << "Guess size before resizing: " << guess.capacity() << "\n";
-		guess.reserve(sizeof(possiblevalue)*permutations);
-		std::cout << "Guess size after resizing: " << guess.capacity() << "\n";
-		computepermutations(possiblevalue);
-	};
-	std::cout << "There are " << guess.size() << " combinations\n";
-	//do {
-	
-	for (int it = 0; it < guess.size(); it++)
-	{
+		
+	do {
+		tries++;
 		answer.clear();
-		for (int i = 0; i < characters.size(); i++)
-		{
-			//assume values - bruteforce, need not to repeat assumptions. IDEA: Map already used/unused values ?
-			// TODO: make brutforce algorithm (checking all permutations assumed values to n-long character set)
-			/*placeholder*/ characters[i].value = guess[it][i];
+		for (int i = 0; i < characters.size(); i++) {
+			characters[i].value = possiblevalue[i];
 			//prepare answer
 			answer += (char)' \'';
 			answer += characters[i].letter;
 			answer += "\'=";
 			answer += std::to_string(characters[i].value);
 		};
-		//std::cout << "Tested solution: " << answer << '\n';
-		std::string temp;
 
-		int* number;
-		number = new int[word.size()];
-		for (int i = 0; i < word.size(); i++)
-		{
+		char zerocharacter{};
+
+		for (size_t i = 0; i < characters.size()-1; i++){
+			if (characters[i].value == 0) { zerocharacter = characters[i].letter; };
+		}
+
+		if (firstletters.find_first_of(zerocharacter) <= firstletters.length()) { continue; };
+
+		std::string temp;
+		int number[10] = {};
+		for (int i = 0; i < word.size(); i++) {
 			temp.clear();
-			for (int j = 0; j < word[i].size(); j++)
-			{
-				for (int k = 0; k < characters.size(); k++)
-				{
-					if (characters[k].letter == word[i][j]) { temp += std::to_string(characters[k].value); break; };
+			for (int j = 0; j < word[i].size(); j++) {
+				for (int k = 0; k < characters.size(); k++) {
+					if (characters[k].letter == word[i][j]) {temp += std::to_string(characters[k].value); break; };
 				};
 			};
-			//std::cout << temp << "\n";
 			number[i] = std::stoi(temp);
 		};
-		for (int i = 0, sum = number[i]; i < operators.size(); i++)
-		{
-			//std::cout << "sum = " << sum << "\n";
+		for (int i = 0, sum = number[i]; i < operators.size(); i++){
 			if (operators[i] == '+') { sum += number[i + 1]; continue; };
 			if (operators[i] == '-') { sum -= number[i + 1]; continue; };
 			if (operators[i] == '*') { sum *= number[i + 1]; continue; };
 			if (operators[i] == '/') { sum /= number[i + 1]; continue; };
 			if (operators[i] == '=') { if (sum == number[i + 1]) { assumption = true; delete[] number; return answer; }; break; };
 		};
-		delete[] number;
-	};
-	//} while (assumption==false );
+	} while (std::next_permutation(possiblevalue.begin(), possiblevalue.end()) || assumption == true);
+
 	return answer;
 };
 int Cryptarithmetic_Solver() {
 	std::string example[] {
-		"SEND + MORE == MONEY",			//Issue: Does not take carryover into account
+		"SEND + MORE == MONEY",
 		"THIS + IS + HIS == CLAIM",
 		"WHAT + WAS + THY == CAUSE",
 		"HIS + HORSE + IS == SLAIN",
