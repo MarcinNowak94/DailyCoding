@@ -807,37 +807,17 @@ int BowlingFramesDisplay() {
 	//https://www.reddit.com/r/dailyprogrammer/comments/7so37o/20180124_challenge_348_intermediate_bowling/
 };
 
-//TODO: Make chart programatically
 std::string Decode_AlphabetCipher(const std::string & keyword, const std::string & message, bool decode) {
-	const std::string chart[] =	{	
-		"abcdefghijklmnopqrstuvwxyz",
-		"bcdefghijklmnopqrstuvwxyza",
-		"cdefghijklmnopqrstuvwxyzab",
-		"defghijklmnopqrstuvwxyzabc",
-		"efghijklmnopqrstuvwxyzabcd",
-		"fghijklmnopqrstuvwxyzabcde",
-		"ghijklmnopqrstuvwxyzabcdef",
-		"hijklmnopqrstuvwxyzabcdefg",
-		"ijklmnopqrstuvwxyzabcdefgh",
-		"jklmnopqrstuvwxyzabcdefghi",
-		"klmnopqrstuvwxyzabcdefghij",
-		"lmnopqrstuvwxyzabcdefghijk",
-		"mnopqrstuvwxyzabcdefghijkl",
-		"nopqrstuvwxyzabcdefghijklm",
-		"opqrstuvwxyzabcdefghijklmn",
-		"pqrstuvwxyzabcdefghijklmno",
-		"qrstuvwxyzabcdefghijklmnop",
-		"rstuvwxyzabcdefghijklmnopq",
-		"stuvwxyzabcdefghijklmnopqr",
-		"tuvwxyzabcdefghijklmnopqrs",
-		"uvwxyzabcdefghijklmnopqrst",
-		"vwxyzabcdefghijklmnopqrstu",
-		"wxyzabcdefghijklmnopqrstuv",
-		"xyzabcdefghijklmnopqrstuvw",
-		"yzabcdefghijklmnopqrstuvwx",
-		"zabcdefghijklmnopqrstuvwxy"
+	const std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
+	std::vector<std::string> chart;
+	for (auto character = 0; character < alphabet.length(); character++) {
+		
+		std::string leftover = alphabet.substr(0, 0 + character);
+		std::string beginning = alphabet.substr(character, alphabet.length() - character);
+		chart.emplace_back(beginning + leftover);
 	};
-	int asciioffset = 97;			//offset of lower case letters in ascii encoding
+
+	const int asciioffset = 97;			//ASCII lower case letters offset
 	std::string solution{};
 	if (!decode) {
 		for (int letter = 0; letter < message.length(); letter++)
