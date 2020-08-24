@@ -14,9 +14,11 @@
 #include <random>
 #include <string>
 #include <vector>
-#include <iomanip> //sefill & setw
+#include <iomanip>		//sefill & setw
 #include <fstream>
-
+#include <map>
+#include <algorithm>
+#include <sstream>		//stream manipulation
 
 
 // TODO: W tym miejscu odwołaj się do dodatkowych nagłówków wymaganych przez program

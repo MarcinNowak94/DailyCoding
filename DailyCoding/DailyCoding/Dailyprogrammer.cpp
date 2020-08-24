@@ -1,8 +1,6 @@
 ﻿#include "stdafx.h"
 #include "dailyprogrammer.h"
 #include "Helper_functions.h"
-#include <sstream>							//stream manipulation
-#include <algorithm>
 //#include "..\Includes\rapidjson\rapidjson.h"	//JSON builder and parser
 //#include "..\Includes\rapidjson\document.h"
 //#include "..\Includes\curl\curl.h"			//libcurl	HTTP requests
@@ -646,27 +644,20 @@ std::vector<assume> SolveCryptaritmethic(const std::string & input) {
 		firstletters += token[0];
 	};
 
-
 	std::vector<assume> characters;
-	std::string unique_letters = Get_unique_characters(input, " +-=*//");
-	for each (auto letter in unique_letters){
+	for each (auto letter in Get_unique_characters(input, " +-=*//")){
 		assume temp{ letter,NULL };
 		characters.emplace_back(temp);
 	};
 
-	bool assumption = false;
 	std::vector<int> possiblevalue{ 1,2,3,4,5,6,7,8,9,0 };
-		
 	do {
 		tries++;
-		answer.clear();
 		for (int i = 0; i < characters.size(); i++) {characters[i].value = possiblevalue[i];};
-
 		char zerocharacter{};
-
 		for (size_t i = 0; i < characters.size()-1; i++){
 			if (characters[i].value == 0) { zerocharacter = characters[i].letter; };
-		}
+		};
 
 		if (firstletters.find_first_of(zerocharacter) <= firstletters.length()) { continue; };
 
@@ -686,10 +677,9 @@ std::vector<assume> SolveCryptaritmethic(const std::string & input) {
 			if (operators[i] == '-') { sum -= number[i + 1]; continue; };
 			if (operators[i] == '*') { sum *= number[i + 1]; continue; };
 			if (operators[i] == '/') { sum /= number[i + 1]; continue; };
-			if (operators[i] == '=') { if (sum == number[i + 1]) { assumption = true; delete[] number; return characters; }; break; };
+			if (operators[i] == '=') { if (sum == number[i + 1]) { std::cout << "Found solution after " << tries << "tries"; delete[] number; characters; }; break; };
 		};
-	} while (std::next_permutation(possiblevalue.begin(), possiblevalue.end()) || assumption == true);
-
+	} while (std::next_permutation(possiblevalue.begin(), possiblevalue.end()));
 	return characters;
 };
 int Cryptarithmetic_Solver() {
