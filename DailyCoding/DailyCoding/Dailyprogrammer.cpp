@@ -641,12 +641,12 @@ std::string Get_unique_characters(const std::string & input, std::string ignore)
 			if (character == found) { unique = false; break; }
 		}
 
-
 		if (unique) {found_letters += character;};
 	};
 	return found_letters;
-}
-std::string SolveCryptaritmethic(const std::string & input) {
+};
+struct assume { char letter; int value; };
+std::vector<assume> SolveCryptaritmethic(const std::string & input) {
 	std::string answer = "Nothing here yet!";
 	unsigned long long tries = 0;
 
@@ -663,7 +663,6 @@ std::string SolveCryptaritmethic(const std::string & input) {
 	};
 
 
-	struct assume { char letter; int value; };
 	std::vector<assume> characters;
 	std::string unique_letters = Get_unique_characters(input, " +-=*//");
 	for each (auto letter in unique_letters){
@@ -677,14 +676,7 @@ std::string SolveCryptaritmethic(const std::string & input) {
 	do {
 		tries++;
 		answer.clear();
-		for (int i = 0; i < characters.size(); i++) {
-			characters[i].value = possiblevalue[i];
-			//prepare answer
-			answer += (char)' \'';
-			answer += characters[i].letter;
-			answer += "\'=";
-			answer += std::to_string(characters[i].value);
-		};
+		for (int i = 0; i < characters.size(); i++) {characters[i].value = possiblevalue[i];};
 
 		char zerocharacter{};
 
@@ -710,11 +702,11 @@ std::string SolveCryptaritmethic(const std::string & input) {
 			if (operators[i] == '-') { sum -= number[i + 1]; continue; };
 			if (operators[i] == '*') { sum *= number[i + 1]; continue; };
 			if (operators[i] == '/') { sum /= number[i + 1]; continue; };
-			if (operators[i] == '=') { if (sum == number[i + 1]) { assumption = true; delete[] number; return answer; }; break; };
+			if (operators[i] == '=') { if (sum == number[i + 1]) { assumption = true; delete[] number; return characters; }; break; };
 		};
 	} while (std::next_permutation(possiblevalue.begin(), possiblevalue.end()) || assumption == true);
 
-	return answer;
+	return characters;
 };
 int Cryptarithmetic_Solver() {
 	std::string example[] {
@@ -726,8 +718,20 @@ int Cryptarithmetic_Solver() {
 		"FOR + LACK + OF == TREAD",
 		"I + WILL + PAY + THE == THEFT"
 	};
+
+	std::vector<assume> solution = {};
 	for (int i = 0; i < (sizeof(example) / sizeof(*example)); i++){
-		std::cout << example[i] << " answer:\n" << SolveCryptaritmethic(example[i]) << "\n\n\a";
+		solution = SolveCryptaritmethic(example[i]);
+		
+		std::string answer{};
+		for (int i = 0; i < solution.size(); i++) {
+			//prepare answer
+			answer += (char)' \'';
+			answer += solution[i].letter;
+			answer += "\'=";
+			answer += std::to_string(solution[i].value);
+		};
+		std::cout << example[i] << " answer:\n" << answer << "\n\n\a";
 	};
 
 	return EXIT_SUCCESS;
