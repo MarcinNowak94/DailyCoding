@@ -90,3 +90,10 @@ struct Timer
 std::vector<std::string> Tokenize(const std::string &String, const char delimiter);
 
 #endif // !TOKENIZE_H
+
+#ifndef GET_UNIQUE_CHARACTERS_H
+#define GET_UNIQUE_CHARACTERS_H
+
+std::string Get_unique_characters(const std::string & input, std::string ignore);
+
+#endif // !GET_UNIQUE_CHARACTERS_H

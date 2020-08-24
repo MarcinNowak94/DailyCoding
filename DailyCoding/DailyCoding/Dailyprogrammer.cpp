@@ -629,22 +629,6 @@ int LightRoom() {
 }; 
 
 //TODO: Check & Refactor
-std::string Get_unique_characters(const std::string & input, std::string ignore) {
-	std::string found_letters{};
-	for (int i = 0; i < input.length(); i++) {
-		const char character = input.at(i);
-		bool unique = true;
-		for each (auto found in found_letters) {
-			if (character == found) { unique = false; break; }
-		}
-		for each (auto found in ignore) {
-			if (character == found) { unique = false; break; }
-		}
-
-		if (unique) {found_letters += character;};
-	};
-	return found_letters;
-};
 struct assume { char letter; int value; };
 std::vector<assume> SolveCryptaritmethic(const std::string & input) {
 	std::string answer = "Nothing here yet!";
@@ -737,7 +721,7 @@ int Cryptarithmetic_Solver() {
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/7p5p2o/20180108_challenge_346_easy_cryptarithmetic_solver/
 	//Date of creation: 07.03.18
-}
+};
 
 //TODO: FIX
 std::string DisplayBowlingFrame(std::vector<int> input) {
