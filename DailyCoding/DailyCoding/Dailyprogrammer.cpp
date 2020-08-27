@@ -631,14 +631,12 @@ std::map<char, int> SolveCryptaritmethic(const std::string & input) {
 	Timer Timer;
 	unsigned long long tries = 0;
 
-	std::vector<char> operators;
+	std::vector<std::string> operators;
 	std::vector<std::string> word;
 	std::vector<std::string> tokenized = Tokenize(input, ' ');
 	std::string firstletters{};
 	for each (auto token in tokenized) {
-		if (token == "+" ) { operators.emplace_back('+'); continue; };
-		if (token == "-" ) { operators.emplace_back('-'); continue; };
-		if (token == "==") { operators.emplace_back('='); continue; };
+		if (token == "+" || token == "-" || token == "==") { operators.emplace_back(token); continue; };
 		word.emplace_back(token);
 		firstletters += token[0];
 	};
@@ -651,8 +649,8 @@ std::map<char, int> SolveCryptaritmethic(const std::string & input) {
 		tries++;
 		char zerocharacter{};
 		for (int i = 0; i < characters.size(); i++) { characters[unique_letters[i]] = possiblevalue[i]; };
-		for each (auto character in characters) {if (character.second==0) { zerocharacter = character.first; }; };
-		if (firstletters.find_first_of(zerocharacter) <= firstletters.length()) { continue; };
+		for each (auto character in characters) { if (character.second == 0) { zerocharacter = character.first; break; }; };
+		if (firstletters.find_first_of(zerocharacter) != std::string::npos) { continue; };
 		
 		std::string number_as_text;
 		std::vector<unsigned long> number;
@@ -663,11 +661,9 @@ std::map<char, int> SolveCryptaritmethic(const std::string & input) {
 		};
 
 		for (int i = 0, sum = number[i]; i < operators.size(); i++) {
-			if (operators[i] == '+') { sum += number[i + 1]; continue; };
-			if (operators[i] == '-') { sum -= number[i + 1]; continue; };
-			if (operators[i] == '*') { sum *= number[i + 1]; continue; };
-			if (operators[i] == '/') { sum /= number[i + 1]; continue; };
-			if (operators[i] == '=') { if (sum == number[i + 1]) { 
+			if (operators[i] == "+")  { sum += number[i + 1]; continue; };
+			if (operators[i] == "-")  { sum -= number[i + 1]; continue; };
+			if (operators[i] == "==") { if (sum == number[i + 1]) { 
 				 std::cout << "\nFound solution after " << tries << "tries.\n";
 				 return characters; }; break; };
 		};
