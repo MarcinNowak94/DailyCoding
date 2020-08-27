@@ -626,7 +626,7 @@ int LightRoom() {
 	//Date of creation: 05.03.2018
 }; 
 
-//TODO: Check & Refactor
+//TODO: FIX, STRETCH: optimize
 std::map<char, int> SolveCryptaritmethic(const std::string & input) {
 	Timer Timer;
 	unsigned long long tries = 0;
@@ -636,9 +636,9 @@ std::map<char, int> SolveCryptaritmethic(const std::string & input) {
 	std::vector<std::string> tokenized = Tokenize(input, ' ');
 	std::string firstletters{};
 	for each (auto token in tokenized) {
-		if (token == "+") { operators.emplace_back('+'); continue; };
-		if (token == "-") { operators.emplace_back('-'); continue; };
-		if (token == "==") { operators.emplace_back('=');   continue; };
+		if (token == "+" ) { operators.emplace_back('+'); continue; };
+		if (token == "-" ) { operators.emplace_back('-'); continue; };
+		if (token == "==") { operators.emplace_back('='); continue; };
 		word.emplace_back(token);
 		firstletters += token[0];
 	};
@@ -651,26 +651,24 @@ std::map<char, int> SolveCryptaritmethic(const std::string & input) {
 		tries++;
 		char zerocharacter{};
 		for (int i = 0; i < characters.size(); i++) { characters[unique_letters[i]] = possiblevalue[i]; };
-		for each (auto character in characters) {if (character.second==0) { zerocharacter = character.first; };};
-
+		for each (auto character in characters) {if (character.second==0) { zerocharacter = character.first; }; };
 		if (firstletters.find_first_of(zerocharacter) <= firstletters.length()) { continue; };
-
-		std::string temp;
-		int number[10] = {};
+		
+		std::string number_as_text;
+		std::vector<unsigned long> number;
 		for (int i = 0; i < word.size(); i++) {
-			temp.clear();
-			for (int j = 0; j < word[i].size(); j++) {
-				temp += std::to_string(characters[word[i][j]]);
-			};
-			number[i] = std::stoi(temp);
+			number_as_text.clear();
+			for each (auto character in word[i]){ number_as_text += std::to_string(characters[character]); };
+			number.emplace_back(std::stoul(number_as_text));				//TODO: FIX - somehow 192 is out of range
 		};
+
 		for (int i = 0, sum = number[i]; i < operators.size(); i++) {
 			if (operators[i] == '+') { sum += number[i + 1]; continue; };
 			if (operators[i] == '-') { sum -= number[i + 1]; continue; };
 			if (operators[i] == '*') { sum *= number[i + 1]; continue; };
 			if (operators[i] == '/') { sum /= number[i + 1]; continue; };
 			if (operators[i] == '=') { if (sum == number[i + 1]) { 
-				 std::cout << "Found solution after " << tries << "tries";
+				 std::cout << "\nFound solution after " << tries << "tries.\n";
 				 return characters; }; break; };
 		};
 	} while (std::next_permutation(possiblevalue.begin(), possiblevalue.end()));
@@ -679,29 +677,38 @@ std::map<char, int> SolveCryptaritmethic(const std::string & input) {
 int Cryptarithmetic_Solver() {
 	std::string example[]{
 		"SEND + MORE == MONEY",
-		"THIS + IS + HIS == CLAIM"//,
+		"THIS + IS + HIS == CLAIM",
 		"WHAT + WAS + THY == CAUSE",
 		"HIS + HORSE + IS == SLAIN",
 		"HERE + SHE == COMES",
 		"FOR + LACK + OF == TREAD",
 		"I + WILL + PAY + THE == THEFT"
+		/*BONUS*/"TEN + HERONS + REST + NEAR + NORTH + SEA + SHORE + AS + TAN + TERNS + SOAR + TO + ENTER + THERE + AS + HERONS + NEST + ON + STONES + AT + SHORE + THREE + STARS + ARE + SEEN + TERN + SNORES + ARE + NEAR == SEVVOTH",
+		/*BONUS*/"SO + MANY + MORE + MEN + SEEM + TO + SAY + THAT + THEY + MAY + SOON + TRY + TO + STAY + AT + HOME +  SO + AS + TO + SEE + OR + HEAR + THE + SAME + ONE + MAN + TRY + TO + MEET + THE + TEAM + ON + THE + MOON + AS + HE + HAS + AT + THE + OTHER + TEN == TESTS",
+		/*BONUS*/"THIS + A + FIRE + THEREFORE + FOR + ALL + HISTORIES + I + TELL + A + TALE + THAT + FALSIFIES + ITS + TITLE + TIS + A + LIE + THE + TALE + OF + THE + LAST + FIRE + HORSES + LATE + AFTER + THE + FIRST + FATHERS + FORESEE + THE + HORRORS + THE + LAST + FREE + TROLL + TERRIFIES + THE + HORSES + OF + FIRE + THE + TROLL + RESTS + AT + THE + HOLE + OF + LOSSES + IT + IS + THERE + THAT + SHE + STORES + ROLES + OF + LEATHERS + AFTER + SHE + SATISFIES + HER + HATE + OFF + THOSE + FEARS + A + TASTE + RISES + AS + SHE + HEARS + THE + LEAST + FAR + HORSE + THOSE + FAST + HORSES + THAT + FIRST + HEAR + THE + TROLL + FLEE + OFF + TO + THE + FOREST + THE + HORSES + THAT + ALERTS + RAISE + THE + STARES + OF + THE + OTHERS + AS + THE + TROLL + ASSAILS + AT + THE + TOTAL + SHIFT + HER + TEETH + TEAR + HOOF + OFF + TORSO + AS + THE + LAST + HORSE + FORFEITS + ITS + LIFE + THE + FIRST + FATHERS + HEAR + OF + THE + HORRORS + THEIR + FEARS + THAT + THE + FIRES + FOR + THEIR + FEASTS + ARREST + AS + THE + FIRST + FATHERS + RESETTLE + THE + LAST + OF + THE + FIRE + HORSES + THE + LAST + TROLL + HARASSES + THE + FOREST + HEART + FREE + AT + LAST + OF + THE + LAST + TROLL + ALL + OFFER + THEIR + FIRE + HEAT + TO + THE + ASSISTERS + FAR + OFF + THE + TROLL + FASTS + ITS + LIFE + SHORTER + AS + STARS + RISE + THE + HORSES + REST + SAFE + AFTER + ALL + SHARE + HOT + FISH + AS + THEIR + AFFILIATES + TAILOR + A + ROOFS + FOR + THEIR + SAFE == FORTRESSES"
 	}; 
 	std::vector<std::map<char, int>> solutions= {
 		{ {'O', 0}, {'M', 1}, {'Y', 2}, {'E', 5}, {'N', 6}, {'D', 7}, {'R', 8}, {'S', 9} },
 		{ {'A',7}, {'C',1}, {'H',8}, {'I',5}, {'L',0}, {'M',6}, {'S',2}, {'T',9} },
-		{ {'A', 0}, {'C', 1}, {'E', 4}, {'H', 2}, {'S', 3}, {'T', 6}, {'U', 7}, {'W', 9}, {'Y', 5}},
-		{ {'A', 1}, {'E', 8}, {'H', 3}, {'I', 5}, {'L', 0}, {'N', 6}, {'O', 9}, {'R', 7}, {'S', 4}},
-		{ {'C', 1}, {'E', 4}, {'H', 9}, {'M', 3}, {'O', 0}, {'R', 5}, {'S', 8}},								//this solution was not supplied need to investigate
-		{ {'A', 2}, {'E', 4}, {'F', 7}, {'H', 0}, {'I', 8}, {'L', 3}, {'P', 5}, {'T', 1}, {'W', 9}, {'Y', 6}},
-		{ {'A', 6}, {'C', 7}, {'D', 3}, {'E', 2}, {'F', 5}, {'K', 8}, {'L', 9}, {'O', 4}, {'R', 0}, {'T', 1}},
-		{ {'A', 2}, {'E', 4}, {'F', 7}, {'H', 0}, {'I', 8}, {'L', 3}, {'P', 5}, {'T', 1}, {'W', 9}, {'Y', 6}}	
+		{ {'A', 0}, {'C', 1}, {'E', 4}, {'H', 2}, {'S', 3}, {'T', 6}, {'U', 7}, {'W', 9}, {'Y', 5} },
+		{ {'A', 1}, {'E', 8}, {'H', 3}, {'I', 5}, {'L', 0}, {'N', 6}, {'O', 9}, {'R', 7}, {'S', 4} },
+		{ {'C', 1}, {'E', 4}, {'H', 9}, {'M', 3}, {'O', 0}, {'R', 5}, {'S', 8} },								//Solution computed, not supplied
+		{ {'A', 6}, {'C', 7}, {'D', 3}, {'E', 2}, {'F', 5}, {'K', 8}, {'L', 9}, {'O', 4}, {'R', 0}, {'T', 1} },
+		{ {'A', 2}, {'E', 4}, {'F', 7}, {'H', 0}, {'I', 8}, {'L', 3}, {'P', 5}, {'T', 1}, {'W', 9}, {'Y', 6} },
+		{ {'A', 2}, {'E', 5}, {'H', 3}, {'N', 7}, {'O', 4}, {'R', 6}, {'S', 1}, {'T', 9}, {'V', 8} },			//Bonus, found in 16m19s
+		{ {'A', 7}, {'E', 0}, {'H', 5}, {'M', 2}, {'N', 6}, {'O', 1}, {'R', 8}, {'S', 3}, {'T', 9}, {'Y', 4} },	//Bonus, found in 7m55s
+		{ {'A', 2}, {'E', 5}, {'H', 3}, {'N', 7}, {'O', 4}, {'R', 6}, {'S', 1}, {'T', 9}, {'V', 8} }			//Bonus Placeholder, TODO: FIX - 192th word throws exception for some reason
 	};
-	
+	std::vector<std::map<char, int>> solutions_recieved{};
+
 	for (int i = 0; i < (sizeof(example) / sizeof(*example)); i++){
-		bool correct = solutions[i] == SolveCryptaritmethic(example[i]);
+		auto solved = SolveCryptaritmethic(example[i]);
+		
+		solutions_recieved.emplace_back(solved);
+		std::cout << "\n";
+		bool correct = solutions[i] == solved;
 		std::cout << '\n' << example[i] << " is answer correct? " << correct << "\n\n\a";
 	};
-
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/7p5p2o/20180108_challenge_346_easy_cryptarithmetic_solver/
 	//Date of creation: 07.03.18
