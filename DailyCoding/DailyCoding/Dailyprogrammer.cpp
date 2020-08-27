@@ -556,60 +556,48 @@ struct occupancy {
 	int leave = NULL;
 };
 int Check_occupancy(const std::vector<occupancy> & example) {
-	
-	
-
-	//iterating through examples
-	//for (int ex = 0; ex < example.size(); ex++) {
 	int earliest = INT_MAX, latest = -INT_MAX, lighton = 0;
 	occupancy temp{};
 	std::vector<occupancy> gaps;
+	int iteration = 0;
 
-	//Migrate logic to this loop from one below
-	/*for each (auto occupancy in example){
-		lighton = occupancy.leave - occupancy.enter;
-		earliest = earliest < occupancy.enter ? earliest : occupancy.enter;
-		latest = latest > occupancy.leave ? latest : occupancy.leave;
-		std::cout << "Enter:    " << occupancy.enter << "\tLeave: " << occupancy.leave << "\n"
-				    << "Earliest: " << earliest	<< "\tLatest:" << latest << "\n"
-					<< "Light: " << lighton << "\n\n";
-			
-	};*/
-
-	//iterating through occupancies
-	for (int occupancy = 0; occupancy < example.size(); occupancy++) {
-		if (occupancy == 0) { 
-			lighton = example[occupancy].leave - example[occupancy].enter; 
-			earliest = example[occupancy].enter;
-			latest = example[occupancy].leave; 
+	for each (auto occupancy in example) {
+		if (iteration++ != 0) { 
+			lighton = occupancy.leave - occupancy.enter; 
+			earliest = occupancy.enter;
+			latest = occupancy.leave; 
 			continue; };
-		if (example[occupancy].enter > latest || (example[occupancy].enter < earliest && example[occupancy].leave < earliest)) {
+
+		if (occupancy.enter > latest || (occupancy.enter < earliest && occupancy.leave < earliest)) {
 			if (gaps.size() == 0) {
-				if (example[occupancy].enter > latest) {
-					temp.enter = latest; temp.leave = example[occupancy].enter;
+				if (occupancy.enter > latest) {
+					temp.enter = latest; temp.leave = occupancy.enter;
 					gaps.emplace_back(temp);
-					lighton += example[occupancy].leave - example[occupancy].enter; continue;
+					lighton += occupancy.leave - occupancy.enter; 
+					continue;
 				};
-				temp.enter = example[occupancy].leave; temp.leave = earliest;
+				temp.enter = occupancy.leave; temp.leave = earliest;
 				gaps.emplace_back(temp);
-				lighton += example[occupancy].leave - example[occupancy].enter; continue;
+				lighton += occupancy.leave - occupancy.enter; 
+				continue;
 			};
-			for (int k = 0; k < gaps.size(); k++) {
-				if (gaps.at(k).enter > example[occupancy].enter && gaps.at(k).leave > example[occupancy].leave) {
-					lighton += example[occupancy].leave - gaps.at(k).enter; gaps.at(k).enter = example[occupancy].leave; continue; };
-				if (gaps.at(k).enter < example[occupancy].enter && gaps.at(k).leave < example[occupancy].leave) {
-					lighton += gaps.at(k).leave - example[occupancy].enter; gaps.at(k).leave = example[occupancy].enter; continue; };
-				if (gaps.at(k).enter < example[occupancy].enter && gaps.at(k).leave > example[occupancy].leave) {
-					lighton += (gaps.at(k).leave - example[occupancy].leave) - (example[occupancy].enter - gaps.at(k).enter);
-					temp.enter = example[occupancy].leave; temp.leave = gaps.at(k).leave;
+			for each (auto gap in gaps) {
+				if (gap.enter > occupancy.enter && gap.leave > occupancy.leave) {
+					lighton += occupancy.leave - gap.enter; gap.enter = occupancy.leave; continue; };
+				if (gap.enter < occupancy.enter && gap.leave < occupancy.leave) {
+					lighton += gap.leave - occupancy.enter; gap.leave = occupancy.enter; continue; };
+				if (gap.enter < occupancy.enter && gap.leave > occupancy.leave) {
+					lighton += (gap.leave - occupancy.leave) - (occupancy.enter - gap.enter);
+					temp.enter = occupancy.leave; temp.leave = gap.leave;
 					gaps.emplace_back(temp);
-					gaps.at(k).leave = example[occupancy].enter;
+					gap.leave = occupancy.enter;
 					continue;
 				};
 			};
 		};
-		if (example[occupancy].enter < earliest) { lighton += earliest - example[occupancy].enter; earliest = example[occupancy].enter; };
-		if (example[occupancy].leave > latest)	 { lighton += example[occupancy].leave - latest; latest = example[occupancy].leave; };
+
+		if (occupancy.enter < earliest) { lighton += earliest - occupancy.enter; earliest = occupancy.enter; };
+		if (occupancy.leave > latest)	{ lighton += occupancy.leave - latest; latest = occupancy.leave; };
 	};
 	return lighton;
 	
