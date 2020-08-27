@@ -551,80 +551,88 @@ int MozartsMusicalDice() {
 };
 
 //TODO: This needs some refactoring
-int LightRoom() {
-	struct occupancy {
-		int enter = NULL;
-		int leave = NULL;
-	};
-	std::vector<std::vector<occupancy>> example = { 
-		{ {1,3}, {2,3}, {4,5} }					/*Output: 3*/,
-		{ {2,4}, {3,6}, {1,3}, {6,8} }			/*Output: 7*/,
-		{ {6,8}, {5,8}, {8,9}, {5,7}, {4,7} },	/*Output: 5*/
-		{ {15, 18}, {13, 16}, {9, 12}, {3, 4}, 
-	      {17, 20}, {9, 11}, {17, 18}, {4, 5}, 
-	      {5, 6}, {4, 5}, {5, 6}, {13, 16}, 
-	      {2, 3}, {15, 17}, {13, 14}}			/*Output: 14*/ //Needs more tests - returns 13 
-	};
+struct occupancy {
+	int enter = NULL;
+	int leave = NULL;
+};
+int Check_occupancy(const std::vector<occupancy> & example) {
+	
+	
 
 	//iterating through examples
-	for (int ex = 0; ex < example.size(); ex++) {
-		int earliest = INT_MAX, latest = -INT_MAX, lighton = 0;
-		occupancy temp{};
-		std::vector<occupancy> gaps;
+	//for (int ex = 0; ex < example.size(); ex++) {
+	int earliest = INT_MAX, latest = -INT_MAX, lighton = 0;
+	occupancy temp{};
+	std::vector<occupancy> gaps;
 
-		//Migrate logic to this loop from one below
-		/*for each (auto occupancy in example[ex]){
-			lighton = occupancy.leave - occupancy.enter;
-			earliest = earliest < occupancy.enter ? earliest : occupancy.enter;
-			latest = latest > occupancy.leave ? latest : occupancy.leave;
-			std::cout << "Enter:    " << occupancy.enter << "\tLeave: " << occupancy.leave << "\n"
-				      << "Earliest: " << earliest	<< "\tLatest:" << latest << "\n"
-					  << "Light: " << lighton << "\n\n";
+	//Migrate logic to this loop from one below
+	/*for each (auto occupancy in example){
+		lighton = occupancy.leave - occupancy.enter;
+		earliest = earliest < occupancy.enter ? earliest : occupancy.enter;
+		latest = latest > occupancy.leave ? latest : occupancy.leave;
+		std::cout << "Enter:    " << occupancy.enter << "\tLeave: " << occupancy.leave << "\n"
+				    << "Earliest: " << earliest	<< "\tLatest:" << latest << "\n"
+					<< "Light: " << lighton << "\n\n";
 			
-		};*/
+	};*/
 
-		//iterating through occupancies
-		for (int occupancy = 0; occupancy < example[ex].size(); occupancy++) {
-			if (occupancy == 0) { 
-				lighton = example[ex][occupancy].leave - example[ex][occupancy].enter; 
-			    earliest = example[ex][occupancy].enter;
-				latest = example[ex][occupancy].leave; 
-				continue; };
-			if (example[ex][occupancy].enter > latest || (example[ex][occupancy].enter < earliest && example[ex][occupancy].leave < earliest)) {
-				if (gaps.size() == 0) {
-					if (example[ex][occupancy].enter > latest) {
-						temp.enter = latest; temp.leave = example[ex][occupancy].enter;
-						gaps.emplace_back(temp);
-						lighton += example[ex][occupancy].leave - example[ex][occupancy].enter; continue;
-					};
-					temp.enter = example[ex][occupancy].leave; temp.leave = earliest;
+	//iterating through occupancies
+	for (int occupancy = 0; occupancy < example.size(); occupancy++) {
+		if (occupancy == 0) { 
+			lighton = example[occupancy].leave - example[occupancy].enter; 
+			earliest = example[occupancy].enter;
+			latest = example[occupancy].leave; 
+			continue; };
+		if (example[occupancy].enter > latest || (example[occupancy].enter < earliest && example[occupancy].leave < earliest)) {
+			if (gaps.size() == 0) {
+				if (example[occupancy].enter > latest) {
+					temp.enter = latest; temp.leave = example[occupancy].enter;
 					gaps.emplace_back(temp);
-					lighton += example[ex][occupancy].leave - example[ex][occupancy].enter; continue;
+					lighton += example[occupancy].leave - example[occupancy].enter; continue;
 				};
-				for (int k = 0; k < gaps.size(); k++) {
-					if (gaps.at(k).enter > example[ex][occupancy].enter && gaps.at(k).leave > example[ex][occupancy].leave) {
-						lighton += example[ex][occupancy].leave - gaps.at(k).enter; gaps.at(k).enter = example[ex][occupancy].leave; continue; };
-					if (gaps.at(k).enter < example[ex][occupancy].enter && gaps.at(k).leave < example[ex][occupancy].leave) {
-						lighton += gaps.at(k).leave - example[ex][occupancy].enter; gaps.at(k).leave = example[ex][occupancy].enter; continue; };
-					if (gaps.at(k).enter < example[ex][occupancy].enter && gaps.at(k).leave > example[ex][occupancy].leave) {
-						lighton += (gaps.at(k).leave - example[ex][occupancy].leave) - (example[ex][occupancy].enter - gaps.at(k).enter);
-						temp.enter = example[ex][occupancy].leave; temp.leave = gaps.at(k).leave;
-						gaps.emplace_back(temp);
-						gaps.at(k).leave = example[ex][occupancy].enter;
-						continue;
-					};
+				temp.enter = example[occupancy].leave; temp.leave = earliest;
+				gaps.emplace_back(temp);
+				lighton += example[occupancy].leave - example[occupancy].enter; continue;
+			};
+			for (int k = 0; k < gaps.size(); k++) {
+				if (gaps.at(k).enter > example[occupancy].enter && gaps.at(k).leave > example[occupancy].leave) {
+					lighton += example[occupancy].leave - gaps.at(k).enter; gaps.at(k).enter = example[occupancy].leave; continue; };
+				if (gaps.at(k).enter < example[occupancy].enter && gaps.at(k).leave < example[occupancy].leave) {
+					lighton += gaps.at(k).leave - example[occupancy].enter; gaps.at(k).leave = example[occupancy].enter; continue; };
+				if (gaps.at(k).enter < example[occupancy].enter && gaps.at(k).leave > example[occupancy].leave) {
+					lighton += (gaps.at(k).leave - example[occupancy].leave) - (example[occupancy].enter - gaps.at(k).enter);
+					temp.enter = example[occupancy].leave; temp.leave = gaps.at(k).leave;
+					gaps.emplace_back(temp);
+					gaps.at(k).leave = example[occupancy].enter;
+					continue;
 				};
 			};
-			if (example[ex][occupancy].enter < earliest) { lighton += earliest - example[ex][occupancy].enter; earliest = example[ex][occupancy].enter; };
-			if (example[ex][occupancy].leave > latest)	 { lighton += example[ex][occupancy].leave - latest; latest = example[ex][occupancy].leave; };
 		};
-		std::cout << "In case#" << ex << " lightbulb was on for " << lighton << ".\n";
+		if (example[occupancy].enter < earliest) { lighton += earliest - example[occupancy].enter; earliest = example[occupancy].enter; };
+		if (example[occupancy].leave > latest)	 { lighton += example[occupancy].leave - latest; latest = example[occupancy].leave; };
 	};
-
-	return EXIT_SUCCESS;
+	return lighton;
+	
 	//https://www.reddit.com/r/dailyprogrammer/comments/7qn07r/20180115_challenge_347_easy_how_long_has_the/
 	//Date of creation: 05.03.2018
 }; 
+int LightRoom() {
+	std::vector<std::vector<occupancy>> examples = {
+		{ {1,3}, {2,3}, {4,5} }					/*Output: 3*/,
+		{ {2,4}, {3,6}, {1,3}, {6,8} }			/*Output: 7*/,
+		{ {6,8}, {5,8}, {8,9}, {5,7}, {4,7} },	/*Output: 5*/
+		{ {15, 18}, {13, 16}, {9, 12}, {3, 4},
+		  {17, 20}, {9, 11}, {17, 18}, {4, 5},
+		  {5, 6}, {4, 5}, {5, 6}, {13, 16},
+		  {2, 3}, {15, 17}, {13, 14}}			/*Output: 14*/ //Needs more tests - returns 13 
+	};
+	int timeon=0, no=0;
+	for each (auto example in examples){
+		timeon= Check_occupancy(example);
+		std::cout << "In case#" << ++no << " lightbulb was on for " << timeon << ".\n";
+	};
+	return EXIT_SUCCESS;
+};
 
 //TODO: FIX, STRETCH: optimize
 std::map<char, int> SolveCryptaritmethic(const std::string & input) {
