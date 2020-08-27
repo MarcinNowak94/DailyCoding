@@ -52,19 +52,19 @@ std::vector<std::string> Tokenize(const std::string &String, const char delimite
 	return Tokenized;
 };
 
-std::string Get_unique_characters(const std::string & input, std::string ignore) {
-	std::string found_letters{};
+std::string Get_unique_characters(const std::string & input, const std::string & ignore) {
+	std::string found_characters{};
 	for (int i = 0; i < input.length(); i++) {
-		const char character = input.at(i);
+		const char & character = input.at(i);
 		bool unique = true;
-		for each (auto found in found_letters) {
+		for each (auto found in found_characters) {
 			if (character == found) { unique = false; break; }
-		}
+		};
 		for each (auto found in ignore) {
 			if (character == found) { unique = false; break; }
-		}
+		};
 
-		if (unique) { found_letters += character; };
+		if (unique) { found_characters += character; };
 	};
-	return found_letters;
+	return found_characters;
 };
