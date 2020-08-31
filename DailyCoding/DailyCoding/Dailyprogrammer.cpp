@@ -562,7 +562,7 @@ int Check_occupancy(const std::vector<occupancy> & example) {
 	int iteration = 0;
 
 	for each (auto occupancy in example) {
-		if (iteration++ != 0) { 
+		if (iteration++ == 0) { 
 			lighton = occupancy.leave - occupancy.enter; 
 			earliest = occupancy.enter;
 			latest = occupancy.leave; 
@@ -649,14 +649,14 @@ std::map<char, int> SolveCryptaritmethic(const std::string & input) {
 		if (firstletters.find_first_of(zerocharacter) != std::string::npos) { continue; };
 		
 		std::string number_as_text;
-		std::vector<unsigned long> number;
+		std::vector<unsigned long long> number;
 		for (int i = 0; i < word.size(); i++) {
 			number_as_text.clear();
 			for each (auto character in word[i]){ number_as_text += std::to_string(characters[character]); };
-			number.emplace_back(std::stoul(number_as_text));				//TODO: FIX - somehow 192 is out of range
+			number.emplace_back(std::stoull(number_as_text));				//TODO: FIX - somehow 192 is out of range
 		};
 
-		for (int i = 0, sum = number[i]; i < operators.size(); i++) {
+		for (unsigned long long i = 0, sum = number[i]; i < operators.size(); i++) {
 			if (operators[i] == "+")  { sum += number[i + 1]; continue; };
 			if (operators[i] == "-")  { sum -= number[i + 1]; continue; };
 			if (operators[i] == "==") { if (sum == number[i + 1]) { 
@@ -689,7 +689,7 @@ int Cryptarithmetic_Solver() {
 		{ {'A', 2}, {'E', 4}, {'F', 7}, {'H', 0}, {'I', 8}, {'L', 3}, {'P', 5}, {'T', 1}, {'W', 9}, {'Y', 6} },
 		{ {'A', 2}, {'E', 5}, {'H', 3}, {'N', 7}, {'O', 4}, {'R', 6}, {'S', 1}, {'T', 9}, {'V', 8} },			//Bonus, found in 16m19s
 		{ {'A', 7}, {'E', 0}, {'H', 5}, {'M', 2}, {'N', 6}, {'O', 1}, {'R', 8}, {'S', 3}, {'T', 9}, {'Y', 4} },	//Bonus, found in 7m55s
-		{ {'A', 2}, {'E', 5}, {'H', 3}, {'N', 7}, {'O', 4}, {'R', 6}, {'S', 1}, {'T', 9}, {'V', 8} }			//Bonus Placeholder, TODO: FIX - 192th word throws exception for some reason
+		{ {'A', 1}, {'E', 0}, {'F', 5}, {'H', 8}, {'I', 7}, {'L', 2}, {'O', 6}, {'R', 3}, {'S', 4}, {'T', 9} }	//Bonus, found in 3.94649e+06 ms (a bit more than hour) after 3217733tries 
 	};
 	std::vector<std::map<char, int>> solutions_recieved{};
 
