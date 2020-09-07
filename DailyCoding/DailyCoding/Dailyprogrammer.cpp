@@ -706,7 +706,7 @@ int Cryptarithmetic_Solver() {
 	//Date of creation: 07.03.18
 };
 
-//TODO: FIX
+//TODO: FIX - output needs to be strictly formatted
 std::string DisplayBowlingFrame(std::vector<int> input) {
 	const int frames = 10;	//bowling game consists of 10 frames
 	const int pins = 10;	//in which player has 2 attempts to knock down 10 pins
@@ -726,20 +726,24 @@ std::string DisplayBowlingFrame(std::vector<int> input) {
 	return bowlingframe;
 };
 int BowlingFramesDisplay() {
-	//TODO:	Fix - output needs to be strictly formatted
-	std::vector<std::vector<int>> examples=	{																	
-																		//Outputs:
-		{6, 4, 5, 3, 10, 10, 8, 1, 8, 0, 10, 6, 3, 7, 3, 5, 3},			// 6/ 53 X  X  81 8- X  63 7/ 53
-		{9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0 },	// 9- 9- 9- 9- 9- 9- 9- 9- 9- 9-
-		{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},				// X  X  X  X  X  X  X  X  X  XXX
-		{5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5},// 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5
-		{10, 3, 7, 6, 1, 10, 10, 10, 2, 8, 9, 0, 7, 3, 10, 10, 10},		// X  3/ 61 X  X  X  2/ 9- 7/ XXX
-		{9, 0, 3, 7, 6, 1, 3, 7, 8, 1, 5, 5, 0, 10, 8, 0, 7, 3, 8, 2, 8}// 9- 3/ 61 3/ 81 5/ -/ 8- 7/ 8/8
+	struct challenges {
+		std::vector<int> example;
+		std::string	solution;
 	};
-	for (int i = 0; i < examples.size(); i++) {
-		std::cout << DisplayBowlingFrame(examples[i]) << '\n';
+	std::vector<challenges> challenges = {
+		{{6, 4, 5, 3, 10, 10, 8, 1, 8, 0, 10, 6, 3, 7, 3, 5, 3},			"6/ 53 X  X  81 8- X  63 7/ 53 "},
+		{{9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0 },		"9- 9- 9- 9- 9- 9- 9- 9- 9- 9- "},
+		{{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},					"X  X  X  X  X  X  X  X  X  XXX"},
+		{{5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5},	"5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5"},
+		{{10, 3, 7, 6, 1, 10, 10, 10, 2, 8, 9, 0, 7, 3, 10, 10, 10},		"X  3/ 61 X  X  X  2/ 9- 7/ XXX"},
+		{{9, 0, 3, 7, 6, 1, 3, 7, 8, 1, 5, 5, 0, 10, 8, 0, 7, 3, 8, 2, 8},	"9- 3/ 61 3/ 81 5/ -/ 8- 7/ 8/8"}
 	};
-
+	for each (auto challenge in challenges){
+		auto answer = DisplayBowlingFrame(challenge.example);
+		std::cout << answer 
+				  << '\n' << challenge.solution << '\n'	//Testing purposes only
+				  << " is " << (std::string)(answer==challenge.solution?"correct":"incorrect") << '\n';
+	};
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/7so37o/20180124_challenge_348_intermediate_bowling/
 };
