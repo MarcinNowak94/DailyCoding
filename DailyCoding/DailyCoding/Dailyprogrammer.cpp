@@ -622,7 +622,7 @@ int LightRoom() {
 	return EXIT_SUCCESS;
 };
 
-//TODO: FIX, STRETCH: optimize
+//STRETCH: optimize
 std::map<char, int> SolveCryptaritmethic(const std::string & input) {
 	Timer Timer;
 	unsigned long long tries = 0;
@@ -766,42 +766,43 @@ std::string Decode_AlphabetCipher(const std::string & keyword, const std::string
 	};
 	return solution;
 };
-int AlphabetCipher()
-{
+int AlphabetCipher(){
 	std::string answer{};
-	std::string input[][2] = 
-	{ 
-		{ "snitch", "thepackagehasbeendelivered" },
-		{ "bond", "theredfoxtrotsquietlyatmidnight" },
-		{ "train", "murderontheorientexpress" },
-		{ "garden", "themolessnuckintothegardenlastnight" },
+	const std::string challange[][3] =	{
+		{ "snitch", "thepackagehasbeendelivered",
+					"lumicjcnoxjhkomxpkwyqogywq"},
 
-		{ "cloak", "klatrgafedvtssdwywcyty" },
-		{ "python", "pjphmfamhrcaifxifvvfmzwqtmyswst" },
-		{ "moore", "rcfpsgfspiecbcc" }
-	};
-	std::string output[] =
-	{
-		"lumicjcnoxjhkomxpkwyqogywq",
-		"uvrufrsryherugdxjsgozogpjralhvg",
-		"flrlrkfnbuxfrqrgkefckvsa",
-		"zhvpsyksjqypqiewsgnexdvqkncdwgtixkx",
+		{ "bond",	"theredfoxtrotsquietlyatmidnight",
+					"uvrufrsryherugdxjsgozogpjralhvg"},
 
-		"iamtheprettiestunicorn",
-		"alwayslookonthebrightsideoflife",
-		"foryoureyesonly"
+		{ "train",	"murderontheorientexpress",
+					"flrlrkfnbuxfrqrgkefckvsa" },
+
+		{ "garden", "themolessnuckintothegardenlastnight",
+					"zhvpsyksjqypqiewsgnexdvqkncdwgtixkx"},
+
+		{ "cloak",	"klatrgafedvtssdwywcyty",
+					"iamtheprettiestunicorn"},
+
+		{ "python", "pjphmfamhrcaifxifvvfmzwqtmyswst",
+					"alwayslookonthebrightsideoflife"},
+
+		{ "moore",	"rcfpsgfspiecbcc",
+					"foryoureyesonly"}
 	};
+
 	bool decode=false;
-	//bonus does not work correctly need to figure out decoding
-	for (int i = 0; i < sizeof(output)/sizeof(*output); i++) {
-		Timer timer;						//execution time
+	for (auto i = 0; i < sizeof(challange) / sizeof(*challange); i++) {
+		Timer timer;
 		if (i == 4) decode = true;
-		std::cout << "\n\nCodeword:\t" << input[i][0] << "\nmessage:\t" << input[i][1];
-		answer = Decode_AlphabetCipher(input[i][0], input[i][1], decode);
+		answer = Decode_AlphabetCipher(challange[i][0], challange[i][1], decode);
+
+		std::cout << "\n\nCodeword:\t" << challange[i][0] << "\nmessage:\t" << challange[i][1];
 		std::cout << "\nAnswer:\t\t" << answer << " is ";
-		if (answer == output[i]) { std::cout << "correct."; }
+		if (answer == challange[i][2]) { std::cout << "correct."; }
 		else { std::cout << "incorrect."; };
 	};
+
 	return EXIT_SUCCESS;
 	//https://www.reddit.com/r/dailyprogrammer/comments/879u8b/20180326_challenge_355_easy_alphabet_cipher/
 	//date of creation: 15-16.07.2018
