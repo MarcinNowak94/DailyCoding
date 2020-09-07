@@ -767,8 +767,12 @@ std::string Decode_AlphabetCipher(const std::string & keyword, const std::string
 	return solution;
 };
 int AlphabetCipher(){
-	std::string answer{};
-	const std::string challange[][3] =	{
+	struct challenge {
+		std::string keyword;
+		std::string message;
+		std::string solution;
+	};
+	challenge challenges[] = {
 		{ "snitch", "thepackagehasbeendelivered",
 					"lumicjcnoxjhkomxpkwyqogywq"},
 
@@ -790,17 +794,16 @@ int AlphabetCipher(){
 		{ "moore",	"rcfpsgfspiecbcc",
 					"foryoureyesonly"}
 	};
+	std::string answer{};
 
-	bool decode=false;
-	for (auto i = 0; i < sizeof(challange) / sizeof(*challange); i++) {
+	int iterator = 0;
+	for each (auto challenge in challenges){
 		Timer timer;
-		if (i == 4) decode = true;
-		answer = Decode_AlphabetCipher(challange[i][0], challange[i][1], decode);
-
-		std::cout << "\n\nCodeword:\t" << challange[i][0] << "\nmessage:\t" << challange[i][1];
-		std::cout << "\nAnswer:\t\t" << answer << " is ";
-		if (answer == challange[i][2]) { std::cout << "correct."; }
-		else { std::cout << "incorrect."; };
+		iterator++;
+		answer = Decode_AlphabetCipher(challenge.keyword, challenge.message, iterator > 4 /*challenge 5 & up - decode mode*/);
+		std::cout <<"\n\nKeyword:\t" << challenge.keyword 
+				  <<  "\nmessage:\t" << challenge.message
+				  <<  "\nAnswer:\t\t"<< answer << " is " << (std::string)(answer == challenge.solution ? "correct" : "incorrect");
 	};
 
 	return EXIT_SUCCESS;
