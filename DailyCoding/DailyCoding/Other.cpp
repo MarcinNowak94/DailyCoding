@@ -2,6 +2,7 @@
 #include "other.h"
 #include "Helper_functions.h"
 #include <iomanip>	//for displaying leading 0
+#include <stdexcept>
 
 int FizzBuzz() {
 	const int max = random(100, 150);
@@ -97,47 +98,67 @@ int DiceGame(){
 	return EXIT_SUCCESS;
 };
 
-enum codetype {EAN_8=0, EAN_13=1};
-std::string CheckEAN(std::string barcode, const int &type) {
-	int odd, even, sum, checksum, possiblechecksum;
-		odd= even= sum= checksum= possiblechecksum = 0;
-	int numberoffset = '0';	//ofset for numbers in ascii table	
-	if (type==EAN_8) {
-		if (barcode.length() < 6) return "too short for EAN-8";
-		//checksum = barcode.at(7)-numberoffset;
-		//possiblechecksum = barcode.at(6) - numberoffset;		//checksum if 0 is omitted
-		for (int i = 7; i >=0 ; i--)
-		{
-			if (i % 2 != 0) { odd += (barcode.at(i) - numberoffset);} 
-			else even += (barcode.at(i) - numberoffset);
+enum codetype { EAN_8 = 1, EAN_13 = 2 };
+std::string CheckEAN(std::string barcode, const int& type) noexcept(false) {
+	int odd = 0, even = 0;
+	int numberoffset = 0;	//ofset for numbers in character set
+	if (type == 1) {
+		if (barcode.length() < 6) throw std::invalid_argument("Too short for EAN-8\a");
+		for (int digit = 7; digit >= 0; digit--) {
+			if (digit % 2 != 0) { odd += (barcode.at(digit) - numberoffset); }
+			else even += (barcode.at(digit) - numberoffset);
 		};
-		if ((10-((3 * odd + even)% 10))%10==0) {return barcode.substr(0, 8);};
-		if ((10 - ((3 * even + odd) % 10)) % 10 == 0) { return '0'+barcode.substr(0, 7); };
-		return ("is not valid EAN-8\a");
+		if ((10 - ((3 * odd + even) % 10)) % 10 == 0) { return barcode.substr(0, 8); };
+		if ((10 - ((3 * even + odd) % 10)) % 10 == 0) { return '0' + barcode.substr(0, 7); };
+		throw std::invalid_argument("is not valid EAN-8\a");
 	};
-	if (type == EAN_13)	{
-		if (barcode.length() <  12) return ("is too short for EAN-13");
-		if (barcode.length() == 12) { /*std::cout << "Warning! Barcode shorter than 13 charcters (length= " << barcode.length() << ")Adding omitted 0\n";*/ barcode = '0' + barcode;};
-		//checksum = barcode.at(12) - numberoffset;
-		//possiblechecksum = barcode.at(11) - numberoffset;		//checksum if 0 is omitted
-		for (int i = 12; i >= 0; i--)
-		{
-			if (i % 2 != 0) { odd += (barcode.at(i) - numberoffset); }
-			else even += (barcode.at(i) - numberoffset);
+	if (type == EAN_13) {
+		if (barcode.length() < 12) throw std::invalid_argument("Too short for EAN-13");
+		if (barcode.length() == 12) { /*Adding omitted 0*/ barcode = '0' + barcode; };
+		for (int digit = 12; digit >= 0; digit--) {
+			if (digit % 2 != 0) { odd += (barcode.at(digit) - numberoffset); }
+			else even += (barcode.at(digit) - numberoffset);
 		};
 		if ((10 - ((3 * odd + even) % 10)) % 10 == 0) { return barcode.substr(0, 12); };
 		if ((10 - ((3 * even + odd) % 10)) % 10 == 0) { return '0' + barcode.substr(0, 12); };
-		return("is not valid EAN-13\a");
+		throw std::invalid_argument("is not valid EAN-13");
 	};
-	return( "Not defined!\a");
+	throw std::invalid_argument("Type not defined!");
+	return("Undefined!\a");
 };
 int BarcodeChecker() {
-	std::string barcodes[] = { "69207020772112",	//code 692070207721 with addon 12  
-								"075678164125" };	//scanner can sometimes ommit predecating 0, real barcode: 0075678164125
-	
-	for each (auto barcode in barcodes) {
-		std::cout << "Barcode (" << barcode << ") EAN-8  code " << CheckEAN(barcode, EAN_8)  << ".\n";
-		std::cout << "Barcode (" << barcode << ") EAN-13 code " << CheckEAN(barcode, EAN_13) << ".\n";
+	std::string barcodes[] = { 
+		"69207020772112",	//code 692070207721 with addon 12  
+		"075678164125" ,	//scanner can sometimes ommit predecating 0, real barcode: 0075678164125
+		//checked on https://www.getnewidentity.com/validate-ean.php
+		"73513537",			//valid
+		"9780471117094",	//valid
+		"4006381333931",	//valid
+		"73513536",			//invalid
+		"7351334219873",	//invalid
+		"5604127000056",	//valid, real
+		"5055856408901"		//valid, real
+	};
+
+	const int types[] = { EAN_8, EAN_13, 3 };
+		
+	for each (auto type in types) {
+		std::string tname = {};
+		switch (type) {
+			case EAN_8:  tname = "EAN-8"; break;
+			case EAN_13: tname = "EAN-13"; break;
+			default:	 tname = "wrong type"; break;
+		};
+
+		for each (auto barcode in barcodes) {
+			std::cout << "Barcode (" << barcode << ") " << tname << " ";
+			try {
+				std::cout << CheckEAN(barcode, type) << "\n";
+			}
+			catch (const std::exception& exception) {
+				std::cout << exception.what() << "\a\n";
+			};
+		};
 	};
 	return EXIT_SUCCESS;
 	//https://pl.wikipedia.org/wiki/EAN
